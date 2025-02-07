@@ -2,12 +2,13 @@ package com.gli.clic;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class ClicApplication {
+public class MainApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ClicApplication.class, args);
+		SpringApplication.run(MainApplication.class, args);
 	}
 
 }
