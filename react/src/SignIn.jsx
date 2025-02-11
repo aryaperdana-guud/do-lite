@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Checkbox,
-  FormControlLabel,
-} from "@mui/material";
+import { Box, TextField, Button, Typography, Checkbox, FormControlLabel } from "@mui/material";
+import { useNavigate } from 'react-router-dom'; // Import for navigation
 import "./SignIn.css";
 import LeftImage from "./assets/LoginImage1.png";
 import MovingBackground from "./components/MovingBackground";
@@ -16,26 +10,39 @@ const SignIn = () => {
     userID: "",
     password: "",
   });
+  const [rememberMe, setRememberMe] = useState(false); // Track "Remember Me" state
+  const navigate = useNavigate(); // React Router hook for navigation
 
+  // Handle form data changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle remember me change
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
+  };
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch("http://your-backend-url.com/api/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-  
+
       const result = await response.json();
-  
+
       if (response.ok) {
-        alert("🎉 Login successful! Redirecting...");
-        
+        if (rememberMe) {
+          // Save user data or token to localStorage if "Remember Me" is checked
+          localStorage.setItem("userID", formData.userID);
+        }
+        alert("Login successful! Redirecting..."); //temporary
+        // navigate("/dashboard");
       } else {
         // Custom error messages
         if (result.error === "Invalid password") {
@@ -51,7 +58,6 @@ const SignIn = () => {
       alert("Network error! Please check your connection.");
     }
   };
-  
 
   return (
     <div className="app">
@@ -89,17 +95,25 @@ const SignIn = () => {
               onChange={handleChange}
               className="LoginField"
             />
-            
+
+            {/* Remember Me checkbox */}
             <Box className="form-options">
-              <FormControlLabel control={<Checkbox />} label="Remember me" />
-              <Typography variant="body2" className="forgot-password">Forgot Password?</Typography>
+              <FormControlLabel
+                control={<Checkbox checked={rememberMe} onChange={handleRememberMeChange} />}
+                label="Remember me"
+              />
+              {/* Forgot Password Link */}
+              <Typography variant="body2" className="forgetPass-link" onClick={() => navigate("/forgot-password")}>
+                Forgot Password?
+              </Typography>
             </Box>
 
             <Button type="submit" variant="contained" fullWidth className="signIn-button">
               Sign In
             </Button>
 
-            <Typography variant="body2" className="signup-link">
+            {/* Sign Up Link */}
+            <Typography variant="body2" className="signup-link" onClick={() => navigate("/signup")}>
               Don't have an account? Sign up here
             </Typography>
           </Box>
