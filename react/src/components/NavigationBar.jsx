@@ -2,9 +2,17 @@
 
 import { useState } from "react"
 import "./NavigationBar.css"
-import NavImage from "../assets/Nav-icon.png"
-import { FaFileAlt, FaClipboardList, FaFolder, FaCalendarAlt, FaCreditCard,FaChevronDown } from "react-icons/fa"
-
+import {
+  FaFileAlt,
+  FaClipboardList,
+  FaFolder,
+  FaCalendarAlt,
+  FaCreditCard,
+  FaChevronDown,
+  FaBars,
+  FaChevronLeft,
+} from "react-icons/fa"
+import NavImage from "../assets/NAV-icon.png"
 
 const navigation = [
   {
@@ -57,6 +65,7 @@ const navigation = [
 export function NavigationBar() {
   const [activeMenu, setActiveMenu] = useState("/bill-of-ladings")
   const [expandedMenu, setExpandedMenu] = useState(null)
+  const [isMinimized, setIsMinimized] = useState(false)
 
   const handleMenuClick = (href) => {
     if (activeMenu === href) {
@@ -67,13 +76,26 @@ export function NavigationBar() {
     }
   }
 
+  const toggleMinimize = () => {
+    setIsMinimized(!isMinimized)
+    if (!isMinimized) {
+      setExpandedMenu(null)
+    }
+  }
+
   return (
-    <div className="navigation-bar">
-      <div className="logo-container">
-        <img src={NavImage} alt="Clickargo Logo" className="logo" />
+    <div className={`navigation-bar ${isMinimized ? "minimized" : ""}`}>
+      <div className="nav-header">
+        <div className="logo-container">
+          <img src={NavImage} alt="Clickargo Logo" className="logo" />
+        </div>
       </div>
 
       <nav className="nav-menu">
+                <button className="toggle-button" onClick={toggleMinimize}>
+                    {isMinimized ? <FaBars /> : <FaChevronLeft />}
+                    <span className="toggle-text">{isMinimized ? "Expand" : "Collapse"}</span>
+                </button>
         {navigation.map((item) => (
           <div key={item.href} className="menu-item">
             <button
@@ -84,10 +106,9 @@ export function NavigationBar() {
               <span className="menu-title">{item.title}</span>
               {item.submenu && (
                 <span className={`chevron ${expandedMenu === item.href ? "rotated" : ""}`}>
-                    <FaChevronDown />
+                  <FaChevronDown />
                 </span>
-            )}
-
+              )}
             </button>
             {item.submenu && (
               <div className={`submenu ${expandedMenu === item.href ? "expanded" : ""}`}>
