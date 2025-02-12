@@ -11,6 +11,7 @@ import {
   FaChevronDown,
   FaBars,
   FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa"
 import NavImage from "../assets/NAV-icon.png"
 
@@ -92,10 +93,11 @@ export function NavigationBar() {
       </div>
 
       <nav className="nav-menu">
-                <button className="toggle-button" onClick={toggleMinimize}>
-                    {isMinimized ? <FaBars /> : <FaChevronLeft />}
-                    <span className="toggle-text">{isMinimized ? "Expand" : "Collapse"}</span>
-                </button>
+          <button 
+              className={`toggle-button ${isMinimized ? "rotated" : ""}`} 
+              onClick={toggleMinimize}>{isMinimized ? <FaChevronRight /> : <FaChevronLeft />}
+          </button>
+
         {navigation.map((item) => (
           <div key={item.href} className="menu-item">
             <button

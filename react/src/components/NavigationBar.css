@@ -3,13 +3,11 @@
     left: 16px;
     top: 16px;
     bottom: 16px;
-    width: 300px;
+    width: 250px;
     background-color: white;
     border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     transition: width 0.3s ease;
   }
   
@@ -40,51 +38,35 @@
   }
   
   .logo {
-    max-width: 70%;
+    max-width: 90%;
     height: auto;
   }
   
   .toggle-button {
-    background-color: #f7f7f7;
+    background-color: #ffffff;
     border: none;
-    border-radius: 15px;
+    min-height: 100px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
     cursor: pointer;
-    font-size: 14px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    font-size: 15px;
     color: #263754;
-    padding: 8px 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
-    width: 100%;
-    min-height: 50px;
-    margin-bottom: 50px;
-    margin-top: 20px;
-  }
+    padding: 7px;
+    position: absolute;
+    top:70%;
+    right: 0;
+    transform: translateX(100%);  /* Move it outside */
+    z-index: 10;
+}
 
   .toggle-button:focus {
     outline: none;
-  }
-  
-  
-  .toggle-button:hover {
-    background-color: #eaeaea;
-  }
-  
-  .toggle-button svg {
-    margin-right: 8px;
-  }
-  
-  .minimized .toggle-button svg {
-    margin-right: 0;
-  }
-  
-  .toggle-text {
-    display: inline-block;
-  }
-  
-  .minimized .toggle-text {
-    display: none;
   }
   
   .nav-menu {
@@ -116,12 +98,17 @@
     align-items: center;
     border-radius: 15px;
     margin-top: 5px;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     white-space: nowrap;
   }
   
   .menu-button:hover {
     background-color: #eaeaea;
+    outline: none;
+  }
+  .minimized .menu-button:hover {
+    background-color: #0070c0;
+    color: #ffffff;
     outline: none;
   }
   
@@ -191,6 +178,7 @@
     opacity: 1;
     border-radius: 10px;
     margin-top: 10px;
+    margin-bottom: 10px;
     transition: all 0.3;
   }
   
