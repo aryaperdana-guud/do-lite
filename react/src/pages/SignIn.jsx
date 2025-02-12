@@ -4,9 +4,9 @@ import { useState } from "react"
 import { Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import "./SignIn.css"
-import LeftImage from "./assets/LoginImage1.png"
-import MovingBackground from "./components/MovingBackground"
-import SignInForm from "./components/SignInForm"
+import LeftImage from "../assets/LoginImage1.png"
+import MovingBackground from "../components/MovingBackground"
+import SignInForm from "../components/SignInForm"
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -62,7 +62,7 @@ const SignIn = () => {
       <MovingBackground />
       <div className="signin-container">
         <div className="left-section">
-          <img src={LeftImage || "/placeholder.svg"} alt="Your Image" className="responsive-image" />
+          <img src={LeftImage} alt="Your Image" className="responsive-image" />
         </div>;
         <div className="right-section">
           <Typography variant="h3" className="welcome-text">

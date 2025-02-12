@@ -1,0 +1,129 @@
+.navigation-bar {
+    position: fixed;
+    left: 16px;
+    top: 16px;
+    bottom: 16px;
+    width: 300px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .logo-container {
+    padding: 16px;
+    margin: 30px;
+    width: 100%;
+  }
+  
+  .logo {
+    max-width: 70%;
+    height: auto;
+  }
+  
+  .nav-menu {
+    flex: 1;
+    padding: 8px;
+    overflow: hidden;
+  }
+  
+  .menu-item {
+    margin-bottom: 4px;
+    overflow: hidden;
+  }
+  
+  .menu-button {
+    width: 100%;
+    overflow: hidden;
+    text-align: left;
+    padding: 10px 15px;
+    background-color: #eaeaea;
+    border: none;
+    min-height: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000000ad;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .menu-button:hover {
+    background-color: #f3f4f6;
+    border-radius: 10px;
+    outline: none;
+  }
+  
+  .menu-button.active {
+    background-color: #263754;
+    color: rgb(255, 255, 255);
+    border-radius: 10px;
+    outline: none;
+  }
+  
+  .chevron {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+  }
+  
+  .chevron.rotated {
+    transform: rotate(90deg);
+  }
+  
+  .submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    border-radius: 10px;
+    opacity: 0;
+  }
+  
+  .submenu.expanded {
+    max-height: 200px;
+    opacity: 1;
+    border-radius: 10px;
+  }
+  
+  .submenu-item {
+    display: block;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #6e6e6e;
+    text-decoration: none;
+    border-radius: 10px;
+    padding-left: 15px;
+  }
+  
+  .submenu-item:hover {
+    background-color: #f3f4f6;
+    color: #263754;
+  }
+  
+  .footer-links {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .footer-link {
+    font-size: 14px;
+    color: #6e6e6e;
+    text-decoration: none;
+  }
+  
+  .footer-link:hover {
+    color: #263754;
+  }
+  
+  .separator {
+    color: #6e6e6e;
+  }
+  
+  

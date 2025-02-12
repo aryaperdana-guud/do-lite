@@ -14,7 +14,7 @@
 .background {
     width: 100vw;
     height: 100vh;
-    background-image: url('./assets/background.png');
+    background-image: url('../assets/background.png');
     background-size: cover;
     background-repeat: no-repeat;
 }
@@ -30,20 +30,21 @@
 }
 
 .signin-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8); /* Combine translate & scale */
+    transform-origin: center; /* Ensure it scales from the middle */
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: rgba(234, 234, 234, 0);
     border-radius: 40px;
     box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.158);
-    width: 90%;
+    width: 80%;
     max-width: 1400px;
     height: 700px;
     padding: 0px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%); /* Move back by half */
 }
 
   
@@ -59,6 +60,8 @@
     padding-right: 80px;
     border-top-left-radius: 40px;
     border-bottom-left-radius: 40px;
+    margin: 0;
+    border: none;
   }
 
   .right-section {
@@ -74,6 +77,8 @@
     border-top-right-radius: 40px;
     border-bottom-right-radius: 40px;
     text-align: left;
+    margin: 0;
+    border: none;
   }
     .white{
         color: #ffffff;

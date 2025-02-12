@@ -40,5 +40,5 @@ const SignInForm = ({
   )
 }
 
-export default SignInForm
+export default SignInForm;
 
