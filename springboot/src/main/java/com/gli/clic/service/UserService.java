@@ -1,13 +1,14 @@
 package com.gli.clic.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.gli.clic.dto.UserDTO;
 import com.gli.clic.model.User;
 import com.gli.clic.repository.UserRepository;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -15,25 +16,28 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;  // Inject password encoder
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public User registerUser(String username, String password) {
-        if (userRepository.findByUsername(username).isPresent()) {
-            throw new RuntimeException("Username already exists!");
+    public String registerUser(UserDTO userDTO) {
+        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+            return "Email already registered!";
         }
-        // Encode the password before saving
-        String encodedPassword = passwordEncoder.encode(password);
-        User user = new User(username, encodedPassword);
-        return userRepository.save(user);
+
+        User user = new User();
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+        userRepository.save(user);
+        return "User registered successfully!";
     }
 
-    public Optional<User> loginUser(String username, String password) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
-        return userOpt.filter(user -> passwordEncoder.matches(password, user.getPassword())); // Check if passwords match
-    }
+    public String loginUser(UserDTO userDTO) {
+        Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
 
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        if (user.isPresent() && passwordEncoder.matches(userDTO.getPassword(), user.get().getPassword())) {
+            return "Login successful!";
+        } else {
+            return "Invalid credentials!";
+        }
     }
 }
