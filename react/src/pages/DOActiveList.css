@@ -1,0 +1,24 @@
+.dashboard {
+    width: 100vw;
+    height: 100vh;
+    background-color: #eaeaea;
+    all:16px;
+    overflow: hidden;
+    }
+  
+  .main-content {
+    margin-left: 280px; /*width navgation 240 */
+    padding: 16px;
+    transition: margin-left 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .navigation-bar.minimized + .main-content {
+    margin-left: 120px; /*width navgation 80 */
+  }
+  
+  .Title {
+    color: #263754;
+    height: 50px;
+    text-align: left;
+  }

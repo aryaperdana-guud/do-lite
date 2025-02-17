@@ -9,27 +9,25 @@ import {
   FaCalendarAlt,
   FaCreditCard,
   FaChevronDown,
-  FaBars,
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa"
-import NavImage from "../assets/NAV-icon.png"
+import NavImage from "../../assets/NAV-icon.png"
 
 const navigation = [
   {
     title: "Bill of Ladings",
     href: "/bill-of-ladings",
     icon: <FaFileAlt />,
-    submenu: [{ title: "New BL", href: "/bill-of-ladings/new" }],
+    submenu: [{ title: "New BL", href: "/bol/newbl" }],
   },
   {
     title: "DO Claims",
     href: "/do-claims",
     icon: <FaClipboardList />,
     submenu: [
-      { title: "Nav 1", href: "#" },
-      { title: "Nav 2", href: "#" },
-      { title: "Nav 3", href: "#" },
+      { title: "Active List", href: "/do-claims/active" },
+      { title: "History List", href: "#" },
     ],
   },
   {

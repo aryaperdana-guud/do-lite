@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignIn from './pages/SignIn';
 import ForgotPassword from './pages/ForgotPassword';
 import SignUp from './pages/SignUp';
-import { Dashboard } from './pages/Dashboard';
+import {DOActive} from './pages/DOActiveList.jsx';
+import { NewBL } from './pages/NewBL.jsx';
 
 function App() {
   return (
@@ -15,7 +16,8 @@ function App() {
         {/* Other routes */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/do-claims/active" element={<DOActive/>} />
+        <Route path="/bol/newbl" element={<NewBL/>} />
       </Routes>
     </Router>
   );

@@ -1,0 +1,224 @@
+.active-lists {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  height: calc(100vh - 180px);
+  background-color: #ffffff;
+  border-radius: 20px;
+  position:relative;
+  color: #000000;
+
+}
+
+.active-lists__header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: #ffffff;
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.active-lists__title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.active-lists__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #263754;
+  margin: 0;
+}
+
+.active-lists__download {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: #000000;
+}
+
+.active-lists__controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #374151;
+}
+
+.active-lists__pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  outline: none;
+}
+
+.active-lists__pagination:focus {
+  outline: none;
+}
+
+.active-lists__pagination svg {
+  color: #000000;
+}
+
+.active-lists__items-per-page {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #000000;
+}
+
+.active-lists__content {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
+  color: #000000
+}
+
+.active-lists__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+  color: #000000
+}
+
+.active-lists__table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.active-lists__table th {
+  background-color: #ffffff;
+  padding: 12px 16px;
+  font-weight: 500;
+  color: #263754;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.active-lists__table td {
+  padding: 12px 16px;
+  color: #4b5563;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.active-lists__table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.active-lists__table tbody tr.odd-row {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.status-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: rgb(255, 255, 255);
+}
+
+.status-icon--payment {
+  background-color: #ff0000;
+}
+
+.status-icon--surrender {
+  background-color: #39e839;
+}
+
+.status-icon--document {
+  background-color: #8d8d8d;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #6b7280;
+}
+
+.active-lists__footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background-color: #ffffff;
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.active-lists__column-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.active-lists__column-select span,
+.active-lists__items-per-page label {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.active-lists__column-select select,
+.active-lists__items-per-page select,
+.pagination-button {
+  padding: 4px 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+  color:#263754
+}
+.pagination-button:focus{
+  outline: none;
+
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .active-lists__controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+
+
+
+
+/* Customize the scrollbar itself */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  height: 12px; /* Height of the horizontal scrollbar */
+}
+
+/* Customize the track (the part the scrollbar moves within) */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Light grey background */
+  border-radius: 10px; /* Round corners */
+}
+
+/* Customize the thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Grey thumb */
+  border-radius: 10px; /* Round corners */
+  border: 3px solid #f1f1f1; /* Border between thumb and track */
+}
+
+/* On hover, change the thumb color */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #263754; /* Darker grey */
+}
+
+
