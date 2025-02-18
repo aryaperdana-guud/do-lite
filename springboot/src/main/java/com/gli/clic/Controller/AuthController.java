@@ -1,62 +1,84 @@
 package com.gli.clic.Controller;
 
-import com.gli.clic.dto.UserDTO;
-import com.gli.clic.model.User;
-import com.gli.clic.repository.UserRepository;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.gli.clic.dto.*;
+import com.gli.clic.service.UserService;
+import com.gli.clic.security.JwtTokenProvider;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
+import javax.validation.Valid;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    private final String jwtSecretKey = "your_secret_key";
-
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody UserDTO userDTO) {
-        Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
-
-        if (user.isPresent() && passwordEncoder.matches(userDTO.getPassword(), user.get().getPassword())) {
-            String token = Jwts.builder()
-                    .setSubject(userDTO.getEmail())
-                    .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 day expiry
-                    .signWith(SignatureAlgorithm.HS256, jwtSecretKey.getBytes())
-                    .compact();
-
-            Map<String, String> response = new HashMap<>();
-            response.put("token", token);
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+    public AuthController(UserService userService, JwtTokenProvider jwtTokenProvider) {
+        this.userService = userService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
-        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already registered!");
+    public ResponseEntity<ApiResponse> register(@RequestBody @Valid UserDTO userDTO) {
+        RegisterResponse response = userService.registerUser(userDTO);
+        return buildApiResponse(response.getMessage(), response.isSuccess());
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse> login(@RequestBody @Valid UserDTO userDTO) {
+        return userService.authenticate(userDTO)
+                .map(token -> buildApiResponse("Login successful", true, Map.of("token", token)))
+                .orElse(buildApiResponse("Invalid credentials", false));
+    }
+
+    @PutMapping("/update/email")
+    public ResponseEntity<ApiResponse> updateEmail(@RequestBody @Valid UpdateEmailDTO updateEmailDTO,
+                                                   @RequestHeader("Authorization") String token) {
+        return processAuthenticatedRequest(token, email -> userService.updateEmail(updateEmailDTO.getEmail()));
+    }
+
+    @DeleteMapping("/delete/email")
+    public ResponseEntity<ApiResponse> deleteUser(@RequestBody Map<String, String> requestBody,
+                                                  @RequestHeader("Authorization") String token) {
+        String email = requestBody.get("email");
+        if (email == null || email.isEmpty()) {
+            return buildApiResponse("Email is required", false, HttpStatus.BAD_REQUEST);
+        }
+        return processAuthenticatedRequest(token, authenticatedEmail -> userService.deleteUserByEmail(email));
+    }
+
+    private ResponseEntity<ApiResponse> processAuthenticatedRequest(String token, AuthAction action) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            return buildApiResponse("Missing or invalid token", false, HttpStatus.UNAUTHORIZED);
         }
 
-        User newUser = new User();
-        newUser.setEmail(userDTO.getEmail());
-        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        String cleanToken = token.replace("Bearer ", "");
+        if (!jwtTokenProvider.validateToken(cleanToken)) {
+            return buildApiResponse("Invalid token", false, HttpStatus.UNAUTHORIZED);
+        }
 
-        userRepository.save(newUser);
-        return ResponseEntity.ok("User registered successfully!");
+        String authenticatedEmail = jwtTokenProvider.extractEmail(cleanToken);
+        return action.execute(authenticatedEmail);
+    }
+
+    private ResponseEntity<ApiResponse> buildApiResponse(String message, boolean status) {
+        return ResponseEntity.ok(new ApiResponse(message, status));
+    }
+
+    private ResponseEntity<ApiResponse> buildApiResponse(String message, boolean status, HttpStatus httpStatus) {
+        return ResponseEntity.status(httpStatus).body(new ApiResponse(message, status));
+    }
+
+    private ResponseEntity<ApiResponse> buildApiResponse(String message, boolean status, Map<String, Object> data) {
+        return ResponseEntity.ok(new ApiResponse(message, status, data));
+    }
+
+    @FunctionalInterface
+    interface AuthAction {
+        ResponseEntity<ApiResponse> execute(String authenticatedEmail);
     }
 }
