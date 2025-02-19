@@ -1,42 +1,51 @@
-import React, { useState, useRef } from 'react';
-import './FileUploadField.css';
+import React, { useState } from 'react';
+import { styled } from '@mui/joy/styles';
+import Button from '@mui/joy/Button';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Typography from '@mui/joy/Typography';
 
-const FileUploadField = () => {
-    const [fileName, setFileName] = useState('');
-    const fileInputRef = useRef(null);
-  
-    const handleFileChange = (e) => {
-      if (e.target.files.length > 0) {
-        setFileName(e.target.files[0].name);
+const VisuallyHiddenInput = styled('input')`
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  white-space: nowrap;
+  width: 1px;
+`;
+
+export default function FileUploadField({ onFileUploaded }) {
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      if (onFileUploaded) {
+        onFileUploaded(file);
       }
-    };
-  
-    const handleBrowseClick = () => {
-      fileInputRef.current.click();
-    };
+    }
+  };
 
   return (
     <div className="file-upload-container">
-      <div className="file-upload-field-container">
-        <div className="file-display-area">
-          {fileName || 'Upload File Here'}
-        </div>
-        <button 
-          onClick={handleBrowseClick}
-          className="browse-button"
-        >
-          Browse
-        </button>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          className="hidden-file-input"
-        />
-      </div>
-      <div className="divider"></div>
+      <Button
+        component="label"
+        role={undefined}
+        variant="outlined"
+        color="neutral"
+        startDecorator={<CloudUploadIcon />}
+      >
+        Upload BL File
+        <VisuallyHiddenInput type="file" onChange={handleFileChange} />
+      </Button>
+      {selectedFile && (
+        <Typography level="body-sm" sx={{ mt: 1 }}>
+          Selected file: {selectedFile.name}
+        </Typography>
+      )}
     </div>
   );
-};
-
-export default FileUploadField;
+}

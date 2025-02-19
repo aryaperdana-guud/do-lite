@@ -5,6 +5,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import SignUp from './pages/SignUp';
 import {DOActive} from './pages/DOActiveList.jsx';
 import { NewBL } from './pages/NewBL.jsx';
+import {DOHistory} from './pages/DOHistory.jsx';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/do-claims/active" element={<DOActive/>} />
+        <Route path="/do-claims/history" element={<DOHistory/>} />
         <Route path="/bol/newbl" element={<NewBL/>} />
       </Routes>
     </Router>

@@ -15,13 +15,9 @@
   flex-direction: column;
 }
 
-.navigation-bar.minimized + .main-content {
-  margin-left: 120px; /*width navgation 80 */
-}
-
 .Title {
   color: #263754;
-  height: 40px; 
+  height: 40px;
   text-align: left;
   margin-bottom: 40px;
   margin-top: 20px;
@@ -34,10 +30,12 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 52px); /* Full height minus Title height and margins */
+  height: calc(100% - 52px);
   overflow: hidden;
+  outline: none;
 }
-.remarks-field{
+
+.remarks-field {
   width: 100%;
   padding: 10px;
   font-size: 16px;
@@ -45,9 +43,9 @@
 }
 
 .form-title {
-  font-size: 1.25rem; 
+  font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 16px; 
+  margin-bottom: 16px;
   padding-bottom: 12px;
   color: #263754;
   border-bottom: 2px solid #e7eaf3;
@@ -56,8 +54,8 @@
 .cards-container {
   display: flex;
   flex-direction: row;
-  gap: 20px; 
-  margin-bottom: 16px; 
+  gap: 20px;
+  margin-bottom: 16px;
   height: calc(100% - 100px);
 }
 
@@ -71,12 +69,12 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px; 
-  min-width: 0; 
+  gap: 20px;
+  min-width: 0;
 }
 
 .general-details, .party-details, .bl-details {
-  background-color: #eeeeee;
+  background-color: #f0f0f0;
   border-radius: 15px;
   padding: 16px;
   border: 1px solid #eaeaea;
@@ -97,7 +95,7 @@
 }
 
 .details-title {
-  margin-bottom: 14px; /* Reduced from 1.75rem */
+  margin-bottom: 14px;
   color: #1a2e5a;
   font-weight: bold;
 }
@@ -105,108 +103,97 @@
 .details-content {
   display: flex;
   flex-direction: column;
-  gap: 12px; 
+  gap: 10px;
   color: #333b4d;
 }
 
 .shipping-option, .remarks-field, .BLNumber-field {
-  margin-bottom: 14px; 
+  margin-bottom: 15px;
   width: 100%;
 }
 
-/* Improve input contrast and focus states */
+/* Input fields */
 .MuiInput-root {
   background-color: #ffffff !important;
   border: 1px solid #cfd7e6 !important;
   color: #1a2a42 !important;
 }
-
-.MuiInput-root:focus-within {
-  border-color: #2e5bff !important;
-  box-shadow: 0 0 0 2px rgba(46, 91, 255, 0.15) !important;
+.MuiSelect-button:focus,
+.MuiSelect-button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
 }
 
-.MuiSelect-root {
-  background-color: #ffffff !important;
-  border: 1px solid #cfd7e6 !important;
-  outline: none;
+/* Hover effect on menu items */
+.MuiMenuItem-root:hover {
+  background-color: #f0f4ff;
 }
 
-.MuiSelect-root.active {
-  outline: none;
-}
-
-.MuiSelect-root:focus-within {
-  border-color: #e0e0e0 !important;
-  box-shadow: 0 0 0 2px rgba(46, 91, 255, 0.15) !important;
-  outline: none;
-}
-
-/* Typography enhancements */
 .MuiTypography-h5 {
   color: #263754 !important;
   font-weight: 600 !important;
-  font-size: 1.125rem !important; /* Reduced size */
+  font-size: 1.125rem !important;
   margin-top: 0 !important;
 }
 
 .MuiTypography-h6 {
   color: #455571 !important;
   font-weight: 500 !important;
-  margin-bottom: 4px !important; /* Reduced from 0.5rem */
-  font-size: 0.9rem !important; /* Reduced size */
+  margin-bottom: 4px !important;
+  font-size: 0.9rem !important;
 }
 
 .submit-button {
-  margin-top: 16px; /* Reduced from 2rem */
+  margin-top: 16px;
   display: flex;
   justify-content: flex-end;
-  gap: 8px; /* Reduced from 1rem */
+  gap: 8px;
 }
 
-/* Style for submit buttons */
 .submit-button .MuiButton-root {
-  padding: 6px 16px; /* Reduced from 0.5rem 1.75rem */
+  padding: 6px 16px;
   font-weight: 500;
 }
 
 .submit-button .MuiButton-root[type="submit"] {
-  background-color: #263754;
+  background-color: #0070c0;
   color: #ffffff;
+  width: 200px;
 }
 
 .submit-button .MuiButton-root[type="submit"]:hover {
-  background-color: #1a2e5a;
+  background-color: #263754;
 }
 
 .required {
   color: #e53e3e;
-  margin-left: 2px; /* Reduced from 4px */
+  margin-left: 2px;
 }
 
 .file-upload-container {
-  margin-top: 6px; /* Reduced from 0.75rem */
-  margin-bottom: 14px; /* Reduced from 1.75rem */
+  margin-top: 6px;
+  margin-bottom: 14px;
   width: 100%;
 }
 
 .file-upload-container .MuiButton-root {
   width: 100%;
   justify-content: center;
-  padding: 8px; /* Reduced from 0.625rem */
-  background-color: #0070c0;
+  padding: 8px;
+  background-color: #263754;
   border: 1px dashed #0070c08d;
   color: #ffffff;
 }
 
 .file-upload-container .MuiButton-root:hover {
-  background-color: #263754;
+  background-color: #0070c0;
   border-color: #2637548d;
 }
 
-/* Adjust component sizes */
 .MuiSelect-root, .MuiInput-root {
-  max-height: 40px !important; /* Reduced height */
+  max-height: 40px !important;
+  outline: none;
 }
 
 /* Responsive adjustments */
@@ -214,11 +201,11 @@
   .form {
     padding: 16px;
   }
-  
+
   .cards-container {
     gap: 16px;
   }
-  
+
   .general-details, .party-details, .bl-details {
     padding: 12px;
   }
@@ -229,21 +216,17 @@
     margin-left: 0;
     padding: 12px;
   }
-  
-  .navigation-bar.minimized + .main-content {
-    margin-left: 0;
-  }
-  
+
   .form {
     padding: 16px;
     height: calc(100% - 46px);
   }
-  
+
   .cards-container {
     height: auto;
     flex-direction: column;
   }
-  
+
   .left-group, .right-group {
     height: auto;
   }
@@ -253,12 +236,12 @@
   .form {
     padding: 12px;
   }
-  
+
   .submit-button {
     flex-direction: column;
     width: 100%;
   }
-  
+
   .submit-button .MuiButton-root {
     width: 100%;
   }

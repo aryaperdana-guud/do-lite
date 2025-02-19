@@ -7,7 +7,7 @@ import Input from '@mui/joy/Input';
 import "./NewBL.css";
 import Button from '@mui/joy/Button';
 import Box from '@mui/joy/Box';
-import FileUploadField from "../components/NewBLField.jsx";
+import FileUploadField from "../components/FileUploadField.jsx";
 
 export function NewBL() {
   // Form state management
@@ -75,12 +75,12 @@ export function NewBL() {
     <div className="dashboard">
       <NavigationBar />
       <main className="main-content">
-        <h1 className="Title">New BL</h1>
+        <h1 className="Title">Bill of Ladings</h1>
 
         <form className="form" onSubmit={handleSubmit}>
           {/* Form Title */}
           <div className="form-title">
-            Add Bill of Lading
+            New BL
           </div>
 
           <div className="cards-container">
@@ -94,13 +94,13 @@ export function NewBL() {
 
                 <div className="details-content">
                   {/* ShippingLine Option */}
-                  <Typography variant="h6">Shipping Line <span className="required">*</span></Typography>
-                  <Select 
-                    className="shipping-option" 
-                    size="md" 
-                    placeholder="Select Shipping Line"
+                  <Typography  variant="h6">Shipping Line <span className="required">*</span></Typography>
+                  <Select
+                    className="shipping-option"
+                    size="md"
                     value={formData.shippingLine}
                     onChange={handleSelectChange('shippingLine')}
+                    placeholder="Select Shipping Line"
                     required
                   >
                     <Option value="Shipping 1">MSC</Option>
@@ -108,6 +108,8 @@ export function NewBL() {
                     <Option value="Shipping 3">Maersk</Option>
                     <Option value="Shipping 4">Shipping 4</Option>
                   </Select>
+
+
 
                   {/*remarks input*/}
                   <Typography variant="h6">Remarks</Typography> 

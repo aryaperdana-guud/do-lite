@@ -96,7 +96,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    border-radius: 15px;
+    border-radius: 10px;
     margin-top: 5px;
     transition: all 0.2s ease;
     white-space: nowrap;
@@ -176,16 +176,22 @@
   .submenu.expanded {
     max-height: 200px;
     opacity: 1;
-    border-radius: 10px;
+    border-radius: 5px;
     margin-top: 10px;
     margin-bottom: 10px;
     transition: all 0.3;
   }
 
-  .submenu-item::selection{
-    background-color: #0070c0;
+  .submenu-item:hover{
+    background-color: #1f5881;
+    color: #ffffff;
   }
   
+  .submenu-item.active {
+    background-color: #0070c0;
+    color: #ffffff;
+  }
+
   .minimized .submenu {
     display: none;
   }
@@ -198,15 +204,10 @@
     background-color: #f7f7f7;
     color: #6e6e6e;
     text-decoration: none;
-    border-radius: 15px;
+    border-radius: 10px;
     padding-left: 50px;
     min-height: 30px;
     margin-bottom: 5px;
-  }
-  
-  .submenu-item:hover {
-    background-color: #0070c0;
-    color: #ffffff;
   }
   
   .footer-links {

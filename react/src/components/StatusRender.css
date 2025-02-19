@@ -1,0 +1,68 @@
+.status-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    
+    transition: all 0.2s ease;
+  }
+  
+  .status-icon .icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2.5px;
+  }
+  
+  .status-icon--accepted {
+    background-color: rgba(34, 197, 94, 0.288);
+  }
+  
+  .status-icon--accepted .icon {
+    color: #22c55e;
+  }
+  
+  .status-icon--rejected {
+    background-color: rgba(239, 68, 68, 0.288);
+  }
+  
+  .status-icon--rejected .icon {
+    color: #ef4444;
+  }
+  
+  .status-icon--pending {
+    background-color: rgba(126, 126, 126, 0.267);
+  }
+  
+  .status-icon--pending .icon {
+    color: #838383;
+  }
+  
+  /* Hover effects */
+  .status-icon:hover {
+    transform: scale(1.05);
+  }
+  
+  .status-icon--accepted:hover {
+    background-color: rgba(34, 197, 94, 0.2);
+  }
+  
+  .status-icon--rejected:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+  }
+  
+  .status-icon--pending:hover {
+    background-color: rgba(128, 128, 128, 0.377);
+  }
+  
+  /* Optional: Animation for pending status */
+  @keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+  }
+  
+  .status-icon--pending .icon {
+    animation: pulse 1.5s infinite;
+  }

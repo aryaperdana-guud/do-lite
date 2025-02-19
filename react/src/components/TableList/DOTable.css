@@ -2,12 +2,11 @@
   display: flex;
   flex-direction: column;
   padding: 15px;
-  height: calc(100vh - 160px);
+  height: calc(100vh - 170px);
   background-color: #ffffff;
   border-radius: 20px;
-  position:relative;
+  position: relative;
   color: #000000;
-
 }
 
 .active-lists__header {
@@ -25,6 +24,7 @@
   align-items: center;
   margin-bottom: 16px;
 }
+
 .active-lists__title {
   font-size: 20px;
   font-weight: 600;
@@ -38,6 +38,9 @@
   cursor: pointer;
   padding: 8px;
   color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .active-lists__controls {
@@ -60,6 +63,9 @@
 
 .active-lists__pagination svg {
   color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .active-lists__items-per-page {
@@ -73,7 +79,7 @@
   flex-grow: 1;
   overflow-y: auto;
   min-height: 0;
-  color: #000000
+  color: #000000;
 }
 
 .active-lists__table {
@@ -81,7 +87,7 @@
   border-collapse: separate;
   border-spacing: 0;
   text-align: left;
-  color: #000000
+  color: #000000;
 }
 
 .active-lists__table thead {
@@ -96,12 +102,14 @@
   font-weight: 500;
   color: #263754;
   border-bottom: 1px solid #eaeaea;
+  text-align: left;
 }
 
 .active-lists__table td {
   padding: 12px 16px;
   color: #4b5563;
   border-bottom: 1px solid #e5e7eb;
+  text-align: left;
 }
 
 .active-lists__table tbody tr:hover {
@@ -112,35 +120,15 @@
   background-color: rgba(0, 0, 0, 0.02);
 }
 
-.status-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 30%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: rgb(255, 255, 255);
-}
-
-.status-icon--payment {
-  background-color: #ff0000;
-}
-
-.status-icon--surrender {
-  background-color: #39e839;
-}
-
-.status-icon--document {
-  background-color: #8d8d8d;
-}
-
 .action-button {
   background: none;
   border: none;
   cursor: pointer;
   padding: 4px;
   color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .active-lists__footer {
@@ -173,16 +161,37 @@
   background-color: white;
   font-size: 14px;
   cursor: pointer;
-  color:#263754
+  color: #263754;
 }
-.pagination-button:focus{
-  outline: none;
 
+.pagination-button:focus {
+  outline: none;
 }
 
 .pagination-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+  border: 3px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #263754;
 }
 
 @media (max-width: 768px) {
@@ -192,33 +201,3 @@
     gap: 8px;
   }
 }
-
-
-
-
-
-/* Customize the scrollbar itself */
-::-webkit-scrollbar {
-  width: 12px; /* Width of the scrollbar */
-  height: 12px; /* Height of the horizontal scrollbar */
-}
-
-/* Customize the track (the part the scrollbar moves within) */
-::-webkit-scrollbar-track {
-  background-color: #f1f1f1; /* Light grey background */
-  border-radius: 10px; /* Round corners */
-}
-
-/* Customize the thumb (the draggable part) */
-::-webkit-scrollbar-thumb {
-  background-color: #888; /* Grey thumb */
-  border-radius: 10px; /* Round corners */
-  border: 3px solid #f1f1f1; /* Border between thumb and track */
-}
-
-/* On hover, change the thumb color */
-::-webkit-scrollbar-thumb:hover {
-  background-color: #263754; /* Darker grey */
-}
-
-
