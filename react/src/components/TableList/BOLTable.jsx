@@ -53,17 +53,17 @@ export const BOLTable = ({
         <div className="active-lists__title-section">
           <h2 className="active-lists__title">{title}</h2>
           <div className="active-lists__actions">
-            <button className="active-lists__download" onClick={onDownload} title="Download">
-              <Badge
+            <button className="active-lists__download" onClick={onDownload}>
+             {title!=="History List"&& (<Badge
                 badgeContent={selectedItems.length}
                 color="primary"
                 overlap="circular"
-                title="selected"
+                title="Selected"
               ><File size={25} />
-              </Badge>
+              </Badge>)}
             </button>      
           
-            <button className="active-lists__download" onClick={onDownload} title="Download">
+            <button className="active-lists__download" onClick={onDownload} title="Download Lists">
                 <Download size={25} />
             </button>
           </div>

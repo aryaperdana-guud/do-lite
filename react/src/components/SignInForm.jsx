@@ -12,7 +12,7 @@ const SignInForm = ({
 }) => {
   return (
     <Box component="form" className="login-form" onSubmit={handleSubmit}>
-      <CustomTextField name="userID" label="User ID" value={formData.userID} onChange={handleChange} />
+      <CustomTextField name="id" label="User ID" value={formData.id} onChange={handleChange} />
       <CustomTextField
         name="password"
         label="Password"

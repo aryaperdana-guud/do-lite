@@ -1,85 +1,84 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Typography } from "@mui/material"
-import { useNavigate } from "react-router-dom"
-import "./SignIn.css"
-import LeftImage from "../assets/LoginImage1.png"
-import MovingBackground from "../components/MovingBackground"
-import SignInForm from "../components/SignInForm"
+import { useState } from "react";
+import { Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import "./SignIn.css";
+import LeftImage from "../assets/LoginImage1.png";
+import MovingBackground from "../components/MovingBackground";
+import SignInForm from "../components/SignInForm";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
-    userID: "",
-    password: "",
-  })
-  const [rememberMe, setRememberMe] = useState(false)
-  const navigate = useNavigate()
+    id: localStorage.getItem("savedId") || "",
+    password: localStorage.getItem("savedPassword") || "",
+  });
+  
 
-  // Define mock user for dev purposes
-  const mockUser = {
-    userID: "DEV_001", // Hardcoded user ID for development
-    password: "Matthew", // Hardcoded password for development
-  }
+  const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
+
+  // Mock user for development testing
+  // const mockUser = {
+  //   id: "DEV_001", // Changed from userID to id for consistency
+  //   password: "Matthew",
+  // };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleRememberMeChange = (e) => {
-    setRememberMe(e.target.checked)
+    setRememberMe(e.target.checked);
   };
+  console.log("Submitting Data:", formData);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting Data:", formData); // Debugging
   
-    // Dev Mode: Bypass backend and use mock credentials
-    if (process.env.NODE_ENV === 'development') {
-      if (formData.userID === mockUser.userID && formData.password === mockUser.password) {
-        if (rememberMe) {
-          localStorage.setItem("userID", formData.userID);
-        }
-        
-        alert("Development Login Successful! Redirecting...");
-        // Use setTimeout to delay the redirect after alert
-        setTimeout(() => {
-          navigate("/bol/active"); // Redirect to dashboard after alert is closed
-        }, 100); // 100ms delay to ensure the alert has time to be dismissed
-      } else {
-        alert("Invalid credentials. Please try again.");
-      }
-      return; // Stop further execution if in dev mode
-    }
-  
-    // Normal login process (if not in dev mode)
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
   
-      const result = await response.json();
+      let result;
+      try {
+        result = await response.json();
+      } catch (err) {
+        console.error("Response parsing error:", err);
+        alert("Unexpected server response. Please try again.");
+        return;
+      }
   
-      // If successful, immediately schedule the redirect
-      if (result) {
+      if (response.ok && result.token) {
+        localStorage.setItem("jwtToken", result.token);
+  
         if (rememberMe) {
-          localStorage.setItem("userID", formData.userID);
+          localStorage.setItem("savedId", formData.id);
+          localStorage.setItem("savedPassword", formData.password);
+        } else {
+          localStorage.removeItem("savedId");
+          localStorage.removeItem("savedPassword");
         }
   
-        // Show alert but redirect immediately without blocking
         alert("Login successful! Redirecting...");
-        setTimeout(() => {
-          navigate("/bol/active"); // Redirect to dashboard after alert
-        }, 100); // 100ms delay to ensure the alert is dismissed
+        setTimeout(() => navigate("/bol/active"), 100);
       } else {
-        alert("Login failed: " + result.error);
+        alert("Login failed: " + (result.error || "Invalid credentials"));
       }
     } catch (error) {
       console.error("Network error:", error);
       alert("Network error! Please check your connection.");
     }
   };
+  
   
 
   return (
@@ -108,7 +107,7 @@ const SignIn = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default SignIn;

@@ -17,9 +17,10 @@ const navigation = [
     title: "Bill of Ladings",
     href: "/bill-of-ladings",
     icon: <FaFileAlt />,
-    submenu: [{ title: "Active List", href: "/bol/active" },
+    submenu: [{ title: "New BL", href: "/bol/newbl" },
+              { title: "Active List", href: "/bol/active" },
               { title: "History List", href: "/bol/history" },
-              { title: "New BL", href: "/bol/newbl" }
+              
     ],
               
   },
