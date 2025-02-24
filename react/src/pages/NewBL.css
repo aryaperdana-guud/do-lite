@@ -35,6 +35,16 @@
   outline: none;
 }
 
+.claim-button{
+  background-color: #0070c0;
+  color: #ffffff;
+  width: 200px;
+}
+
+.claim-button:hover{
+  background-color: #263754;
+}
+
 .remarks-field {
   width: 100%;
   padding: 10px;
@@ -50,6 +60,26 @@
   color: #263754;
   border-bottom: 2px solid #e7eaf3;
 }
+
+.read-only-field {
+  background-color: #fcfcfc; /* Light gray to indicate non-editable */
+  border: 1px solid #d6d6d6; /* Soft border like a disabled input */
+  color: #000000; /* Muted text color */
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: not-allowed; /* Indicates it's non-interactive */
+}
+
+
+
 
 .cards-container {
   display: flex;
@@ -79,6 +109,8 @@
   padding: 16px;
   border: 1px solid #eaeaea;
 }
+
+
 
 .general-details {
   flex: 3;

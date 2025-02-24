@@ -53,8 +53,8 @@ export const DataTable = ({
             <thead>
               <tr>
                 <th>Payment</th>
-                <th>Surrender</th>
                 <th>Document</th>
+                <th>Surrender</th>
                 <th>Job ID</th>
                 <th>Shipment Type</th>
                 <th>Shipping Line</th>
@@ -74,8 +74,8 @@ export const DataTable = ({
                 paginatedData.map((row, index) => (
                   <tr key={row.id} className={index % 2 === 0 ? "even-row" : "odd-row"}>
                     <td><StatusIcon type="payment" status={row.payment} /></td>
-                    <td><StatusIcon type="surrender" status={row.surrender} /></td>
                     <td><StatusIcon type="document" status={row.document} /></td>
+                    <td><StatusIcon type="surrender" status={row.surrender} /></td>
                     <td>{row.jobId}</td>
                     <td>{row.shipmentType}</td>
                     <td>{row.shippingLine}</td>

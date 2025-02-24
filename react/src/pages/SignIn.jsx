@@ -40,12 +40,10 @@ const SignIn = () => {
           localStorage.setItem("userID", formData.userID);
         }
         
-        // Show the alert but immediately schedule the redirect
         alert("Development Login Successful! Redirecting...");
-  
         // Use setTimeout to delay the redirect after alert
         setTimeout(() => {
-          navigate("/do-claims/active"); // Redirect to dashboard after alert is closed
+          navigate("/bol/active"); // Redirect to dashboard after alert is closed
         }, 100); // 100ms delay to ensure the alert has time to be dismissed
       } else {
         alert("Invalid credentials. Please try again.");
@@ -72,7 +70,7 @@ const SignIn = () => {
         // Show alert but redirect immediately without blocking
         alert("Login successful! Redirecting...");
         setTimeout(() => {
-          navigate("/do-claims/active"); // Redirect to dashboard after alert
+          navigate("/bol/active"); // Redirect to dashboard after alert
         }, 100); // 100ms delay to ensure the alert is dismissed
       } else {
         alert("Login failed: " + result.error);

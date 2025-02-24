@@ -88,9 +88,10 @@ export function NewBL() {
 
               {/* General Details Section */}
               <div className="general-details">
-                <div className="details-title">
-                  <Typography variant="h5" fontWeight="bold">General Details</Typography>
-                </div>
+              <div className="details-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                {/* <ShipIcon style={{ fontSize: 24 }} /> Icon on the left */}
+                <Typography variant="h5" fontWeight="bold">General Details</Typography>
+              </div>
 
                 <div className="details-content">
                   {/* ShippingLine Option */}

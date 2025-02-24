@@ -17,8 +17,8 @@ const navigation = [
     title: "Bill of Ladings",
     href: "/bill-of-ladings",
     icon: <FaFileAlt />,
-    submenu: [{ title: "BL Active Lists", href: "#" },
-              { title: "BL History Lists", href: "#" },
+    submenu: [{ title: "Active List", href: "/bol/active" },
+              { title: "History List", href: "/bol/history" },
               { title: "New BL", href: "/bol/newbl" }
     ],
               
@@ -37,8 +37,8 @@ const navigation = [
     href: "/my-do",
     icon: <FaFolder />,
     submenu: [
-      { title: "Nav 1", href: "#" },
-      { title: "Nav 2", href: "#" },
+      { title: "Active List", href: "#" },
+      { title: "History List", href: "#" },
       { title: "Nav 3", href: "#" },
     ],
   },

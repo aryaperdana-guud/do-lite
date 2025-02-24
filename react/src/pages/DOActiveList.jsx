@@ -7,7 +7,7 @@ const ACTIVE_DATA = [
   {
     id: 1,
     payment: "rejected",
-    surrender: "accepted",
+    surrender: "pending",
     document: "pending",
     jobId: "DOJF1234567890",
     shipmentType: "IMPORT",
@@ -18,7 +18,7 @@ const ACTIVE_DATA = [
   {
     id: 2,
     payment: "accepted",
-    surrender: "rejected",
+    surrender: "pending",
     document: "rejected",
     jobId: "DOJF1234567890",
     shipmentType: "IMPORT",
@@ -40,7 +40,7 @@ const ACTIVE_DATA = [
   {
     id: 2,
     payment: "accepted",
-    surrender: "rejected",
+    surrender: "pending",
     document: "pending",
     jobId: "DOJF1234567890",
     shipmentType: "IMPORT",
@@ -51,7 +51,7 @@ const ACTIVE_DATA = [
   {
     id: 1,
     payment: "rejected",
-    surrender: "accepted",
+    surrender: "pending",
     document: "pending",
     jobId: "DOJF1234567890",
     shipmentType: "IMPORT",
@@ -62,7 +62,7 @@ const ACTIVE_DATA = [
   {
     id: 2,
     payment: "accepted",
-    surrender: "rejected",
+    surrender: "pending",
     document: "pending",
     jobId: "DOJF1234567890",
     shipmentType: "IMPORT",
@@ -73,7 +73,7 @@ const ACTIVE_DATA = [
   {
     id: 1,
     payment: "rejected",
-    surrender: "accepted",
+    surrender: "pending",
     document: "pending",
     jobId: "DOJF1234567890",
     shipmentType: "IMPORT",
@@ -84,7 +84,7 @@ const ACTIVE_DATA = [
   {
     id: 2,
     payment: "accepted",
-    surrender: "rejected",
+    surrender: "pending",
     document: "pending",
     jobId: "DOJF1234567890",
     shipmentType: "IMPORT",
@@ -95,7 +95,7 @@ const ACTIVE_DATA = [
   {
     id: 1,
     payment: "rejected",
-    surrender: "accepted",
+    surrender: "pending",
     document: "pending",
     jobId: "DOJF1234567890",
     shipmentType: "IMPORT",
