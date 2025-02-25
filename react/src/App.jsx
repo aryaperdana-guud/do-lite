@@ -10,6 +10,7 @@ import { BOLActive } from './pages/BOLActiveList.jsx';
 import { BOLHistory } from './pages/BOLHistoryList.jsx';
 import { ViewBL } from './pages/ViewBL.jsx';
 import { BOLClaim } from './pages/BOLClaim.jsx';
+import EditDOClaim from "./pages/EditDOClaim.jsx";
 import AuthGuard from "./components/AuthGuard.jsx";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Route path="/bol/history" element={<AuthGuard><BOLHistory /></AuthGuard>} />
         <Route path="/bol/active" element={<AuthGuard><BOLActive /></AuthGuard>} />
         <Route path="/bol/claim" element={<AuthGuard><BOLClaim /></AuthGuard>} />
+        <Route path="/edit-do-claim/:id" element={<EditDOClaim />} />
         <Route path="/bol/active/view/:id" element={<AuthGuard><ViewBL /></AuthGuard>}/>
       </Routes>
     </Router>
