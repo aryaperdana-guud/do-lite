@@ -59,12 +59,12 @@ export const BOLTable = ({
                 color="primary"
                 overlap="circular"
                 title="Selected"
-              ><File size={25} />
+              ><File size={30} />
               </Badge>)}
             </button>      
           
             <button className="active-lists__download" onClick={onDownload} title="Download Lists">
-                <Download size={25} />
+                <Download size={30} />
             </button>
           </div>
         </div>

@@ -1,28 +1,21 @@
-"use client";
-
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../components/UserContext.jsx";
 import "./SignIn.css";
 import LeftImage from "../assets/LoginImage1.png";
 import MovingBackground from "../components/MovingBackground";
 import SignInForm from "../components/SignInForm";
 
 const SignIn = () => {
+  const { setUser } = useContext(UserContext);
   const [formData, setFormData] = useState({
     id: localStorage.getItem("savedId") || "",
     password: localStorage.getItem("savedPassword") || "",
   });
-  
 
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const navigate = useNavigate();
-
-  // Mock user for development testing
-  // const mockUser = {
-  //   id: "DEV_001", // Changed from userID to id for consistency
-  //   password: "Matthew",
-  // };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -31,13 +24,11 @@ const SignIn = () => {
   const handleRememberMeChange = (e) => {
     setRememberMe(e.target.checked);
   };
-  console.log("Submitting Data:", formData);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting Data:", formData); // Debugging
-  
+    console.log("Submitting Data:", formData);
+
     try {
       const response = await fetch(
         "https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/auth/login",
@@ -47,7 +38,7 @@ const SignIn = () => {
           body: JSON.stringify(formData),
         }
       );
-  
+
       let result;
       try {
         result = await response.json();
@@ -56,10 +47,10 @@ const SignIn = () => {
         alert("Unexpected server response. Please try again.");
         return;
       }
-  
+
       if (response.ok && result.token) {
         localStorage.setItem("jwtToken", result.token);
-  
+
         if (rememberMe) {
           localStorage.setItem("savedId", formData.id);
           localStorage.setItem("savedPassword", formData.password);
@@ -67,8 +58,27 @@ const SignIn = () => {
           localStorage.removeItem("savedId");
           localStorage.removeItem("savedPassword");
         }
-  
-        alert("Login successful! Redirecting...");
+
+        // Fetch user profile immediately after login
+        const profileResponse = await fetch(
+          "https://cdo-dev-id2.clickargo.com/be/clicdo/api/co/cac/profile/",
+          {
+            headers: { Authorization: `Bearer ${result.token}` },
+          }
+        );
+
+        const profileData = await profileResponse.json();
+        console.log("Fetched Profile:", profileData);
+
+        const userData = {
+          username: profileData.user?.name || "Unknown",
+          companyName: profileData.user?.coreAccn?.accnName || "No Company",
+          avatarUrl: profileData.user?.avatar || "",
+        };
+
+        setUser(userData); // Update user context
+        localStorage.setItem("user", JSON.stringify(userData)); // Store user in localStorage
+
         setTimeout(() => navigate("/bol/active"), 100);
       } else {
         alert("Login failed: " + (result.error || "Invalid credentials"));
@@ -78,8 +88,6 @@ const SignIn = () => {
       alert("Network error! Please check your connection.");
     }
   };
-  
-  
 
   return (
     <div className="app">

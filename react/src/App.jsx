@@ -11,26 +11,28 @@ import { BOLHistory } from './pages/BOLHistoryList.jsx';
 import { ViewBL } from './pages/ViewBL.jsx';
 import { BOLClaim } from './pages/BOLClaim.jsx';
 import AuthGuard from "./components/AuthGuard.jsx";
-
+import { UserProvider } from "./components/UserContext.jsx";
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Default route */}
-        <Route path="/" element={<SignIn />} />
+    <UserProvider>
+      <Router>
+        <Routes>
+          {/* Default route */}
+          <Route path="/" element={<SignIn />} />
 
-        {/* Other routes */}
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/do-claims/active" element={<AuthGuard><DOActive /></AuthGuard>} />
-        <Route path="/do-claims/history" element={<AuthGuard><DOHistory /></AuthGuard>} />
-        <Route path="/bol/newbl" element={<AuthGuard><NewBL /></AuthGuard>} />
-        <Route path="/bol/history" element={<AuthGuard><BOLHistory /></AuthGuard>} />
-        <Route path="/bol/active" element={<AuthGuard><BOLActive /></AuthGuard>} />
-        <Route path="/bol/claim" element={<AuthGuard><BOLClaim /></AuthGuard>} />
-        <Route path="/bol/active/view/:id" element={<AuthGuard><ViewBL /></AuthGuard>}/>
-      </Routes>
-    </Router>
+          {/* Other routes */}
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/do-claims/active" element={<AuthGuard><DOActive /></AuthGuard>} />
+          <Route path="/do-claims/history" element={<AuthGuard><DOHistory /></AuthGuard>} />
+          <Route path="/bol/newbl" element={<AuthGuard><NewBL /></AuthGuard>} />
+          <Route path="/bol/history" element={<AuthGuard><BOLHistory /></AuthGuard>} />
+          <Route path="/bol/active" element={<AuthGuard><BOLActive /></AuthGuard>} />
+          <Route path="/bol/claim" element={<AuthGuard><BOLClaim /></AuthGuard>} />
+          <Route path="/bol/active/view/:id" element={<AuthGuard><ViewBL /></AuthGuard>}/>
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 

@@ -1,0 +1,73 @@
+.profile-dropdown {
+    position: absolute;
+    right:33px;
+    top:46px;
+    transform: scale(1.2);
+  }
+  
+  .profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.2s;
+    background-color: #ffffff;
+  }
+  
+  .profile-trigger:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  
+  .profile-avatar {
+    width: 35px !important;
+    height: 35px !important;
+  }
+  
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .username {
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    color: #263754;
+  }
+  
+  .company-name {
+    color: rgba(0, 0, 0, 0.6) !important;
+    line-height: 1.2 !important;
+  }
+  
+  .dropdown-arrow {
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  .dropdown-arrow:focus{
+    outline: none;
+  }
+  
+  .dropmenu-item {
+    display: flex ;
+    gap: 8px ;
+    border-radius: 20px;
+    padding: 8px 16px ;
+    min-width: 200px;
+  }
+  
+  .menu-icon {
+    font-size: 20px;
+  }
+  
+  .logout {
+    color: #d32f2f ;
+  }
+  
+  .logout .menu-icon {
+    color: #d32f2f ;
+  }
+  
+  

@@ -8,6 +8,7 @@ import "./NewBL.css";
 import Button from '@mui/joy/Button';
 import Box from '@mui/joy/Box';
 import FileUploadField from "../components/FileUploadField.jsx";
+import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
 export function NewBL() {
   // Form state management
@@ -75,6 +76,7 @@ export function NewBL() {
     <div className="dashboard">
       <NavigationBar />
       <main className="main-content">
+        <ProfileDropdown/>
         <h1 className="Title">Bill of Ladings</h1>
 
         <form className="form" onSubmit={handleSubmit}>
