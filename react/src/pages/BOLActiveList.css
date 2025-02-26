@@ -9,6 +9,7 @@
 .main-content {
   margin-left: 280px; /*width navgation 240 */
   padding: 16px;
+  height: 1080px !important;
   transition: margin-left 0.3s ease;
   overflow: hidden;
 }

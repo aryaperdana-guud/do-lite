@@ -7,9 +7,8 @@
 
 .main-content {
   margin-left: 280px;
-  padding: 16px;
   transition: margin-left 0.3s ease;
-  height: calc(100vh - 32px);
+  height: calc(100vh - 36px) !important;
   overflow: hidden;
   display: flex;
   flex-direction: column;

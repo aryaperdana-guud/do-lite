@@ -64,6 +64,25 @@
   padding: 4px;
 }
 
+.action-button-extension {
+  padding: 4px;
+  background-color: #ffffff00;
+  color: #666;
+  outline: none;
+  border: none;
+}
+
+.action-button-extension:hover {
+  outline: none;
+  border: none;
+  color: #2563eb;
+}
+
+.action-button-extension:focus {
+  outline: none;
+  border: none;
+}
+
 .active-lists__title {
   font-size: 18px;
   font-weight: 600;
@@ -130,13 +149,6 @@
   color: #1a1a1a;
   border-bottom: 1px solid #e5e7eb;
   text-align: left;
-  font-size: 14px;
-}
-
-.active-lists__table td {
-  padding: 12px 16px;
-  color: #4b5563;
-  border-bottom: 1px solid #e5e7eb;
   font-size: 14px;
 }
 
@@ -218,11 +230,6 @@
   color: #2563eb;
 }
 
-.action-buttons {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-start;
-}
 .action-button:focus-visible,
 .action-button:focus {
   outline: none;
@@ -248,7 +255,7 @@
 
 .active-lists__footer {
   position: sticky;
-  bottom: 0;
+  bottom: -50px;
   z-index: 2;
   background-color: #ffffff;
   padding: 16px;

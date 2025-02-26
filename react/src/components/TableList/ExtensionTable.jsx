@@ -134,7 +134,7 @@ export const ExtensionTable = ({
                           <>
                             <span className="action-button placeholder"></span>
                             <button
-                              className="action-button"
+                              className="action-button-extension"
                               onClick={() => onView?.(row)}
                               title="View"
                             >
@@ -145,7 +145,7 @@ export const ExtensionTable = ({
                         ) : (
                           <>
                             <button
-                              className="action-button"
+                              className="action-button-extension"
                               onClick={() => onEdit?.(row)}
                               title="Edit"
                             >
@@ -153,7 +153,7 @@ export const ExtensionTable = ({
                             </button>
 
                             <button
-                              className="action-button"
+                              className="action-button-extension"
                               onClick={() => onView?.(row)}
                               title="View"
                             >
@@ -161,7 +161,7 @@ export const ExtensionTable = ({
                             </button>
 
                             <button
-                              className="action-button"
+                              className="action-button-extension"
                               onClick={() => onDelete?.(row)}
                               title="Delete"
                             >
