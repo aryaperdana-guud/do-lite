@@ -11,6 +11,9 @@ import { BOLHistory } from './pages/BOLHistoryList.jsx';
 import { ViewBL } from './pages/ViewBL.jsx';
 import { BOLClaim } from './pages/BOLClaim.jsx';
 import EditDOClaim from "./pages/EditDOClaim.jsx";
+import EditDOClaimAttachments from "./pages/EditDOClaimAttachments.jsx";
+import EditDOClaimQuery from "./pages/EditDOClaimQuery.jsx";
+import EditDOClaimAudit from "./pages/EditDOClaimAudit.jsx";
 import AuthGuard from "./components/AuthGuard.jsx";
 
 function App() {
@@ -30,6 +33,9 @@ function App() {
         <Route path="/bol/active" element={<AuthGuard><BOLActive /></AuthGuard>} />
         <Route path="/bol/claim" element={<AuthGuard><BOLClaim /></AuthGuard>} />
         <Route path="/edit-do-claim/:id" element={<EditDOClaim />} />
+        <Route path="/edit-do-claim-attachments/:id" element={<EditDOClaimAttachments />} />
+        <Route path="/edit-do-claim-query/:id" element={<EditDOClaimQuery />} />
+        <Route path="/edit-do-claim-audit/:id" element={<EditDOClaimAudit />} />
         <Route path="/bol/active/view/:id" element={<AuthGuard><ViewBL /></AuthGuard>}/>
       </Routes>
     </Router>

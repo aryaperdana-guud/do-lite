@@ -33,9 +33,9 @@ const EditDOClaim = () => {
                 </div>
                 <div className="tab-menu">
                     <button className="tab-active">CLAIM DETAILS</button>
-                    <button className="tab">ATTACHMENTS</button>
-                    <button className="tab">QUERY</button>
-                    <button className="tab">AUDIT</button>
+                    <button className="tab" onClick={() => navigate(`/edit-do-claim-attachments/${id}`)}>ATTACHMENTS</button>
+                    <button className="tab" onClick={() => navigate(`/edit-do-claim-query/${id}`)}>QUERY</button>
+                    <button className="tab" onClick={() => navigate(`/edit-do-claim-audit/${id}`)}>AUDIT</button>
                 </div>
 
                 <div className="edit-do-form">
