@@ -1,0 +1,147 @@
+.dashboard {
+    width: 100vw;
+    height: 100vh;
+    background-color: #eaeaea;
+    padding: 16px; 
+    overflow: hidden;
+}
+
+.title {
+    margin: 20px;
+    margin-bottom: 40px;
+}
+
+.action-button-save {
+    color: green;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.action-button-delete {
+    color: red;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.action-button-exit {
+    color: orange;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.main-content {
+    margin-left: 280px;
+    padding: 20px;
+    height: 630px;
+    /* overflow: hidden; */
+}
+
+.edit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.edit-do-container{
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    height: 850px;
+}
+
+.table-content.empty {
+    background-color: #eaeaea;
+    border: none;
+    width: 100%;
+}
+
+.table-content.filled {
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.selected-bol {
+    background: #eaeaea;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    padding-bottom: 20px;
+    overflow: hidden;
+}
+
+.selected-bol .form-title {
+    font-size: 20px;
+}
+
+.selected-bol table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.selected-bol th,
+.selected-bol td {
+    padding: 10px;
+}
+
+.selected-bol th {
+    border-bottom: 2px solid #ccc;
+}
+
+.selected-bol tbody tr:first-child td:first-child {
+    border-top-left-radius: 12px;
+}
+.selected-bol tbody tr:first-child td:last-child {
+    border-top-right-radius: 12px;
+}
+.selected-bol tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 12px;
+}
+.selected-bol tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 12px;
+}
+
+.button-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bottom-buttons{
+    display: flex;
+    justify-content: left;
+    gap: 10px;
+    margin-top: 50px;
+    align-items: center;
+}
+
+.add-button{
+    background-color: #263754;
+    color: white;
+    text-align: center;
+ 
+}
+
+.confirm-button{
+    background-color: #39E839;
+    color: white;
+    text-align: center;
+}
