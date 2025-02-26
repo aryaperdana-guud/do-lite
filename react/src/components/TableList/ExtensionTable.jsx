@@ -25,6 +25,7 @@ export const ExtensionTable = ({
   onViewDO,
   onViewContainers,
 }) => {
+  const temp = title;
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const navigate = useNavigate();
@@ -129,7 +130,19 @@ export const ExtensionTable = ({
                     <td>{row.paymentDate}</td>
                     <td>
                       <div className="action-buttons">
-                        {title !== "History List" && (
+                        {temp === "History List" ? (
+                          <>
+                            <span className="action-button placeholder"></span>
+                            <button
+                              className="action-button"
+                              onClick={() => onView?.(row)}
+                              title="View"
+                            >
+                              <Eye size={16} />
+                            </button>
+                            <span className="action-button placeholder"></span>
+                          </>
+                        ) : (
                           <>
                             <button
                               className="action-button"
@@ -141,6 +154,14 @@ export const ExtensionTable = ({
 
                             <button
                               className="action-button"
+                              onClick={() => onView?.(row)}
+                              title="View"
+                            >
+                              <Eye size={16} />
+                            </button>
+
+                            <button
+                              className="action-button"
                               onClick={() => onDelete?.(row)}
                               title="Delete"
                             >
@@ -148,14 +169,6 @@ export const ExtensionTable = ({
                             </button>
                           </>
                         )}
-
-                        <button
-                          className="action-button"
-                          onClick={() => onView?.(row)}
-                          title="View"
-                        >
-                          <Eye size={16} />
-                        </button>
                       </div>
                     </td>
                   </tr>

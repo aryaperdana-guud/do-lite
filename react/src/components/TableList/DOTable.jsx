@@ -1,8 +1,16 @@
 import React from "react";
 import { useState } from "react";
-import { Eye, Download, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Eye,
+  Edit,
+  Trash,
+  Download,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import "./DOTable.css";
 import { StatusIcon } from "../StatusRender.jsx"; // Make sure path is correct
+import { useNavigate } from "react-router-dom";
 
 // Keeping the mock data for development
 
@@ -12,9 +20,11 @@ export const DataTable = ({
   loading = false,
   onDownload,
   onViewItem,
+  onEditItem,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const navigate = useNavigate();
 
   const totalPages = Math.ceil((data?.length || 0) / itemsPerPage);
 
@@ -94,12 +104,21 @@ export const DataTable = ({
                     <td>{row.dateSubmitted}</td>
                     <td>{row.noOfBl}</td>
                     <td>
-                      <button
-                        className="action-button"
-                        onClick={() => onViewItem?.(row)}
-                      >
-                        <Eye size={16} />
-                      </button>
+                      <div className="action-buttons">
+                        <button
+                          className="action-button"
+                          onClick={() => navigate(`/edit-do-claim/${row.id}`)}
+                        >
+                          <Edit size={16} />
+                        </button>
+
+                        <button
+                          className="action-button"
+                          onClick={() => onViewItem?.(row)}
+                        >
+                          <Eye size={16} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

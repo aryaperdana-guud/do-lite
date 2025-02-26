@@ -1,5 +1,5 @@
-import { useState, useLayoutEffect } from "react"
-import "./NavigationBar.css"
+import { useState, useLayoutEffect } from "react";
+import "./NavigationBar.css";
 import {
   FaFileAlt,
   FaClipboardList,
@@ -9,20 +9,19 @@ import {
   FaChevronDown,
   FaChevronLeft,
   FaChevronRight,
-} from "react-icons/fa"
-import NavImage from "../../assets/NAV-icon.png"
+} from "react-icons/fa";
+import NavImage from "../../assets/NAV-icon.png";
 
 const navigation = [
   {
     title: "Bill of Ladings",
     href: "/bill-of-ladings",
     icon: <FaFileAlt />,
-    submenu: [{ title: "New BL", href: "/bol/newbl" },
-              { title: "Active List", href: "/bol/active" },
-              { title: "History List", href: "/bol/history" },
-              
+    submenu: [
+      { title: "New BL", href: "/bol/newbl" },
+      { title: "Active List", href: "/bol/active" },
+      { title: "History List", href: "/bol/history" },
     ],
-              
   },
   {
     title: "DO Claims",
@@ -48,8 +47,9 @@ const navigation = [
     href: "/do-extension",
     icon: <FaCalendarAlt />,
     submenu: [
-      { title: "Active List", href: "/doextension/active" },
-      { title: "History List", href: "/doextension/history" },
+      { title: "Active List", href: "/do-extension/active" },
+      { title: "History List", href: "/do-extension/history" },
+      { title: "Nav 3", href: "#" },
     ],
   },
   {
@@ -61,43 +61,42 @@ const navigation = [
       { title: "Transactions", href: "#" },
     ],
   },
-]
+];
 
 export function NavigationBar() {
-  const [activeMenu, setActiveMenu] = useState("/bill-of-ladings")
-  const [expandedMenu, setExpandedMenu] = useState(null) // Track expanded menu
-  const [activeSubmenu, setActiveSubmenu] = useState(null) // Track active submenu
-  const [isMinimized, setIsMinimized] = useState(false)
+  const [activeMenu, setActiveMenu] = useState("/bill-of-ladings");
+  const [expandedMenu, setExpandedMenu] = useState(null); // Track expanded menu
+  const [activeSubmenu, setActiveSubmenu] = useState(null); // Track active submenu
+  const [isMinimized, setIsMinimized] = useState(false);
 
   useLayoutEffect(() => {
-    const storedExpandedMenu = localStorage.getItem("expandedMenu")
-    const storedActiveMenu = localStorage.getItem("activeMenu")
-    const storedActiveSubmenu = localStorage.getItem("activeSubmenu")
-    
+    const storedExpandedMenu = localStorage.getItem("expandedMenu");
+    const storedActiveMenu = localStorage.getItem("activeMenu");
+    const storedActiveSubmenu = localStorage.getItem("activeSubmenu");
+
     if (storedExpandedMenu) {
-      setExpandedMenu(storedExpandedMenu)
+      setExpandedMenu(storedExpandedMenu);
     }
     if (storedActiveMenu) {
-      setActiveMenu(storedActiveMenu)
+      setActiveMenu(storedActiveMenu);
     }
     if (storedActiveSubmenu) {
-      setActiveSubmenu(storedActiveSubmenu)
+      setActiveSubmenu(storedActiveSubmenu);
     }
-  }, [])
+  }, []);
 
   const handleMenuClick = (href) => {
-  setExpandedMenu((prev) => (prev === href ? null : href)); // Toggle if clicked again
-  setActiveMenu(href); // Set the active menu
-  localStorage.setItem("expandedMenu", expandedMenu === href ? "" : href); // Save expanded state
-  localStorage.setItem("activeMenu", href);
-};
+    setExpandedMenu((prev) => (prev === href ? null : href)); // Toggle if clicked again
+    setActiveMenu(href); // Set the active menu
+    localStorage.setItem("expandedMenu", expandedMenu === href ? "" : href); // Save expanded state
+    localStorage.setItem("activeMenu", href);
+  };
 
-  
   const handleSubmenuClick = (href) => {
-    setActiveSubmenu(href) // Set the active submenu
-    setExpandedMenu(null) // Collapse the parent menu after submenu selection
-    localStorage.setItem("activeSubmenu", href) // Save submenu active state
-  }
+    setActiveSubmenu(href); // Set the active submenu
+    setExpandedMenu(null); // Collapse the parent menu after submenu selection
+    localStorage.setItem("activeSubmenu", href); // Save submenu active state
+  };
 
   const toggleMinimize = () => {
     setIsMinimized((prev) => {
@@ -118,8 +117,6 @@ export function NavigationBar() {
       return !prev;
     });
   };
-  
-  
 
   return (
     <div className={`navigation-bar ${isMinimized ? "minimized" : ""}`}>
@@ -130,9 +127,10 @@ export function NavigationBar() {
       </div>
 
       <nav className="nav-menu">
-        <button 
-          className={`toggle-button ${isMinimized ? "rotated" : ""}`} 
-          onClick={toggleMinimize}>
+        <button
+          className={`toggle-button ${isMinimized ? "rotated" : ""}`}
+          onClick={toggleMinimize}
+        >
           {isMinimized ? <FaChevronRight /> : <FaChevronLeft />}
         </button>
 
@@ -145,17 +143,21 @@ export function NavigationBar() {
               <div className="menu-icon-container">{item.icon}</div>
               <span className="menu-title">{item.title}</span>
               {item.submenu && (
-                <span className={`chevron ${expandedMenu === item.href ? "rotated" : ""}`}>
+                <span
+                  className={`chevron ${expandedMenu === item.href ? "rotated" : ""}`}
+                >
                   <FaChevronDown />
                 </span>
               )}
             </button>
             {item.submenu && (
-              <div className={`submenu ${expandedMenu === item.href ? "expanded" : ""}`}>
+              <div
+                className={`submenu ${expandedMenu === item.href ? "expanded" : ""}`}
+              >
                 {item.submenu.map((subitem) => (
-                  <a 
-                    key={subitem.href} 
-                    href={subitem.href} 
+                  <a
+                    key={subitem.href}
+                    href={subitem.href}
                     className={`submenu-item ${activeSubmenu === subitem.href ? "active" : ""}`}
                     onClick={() => handleSubmenuClick(subitem.href)} // Handle submenu click
                   >
@@ -178,5 +180,5 @@ export function NavigationBar() {
         </a>
       </div>
     </div>
-  )
+  );
 }

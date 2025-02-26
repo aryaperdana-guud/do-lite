@@ -14,6 +14,11 @@ import AuthGuard from "./components/AuthGuard.jsx";
 import { UserProvider } from "./components/UserContext.jsx";
 import { ExtensionActive } from "./pages/DOExtensionActive.jsx";
 import { ExtensionHistory } from "./pages/DOExtensionHistory.jsx";
+import EditDOClaim from "./pages/EditDOClaim.jsx";
+import EditDOClaimAttachments from "./pages/EditDOClaimAttachments.jsx";
+import EditDOClaimAudit from "./pages/EditDOClaimAudit.jsx";
+import EditDOClaimQuery from "./pages/EditDOClaimQuery.jsx";
+// import { ExtensionEdit } from './pages/DOExtensionedit.jsx';
 
 function App() {
   return (
@@ -86,7 +91,7 @@ function App() {
           />
 
           <Route
-            path="/doextension/active"
+            path="/do-extension/active"
             element={
               <AuthGuard>
                 <ExtensionActive />
@@ -94,12 +99,27 @@ function App() {
             }
           />
           <Route
-            path="/doextension/history"
+            path="/do-extension/history"
             element={
               <AuthGuard>
                 <ExtensionHistory />
               </AuthGuard>
             }
+          />
+          {/* <Route path="/do-extension/active/edit" element={<AuthGuard><ExtensionEdit /></AuthGuard>}/> */}
+
+          <Route path="/edit-do-claim/:id" element={<EditDOClaim />} />
+          <Route
+            path="/edit-do-claim-attachments/:id"
+            element={<EditDOClaimAttachments />}
+          />
+          <Route
+            path="/edit-do-claim-query/:id"
+            element={<EditDOClaimQuery />}
+          />
+          <Route
+            path="/edit-do-claim-audit/:id"
+            element={<EditDOClaimAudit />}
           />
         </Routes>
       </Router>
