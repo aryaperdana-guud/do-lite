@@ -7,7 +7,7 @@ import { StatusIcon } from "../StatusRender" // Make sure path is correct
 import "./BOLTable.css" // Import the existing CSS file
 
 export const ExtensionTable = ({
-  title = "Extension List",
+  title,
   data = [],
   loading = false,
   onView,
@@ -17,6 +17,8 @@ export const ExtensionTable = ({
   onViewDO,
   onViewContainers,
 }) => {
+
+  const temp = title
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const navigate = useNavigate()
@@ -106,17 +108,32 @@ export const ExtensionTable = ({
                     <td>{row.amount}</td>
                     <td>{row.paymentDate}</td>
                     <td>
-                      <div className="action-buttons">
-                        <button className="action-button" onClick={() => onEdit?.(row)} title="Edit">
-                          <Pencil size={16} />
-                        </button>
-                        <button className="action-button" onClick={() => onView?.(row)} title="View">
-                          <Eye size={16} />
-                        </button>
-                        <button className="action-button" onClick={() => onDelete?.(row)} title="Delete">
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
+                    <div className="action-buttons">
+                      {temp === "History List" ? (
+                        <>
+                          <span className="action-button placeholder"></span>
+                          <button className="action-button" onClick={() => onView?.(row)} title="View">
+                            <Eye size={16} />
+                          </button>
+                          <span className="action-button placeholder"></span>
+                        </>
+                      ) : (
+                        <>
+                          <button className="action-button" onClick={() => onEdit?.(row)} title="Edit">
+                            <Pencil size={16} />
+                          </button>
+
+                          <button className="action-button" onClick={() => onView?.(row)} title="View">
+                            <Eye size={16} />
+                          </button>
+
+                          <button className="action-button" onClick={() => onDelete?.(row)} title="Delete">
+                            <Trash2 size={16} />
+                          </button>
+                        </>
+                      )}
+                    </div>
+
                     </td>
                   </tr>
                 ))
