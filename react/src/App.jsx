@@ -14,7 +14,7 @@ import AuthGuard from "./components/AuthGuard.jsx";
 import { UserProvider } from "./components/UserContext.jsx";
 import { ExtensionActive } from './pages/DOExtensionActive.jsx';
 import { ExtensionHistory } from './pages/DOExtensionHistory.jsx';
-
+import { ExtensionEdit } from './pages/DOExtensionedit.jsx';
 
 function App() {
   return (
@@ -37,8 +37,9 @@ function App() {
           <Route path="/bol/claim" element={<AuthGuard><BOLClaim /></AuthGuard>} />
           <Route path="/bol/active/view/:id" element={<AuthGuard><ViewBL /></AuthGuard>}/>
 
-          <Route path="/doextension/active" element={<AuthGuard><ExtensionActive /></AuthGuard>}/>
-          <Route path="/doextension/history" element={<AuthGuard><ExtensionHistory /></AuthGuard>}/>
+          <Route path="/do-extension/active" element={<AuthGuard><ExtensionActive /></AuthGuard>}/>
+          <Route path="/do-extension/history" element={<AuthGuard><ExtensionHistory /></AuthGuard>}/>
+          <Route path="/do-extension/active/edit" element={<AuthGuard><ExtensionEdit /></AuthGuard>}/>
 
         </Routes>
       </Router>
