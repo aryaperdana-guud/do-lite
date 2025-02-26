@@ -48,8 +48,8 @@ const navigation = [
     href: "/do-extension",
     icon: <FaCalendarAlt />,
     submenu: [
-      { title: "Active List", href: "/doextension/active" },
-      { title: "History List", href: "/doextension/history" },
+      { title: "Active List", href: "/do-extension/active" },
+      { title: "History List", href: "/do-extension/history" },
       { title: "Nav 3", href: "#" },
     ],
   },
