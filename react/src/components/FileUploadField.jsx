@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { styled } from '@mui/joy/styles';
-import Button from '@mui/joy/Button';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import Typography from '@mui/joy/Typography';
+import React, { useState } from "react";
+import { styled } from "@mui/joy/styles";
+import Button from "@mui/joy/Button";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import Typography from "@mui/joy/Typography";
 
-const VisuallyHiddenInput = styled('input')`
+const VisuallyHiddenInput = styled("input")`
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
   height: 1px;

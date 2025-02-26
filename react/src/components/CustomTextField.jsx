@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material"
+import { TextField } from "@mui/material";
 
 const CustomTextField = ({ name, value, onChange, ...props }) => {
   return (
@@ -12,7 +12,7 @@ const CustomTextField = ({ name, value, onChange, ...props }) => {
       className="LoginField"
       {...props}
     />
-  )
-}
+  );
+};
 
-export default CustomTextField
+export default CustomTextField;

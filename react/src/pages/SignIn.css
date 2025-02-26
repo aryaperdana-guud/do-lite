@@ -1,176 +1,170 @@
 .background-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200vw; 
-    height: 100vh;
-    display: flex;
-    overflow: hidden;
-    z-index: -1;
-    animation: scrollBg 20s linear infinite;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200vw;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  z-index: -1;
+  animation: scrollBg 20s linear infinite;
 }
 
 /* Each background segment */
 .background {
-    width: 100vw;
-    height: 100vh;
-    background-image: url('../assets/background.png');
-    background-size: cover;
-    background-repeat: no-repeat;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../assets/background.png");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 /* Smooth infinite scrolling effect */
 @keyframes scrollBg {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(-100vw);
-    }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100vw);
+  }
 }
 
 .signin-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.8); /* Combine translate & scale */
-    transform-origin: center; /* Ensure it scales from the middle */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(234, 234, 234, 0);
-    border-radius: 40px;
-    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.158);
-    width: 80%;
-    max-width: 1400px;
-    height: 700px;
-    padding: 0px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8); /* Combine translate & scale */
+  transform-origin: center; /* Ensure it scales from the middle */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(234, 234, 234, 0);
+  border-radius: 40px;
+  box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.158);
+  width: 80%;
+  max-width: 1400px;
+  height: 700px;
+  padding: 0px;
 }
 
-  
-  .left-section {
-    width: 50%;
-    height: 100%;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-left: 80px;
-    padding-right: 80px;
-    border-top-left-radius: 40px;
-    border-bottom-left-radius: 40px;
-    margin: 0;
-    border: none;
-  }
+.left-section {
+  width: 50%;
+  height: 100%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 80px;
+  padding-right: 80px;
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
+  margin: 0;
+  border: none;
+}
 
-  .right-section {
-    width: 50%;
-    height: 100%;
-    background: #1e3a5f;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 80px;
-    padding-right: 80px;
-    border-top-right-radius: 40px;
-    border-bottom-right-radius: 40px;
-    text-align: left;
-    margin: 0;
-    border: none;
-  }
-    .white{
-        color: #ffffff;
-    }
-    
-    .welcome-text {
-        font-weight: bolder;
+.right-section {
+  width: 50%;
+  height: 100%;
+  background: #1e3a5f;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 80px;
+  padding-right: 80px;
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+  text-align: left;
+  margin: 0;
+  border: none;
+}
+.white {
+  color: #ffffff;
+}
 
-    }
-    
-    .white-text {
-        color: white;
-    }
-    
-    .blue-text {
-        color: #00aaff;
-        font-weight: bold;
-    }
-    
-    .login-form {
-        width: 100%;
-        margin-top: 30px;
-    }
+.welcome-text {
+  font-weight: bolder;
+}
 
-    .form-options {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px 0;
-    }
-    .forgetPass-link{
-        color: #ffffff;
-    }
-    .forgetPass-link :hover{
-        text-decoration: underline;
-    }
-    .signIn-button {
-        background-color: #0055a4;
-        color: white;
-        font-size: 16px;
-        padding-top: 50px ;
-        height: 50px;
-    }
-    
-    .signup-link {
-        text-align: left;
-        margin-top: 20px;
-        padding-top: 20px;
-        
-    }
-    .signup-link:hover {
-        text-decoration: underline;
-    }
+.white-text {
+  color: white;
+}
 
-    
-    /* FIELD LOGIN */
-    /* Default label color */
-    .LoginField .MuiInputLabel-root {
-    color: #f8f8f8d3;  /* Default label color */
-    }
-  
-    /* Label color when focused */
-    .LoginField .MuiInputLabel-root.Mui-focused {
-        color: #ffffff00;  /* Change to your preferred focus color */
-    }
-    
-    /* Underline color when not focused */
-    .LoginField .MuiFilledInput-underline:before {
-        border-bottom: 0px solid #000000;  
-    }
-    
-    /* Underline color when focused */
-    .LoginField .MuiFilledInput-underline:after {
-        border-bottom: 3px solid #0070C0; 
-    }
-    
-    /* Change input text color */
-    .LoginField .MuiFilledInput-input {
-        color: #ffffff;  /* Default text color */
-        size: 25px;
-    }
-    
-    .LoginField .MuiFilledInput-root {
-        background-color: #182d4db0;  /* Light grey background */
-      }
-    
-  
-    /* .................................... */
-      
-    .responsive-image {
-        width: 120%;      /* Make the image responsive */
-        height: auto;     /* Maintain aspect ratio */
-        object-fit: fill;  /* Ensure the image fits without stretching */
-      }
-  
+.blue-text {
+  color: #00aaff;
+  font-weight: bold;
+}
+
+.login-form {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+.forgetPass-link {
+  color: #ffffff;
+}
+.forgetPass-link :hover {
+  text-decoration: underline;
+}
+.signIn-button {
+  background-color: #0055a4;
+  color: white;
+  font-size: 16px;
+  padding-top: 50px;
+  height: 50px;
+}
+
+.signup-link {
+  text-align: left;
+  margin-top: 20px;
+  padding-top: 20px;
+}
+.signup-link:hover {
+  text-decoration: underline;
+}
+
+/* FIELD LOGIN */
+/* Default label color */
+.LoginField .MuiInputLabel-root {
+  color: #f8f8f8d3; /* Default label color */
+}
+
+/* Label color when focused */
+.LoginField .MuiInputLabel-root.Mui-focused {
+  color: #ffffff00; /* Change to your preferred focus color */
+}
+
+/* Underline color when not focused */
+.LoginField .MuiFilledInput-underline:before {
+  border-bottom: 0px solid #000000;
+}
+
+/* Underline color when focused */
+.LoginField .MuiFilledInput-underline:after {
+  border-bottom: 3px solid #0070c0;
+}
+
+/* Change input text color */
+.LoginField .MuiFilledInput-input {
+  color: #ffffff; /* Default text color */
+  size: 25px;
+}
+
+.LoginField .MuiFilledInput-root {
+  background-color: #182d4db0; /* Light grey background */
+}
+
+/* .................................... */
+
+.responsive-image {
+  width: 120%; /* Make the image responsive */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: fill; /* Ensure the image fits without stretching */
+}

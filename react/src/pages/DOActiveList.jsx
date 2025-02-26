@@ -1,7 +1,7 @@
-import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx"
-import "./DOActiveList.css"
-import React from "react"
-import {DataTable} from '../components/TableList/DOTable.jsx'
+import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx";
+import "./DOActiveList.css";
+import React from "react";
+import { DataTable } from "../components/TableList/DOTable.jsx";
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
 const ACTIVE_DATA = [
@@ -190,14 +190,11 @@ export function DOActive() {
       <main className="main-content">
         <h1 className="Title">DO Claims</h1>
         <div>
-        <ProfileDropdown/>
-        <DataTable title="Active List" data={ACTIVE_DATA}/>;
+          <ProfileDropdown />
+          <DataTable title="Active List" data={ACTIVE_DATA} />;
         </div>
-        
       </main>
-      <div>
-      </div>
+      <div></div>
     </div>
-  )
+  );
 }
-

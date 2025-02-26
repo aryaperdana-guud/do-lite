@@ -1,45 +1,41 @@
-import React from "react"
-import { useState } from "react"
-import { Eye, Download, ChevronLeft, ChevronRight } from "lucide-react"
-import "./DOTable.css"
-import { StatusIcon } from '../StatusRender.jsx';  // Make sure path is correct
+import React from "react";
+import { useState } from "react";
+import { Eye, Download, ChevronLeft, ChevronRight } from "lucide-react";
+import "./DOTable.css";
+import { StatusIcon } from "../StatusRender.jsx"; // Make sure path is correct
 
 // Keeping the mock data for development
 
-export const DataTable = ({ 
+export const DataTable = ({
   title,
   data,
   loading = false,
   onDownload,
-  onViewItem
+  onViewItem,
 }) => {
-  
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const totalPages = Math.ceil((data?.length || 0) / itemsPerPage);
 
   const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const handleNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const handleNextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(1);
   };
 
-  const paginatedData = data?.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  ) || [];
+  const paginatedData =
+    data?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) ||
+    [];
 
   return (
     <div className="active-lists">
       <div className="active-lists__header">
         <div className="active-lists__title-section">
           <h2 className="active-lists__title">{title}</h2>
-          <button 
-            className="active-lists__download"
-            onClick={onDownload}
-          >
+          <button className="active-lists__download" onClick={onDownload}>
             <Download size={20} />
           </button>
         </div>
@@ -66,23 +62,39 @@ export const DataTable = ({
             <tbody>
               {paginatedData.length === 0 ? (
                 <tr>
-                  <td colSpan="9" style={{ textAlign: "center", padding: "30px", color: "#888" }}>
+                  <td
+                    colSpan="9"
+                    style={{
+                      textAlign: "center",
+                      padding: "30px",
+                      color: "#888",
+                    }}
+                  >
                     Sorry, no matching records found.
                   </td>
                 </tr>
               ) : (
                 paginatedData.map((row, index) => (
-                  <tr key={row.id} className={index % 2 === 0 ? "even-row" : "odd-row"}>
-                    <td><StatusIcon type="payment" status={row.payment} /></td>
-                    <td><StatusIcon type="document" status={row.document} /></td>
-                    <td><StatusIcon type="surrender" status={row.surrender} /></td>
+                  <tr
+                    key={row.id}
+                    className={index % 2 === 0 ? "even-row" : "odd-row"}
+                  >
+                    <td>
+                      <StatusIcon type="payment" status={row.payment} />
+                    </td>
+                    <td>
+                      <StatusIcon type="document" status={row.document} />
+                    </td>
+                    <td>
+                      <StatusIcon type="surrender" status={row.surrender} />
+                    </td>
                     <td>{row.jobId}</td>
                     <td>{row.shipmentType}</td>
                     <td>{row.shippingLine}</td>
                     <td>{row.dateSubmitted}</td>
                     <td>{row.noOfBl}</td>
                     <td>
-                      <button 
+                      <button
                         className="action-button"
                         onClick={() => onViewItem?.(row)}
                       >
@@ -100,17 +112,17 @@ export const DataTable = ({
       <div className="active-lists__footer">
         <div className="active-lists__controls">
           <div className="active-lists__pagination">
-            <button 
-              className="pagination-button" 
-              onClick={handlePrevPage} 
+            <button
+              className="pagination-button"
+              onClick={handlePrevPage}
               disabled={currentPage === 1}
             >
               <ChevronLeft size={16} />
             </button>
             <span>{`Page ${currentPage} of ${totalPages}`}</span>
-            <button 
-              className="pagination-button" 
-              onClick={handleNextPage} 
+            <button
+              className="pagination-button"
+              onClick={handleNextPage}
               disabled={currentPage === totalPages}
             >
               <ChevronRight size={16} />
@@ -118,9 +130,9 @@ export const DataTable = ({
           </div>
           <div className="active-lists__items-per-page">
             <label htmlFor="itemsPerPage">Show:</label>
-            <select 
-              id="itemsPerPage" 
-              value={itemsPerPage} 
+            <select
+              id="itemsPerPage"
+              value={itemsPerPage}
               onChange={handleItemsPerPageChange}
             >
               <option value={5}>5</option>

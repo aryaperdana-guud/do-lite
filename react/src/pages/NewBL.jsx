@@ -3,72 +3,76 @@ import { Typography } from "@mui/material";
 import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
-import Input from '@mui/joy/Input';
+import Input from "@mui/joy/Input";
 import "./NewBL.css";
-import Button from '@mui/joy/Button';
-import Box from '@mui/joy/Box';
+import Button from "@mui/joy/Button";
+import Box from "@mui/joy/Box";
 import FileUploadField from "../components/FileUploadField.jsx";
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
 export function NewBL() {
   // Form state management
   const [formData, setFormData] = useState({
-    shippingLine: '',
-    remarks: '',
-    cargoOwner: '',
-    blNumber: '',
-    containerNumber: '',
-    blFile: null
+    shippingLine: "",
+    remarks: "",
+    cargoOwner: "",
+    blNumber: "",
+    containerNumber: "",
+    blFile: null,
   });
-  
+
   // Handle input changes for text fields
   const handleInputChange = (field) => (event) => {
     setFormData({
       ...formData,
-      [field]: event.target.value
+      [field]: event.target.value,
     });
   };
-  
+
   // Handle select changes
   const handleSelectChange = (field) => (event, newValue) => {
     setFormData({
       ...formData,
-      [field]: newValue
+      [field]: newValue,
     });
   };
-  
+
   // Handle file upload
   const handleFileUpload = (file) => {
     setFormData({
       ...formData,
-      blFile: file
+      blFile: file,
     });
   };
-  
+
   // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     // Validate form
-    if (!formData.shippingLine || !formData.blNumber || !formData.containerNumber) {
-      alert('Please fill in all required fields');
+    if (
+      !formData.shippingLine ||
+      !formData.blNumber ||
+      !formData.containerNumber
+    ) {
+      alert("Please fill in all required fields");
       return;
     }
-    
+
     // Process form data here (e.g., send to API)
-    console.log('Form data submitted:', formData);
-    
+    console.log("Form data submitted:", formData);
+
     // Show success message
-    alert('Bill of Lading created successfully');
-    
+    alert("Bill of Lading created successfully");
+
     // Reset form
     setFormData({
-      shippingLine: '',
-      remarks: '',
-      cargoOwner: '',
-      blNumber: '',
-      containerNumber: '',
-      blFile: null
+      shippingLine: "",
+      remarks: "",
+      cargoOwner: "",
+      blNumber: "",
+      containerNumber: "",
+      blFile: null,
     });
   };
 
@@ -76,33 +80,37 @@ export function NewBL() {
     <div className="dashboard">
       <NavigationBar />
       <main className="main-content">
-        <ProfileDropdown/>
+        <ProfileDropdown />
         <h1 className="Title">Bill of Ladings</h1>
 
         <form className="form" onSubmit={handleSubmit}>
           {/* Form Title */}
-          <div className="form-title">
-            New BL
-          </div>
+          <div className="form-title">New BL</div>
 
           <div className="cards-container">
             <div className="left-group">
-
               {/* General Details Section */}
               <div className="general-details">
-              <div className="details-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                {/* <ShipIcon style={{ fontSize: 24 }} /> Icon on the left */}
-                <Typography variant="h5" fontWeight="bold">General Details</Typography>
-              </div>
+                <div
+                  className="details-title"
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  {/* <ShipIcon style={{ fontSize: 24 }} /> Icon on the left */}
+                  <Typography variant="h5" fontWeight="bold">
+                    General Details
+                  </Typography>
+                </div>
 
                 <div className="details-content">
                   {/* ShippingLine Option */}
-                  <Typography  variant="h6">Shipping Line <span className="required">*</span></Typography>
+                  <Typography variant="h6">
+                    Shipping Line <span className="required">*</span>
+                  </Typography>
                   <Select
                     className="shipping-option"
                     size="md"
                     value={formData.shippingLine}
-                    onChange={handleSelectChange('shippingLine')}
+                    onChange={handleSelectChange("shippingLine")}
                     placeholder="Select Shipping Line"
                     required
                   >
@@ -112,33 +120,33 @@ export function NewBL() {
                     <Option value="Shipping 4">Shipping 4</Option>
                   </Select>
 
-
-
                   {/*remarks input*/}
-                  <Typography variant="h6">Remarks</Typography> 
-                  <Input 
-                    className="remarks-field" 
-                    size="md" 
-                    placeholder="Add any remarks here" 
+                  <Typography variant="h6">Remarks</Typography>
+                  <Input
+                    className="remarks-field"
+                    size="md"
+                    placeholder="Add any remarks here"
                     value={formData.remarks}
-                    onChange={handleInputChange('remarks')}
-                  /> 
+                    onChange={handleInputChange("remarks")}
+                  />
                 </div>
               </div>
 
               {/* Party Details Section */}
               <div className="party-details">
                 <div className="details-title">
-                  <Typography variant="h5" fontWeight="bold">Party Details</Typography>
+                  <Typography variant="h5" fontWeight="bold">
+                    Party Details
+                  </Typography>
                 </div>
                 <div className="details-content">
                   <Typography variant="h6">Cargo Owner</Typography>
-                  <Select 
-                    className="shipping-option" 
-                    size="md" 
+                  <Select
+                    className="shipping-option"
+                    size="md"
                     placeholder="Select Cargo Owner"
                     value={formData.cargoOwner}
-                    onChange={handleSelectChange('cargoOwner')}
+                    onChange={handleSelectChange("cargoOwner")}
                   >
                     <Option value="Owner 1">Owner 1</Option>
                     <Option value="Owner 2">Owner 2</Option>
@@ -153,49 +161,58 @@ export function NewBL() {
               {/* BL Details Section */}
               <div className="bl-details">
                 <div className="details-title">
-                  <Typography variant="h5" fontWeight="bold">BL Details</Typography> 
+                  <Typography variant="h5" fontWeight="bold">
+                    BL Details
+                  </Typography>
                 </div>
                 <div className="details-content">
-                <Typography variant="h6">BL Number <span className="required">*</span></Typography> 
-                <Input 
-                  className="BLNumber-field" 
-                  size="md" 
-                  placeholder="Enter BL Number" 
-                  value={formData.blNumber}
-                  onChange={handleInputChange('blNumber')}
-                  required
-                />
+                  <Typography variant="h6">
+                    BL Number <span className="required">*</span>
+                  </Typography>
+                  <Input
+                    className="BLNumber-field"
+                    size="md"
+                    placeholder="Enter BL Number"
+                    value={formData.blNumber}
+                    onChange={handleInputChange("blNumber")}
+                    required
+                  />
 
-                <Typography variant="h6">Container Number <span className="required">*</span></Typography> 
-                <Input 
-                  className="BLNumber-field" 
-                  size="md" 
-                  placeholder="Enter Container Number" 
-                  value={formData.containerNumber}
-                  onChange={handleInputChange('containerNumber')}
-                  required
-                />
-                
-                <Typography variant="h6">BL File</Typography> 
-                <FileUploadField onFileUploaded={handleFileUpload} />
+                  <Typography variant="h6">
+                    Container Number <span className="required">*</span>
+                  </Typography>
+                  <Input
+                    className="BLNumber-field"
+                    size="md"
+                    placeholder="Enter Container Number"
+                    value={formData.containerNumber}
+                    onChange={handleInputChange("containerNumber")}
+                    required
+                  />
+
+                  <Typography variant="h6">BL File</Typography>
+                  <FileUploadField onFileUploaded={handleFileUpload} />
                 </div>
               </div>
             </div>
           </div>
-          
-          <Box className="submit-button" sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+
+          <Box
+            className="submit-button"
+            sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}
+          >
             <Button type="submit">Submit</Button>
-            <Button 
-              variant="outlined" 
-              color="neutral" 
+            <Button
+              variant="outlined"
+              color="neutral"
               onClick={() => {
                 setFormData({
-                  shippingLine: '',
-                  remarks: '',
-                  cargoOwner: '',
-                  blNumber: '',
-                  containerNumber: '',
-                  blFile: null
+                  shippingLine: "",
+                  remarks: "",
+                  cargoOwner: "",
+                  blNumber: "",
+                  containerNumber: "",
+                  blFile: null,
                 });
               }}
             >

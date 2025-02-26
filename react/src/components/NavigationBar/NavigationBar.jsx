@@ -50,7 +50,6 @@ const navigation = [
     submenu: [
       { title: "Active List", href: "/doextension/active" },
       { title: "History List", href: "/doextension/history" },
-      { title: "Nav 3", href: "#" },
     ],
   },
   {

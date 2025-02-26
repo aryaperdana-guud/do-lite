@@ -1,13 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Eye, Pencil, Search, Trash2, ChevronLeft, ChevronRight, Download } from "lucide-react"
-import { useNavigate } from "react-router-dom"
-import { StatusIcon } from "../StatusRender" // Make sure path is correct
-import "./BOLTable.css" // Import the existing CSS file
+import { useState } from "react";
+import {
+  Eye,
+  Pencil,
+  Search,
+  Trash2,
+  ChevronLeft,
+  ChevronRight,
+  Download,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { StatusIcon } from "../StatusRender"; // Make sure path is correct
+import "./BOLTable.css"; // Import the existing CSS file
 
 export const ExtensionTable = ({
-  title = "Extension List",
+  title,
   data = [],
   loading = false,
   onView,
@@ -17,20 +25,23 @@ export const ExtensionTable = ({
   onViewDO,
   onViewContainers,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(10)
-  const navigate = useNavigate()
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const navigate = useNavigate();
 
-  const totalPages = Math.ceil((data?.length || 0) / itemsPerPage)
+  const totalPages = Math.ceil((data?.length || 0) / itemsPerPage);
 
-  const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1))
-  const handleNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+  const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const handleNextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const handleItemsPerPageChange = (e) => {
-    setItemsPerPage(Number(e.target.value))
-    setCurrentPage(1)
-  }
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1);
+  };
 
-  const paginatedData = data?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) || []
+  const paginatedData =
+    data?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) ||
+    [];
 
   return (
     <div className="active-lists">
@@ -38,7 +49,11 @@ export const ExtensionTable = ({
         <div className="active-lists__title-section">
           <h2 className="active-lists__title">{title}</h2>
           <div className="active-lists__actions">
-            <button className="active-lists__download" onClick={onDownload} title="Download Lists">
+            <button
+              className="active-lists__download"
+              onClick={onDownload}
+              title="Download Lists"
+            >
               <Download size={30} />
             </button>
           </div>
@@ -66,7 +81,14 @@ export const ExtensionTable = ({
             <tbody>
               {paginatedData.length === 0 ? (
                 <tr>
-                  <td colSpan="9" style={{ textAlign: "center", padding: "30px", color: "#888" }}>
+                  <td
+                    colSpan="9"
+                    style={{
+                      textAlign: "center",
+                      padding: "30px",
+                      color: "#888",
+                    }}
+                  >
                     Sorry, no matching records found.
                   </td>
                 </tr>
@@ -107,14 +129,32 @@ export const ExtensionTable = ({
                     <td>{row.paymentDate}</td>
                     <td>
                       <div className="action-buttons">
-                        <button className="action-button" onClick={() => onEdit?.(row)} title="Edit">
-                          <Pencil size={16} />
-                        </button>
-                        <button className="action-button" onClick={() => onView?.(row)} title="View">
+                        {title !== "History List" && (
+                          <>
+                            <button
+                              className="action-button"
+                              onClick={() => onEdit?.(row)}
+                              title="Edit"
+                            >
+                              <Pencil size={16} />
+                            </button>
+
+                            <button
+                              className="action-button"
+                              onClick={() => onDelete?.(row)}
+                              title="Delete"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </>
+                        )}
+
+                        <button
+                          className="action-button"
+                          onClick={() => onView?.(row)}
+                          title="View"
+                        >
                           <Eye size={16} />
-                        </button>
-                        <button className="action-button" onClick={() => onDelete?.(row)} title="Delete">
-                          <Trash2 size={16} />
                         </button>
                       </div>
                     </td>
@@ -130,26 +170,37 @@ export const ExtensionTable = ({
         <div className="active-lists__controls">
           <div className="active-lists__column-select">
             <span>Column:</span>
-            <select className="row-number" value={itemsPerPage} onChange={handleItemsPerPageChange}>
+            <select
+              className="row-number"
+              value={itemsPerPage}
+              onChange={handleItemsPerPageChange}
+            >
               <option value={10}>10</option>
               <option value={20}>20</option>
               <option value={50}>50</option>
             </select>
           </div>
           <div className="active-lists__pagination">
-            <button className="pagination-button" onClick={handlePrevPage} disabled={currentPage === 1}>
+            <button
+              className="pagination-button"
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+            >
               <ChevronLeft size={16} />
             </button>
             <span>{`Page ${currentPage} of ${totalPages}`}</span>
-            <button className="pagination-button" onClick={handleNextPage} disabled={currentPage === totalPages}>
+            <button
+              className="pagination-button"
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
               <ChevronRight size={16} />
             </button>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ExtensionTable
-
+export default ExtensionTable;

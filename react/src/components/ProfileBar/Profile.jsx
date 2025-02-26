@@ -2,7 +2,15 @@
 
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Avatar, Menu, MenuItem, Box, Typography, IconButton, CircularProgress } from "@mui/material";
+import {
+  Avatar,
+  Menu,
+  MenuItem,
+  Box,
+  Typography,
+  IconButton,
+  CircularProgress,
+} from "@mui/material";
 import {
   Person as PersonIcon,
   Logout as LogoutIcon,
@@ -43,20 +51,24 @@ const ProfileDropdown = () => {
         ) : (
           <>
             <Avatar
-                src={user?.avatarUrl}
-                alt={user?.username}
-                className="profile-avatar"
-                sx={{
-                    bgcolor: user?.avatarUrl ? "transparent" : "#1976d2",
-                    color: "#ffffff", 
-                }}
-                >
-                {user?.username?.charAt(0) || "U"}
+              src={user?.avatarUrl}
+              alt={user?.username}
+              className="profile-avatar"
+              sx={{
+                bgcolor: user?.avatarUrl ? "transparent" : "#1976d2",
+                color: "#ffffff",
+              }}
+            >
+              {user?.username?.charAt(0) || "U"}
             </Avatar>
 
             <div className="profile-info">
-              <Typography variant="subtitle2" className="username">{user?.username}</Typography>
-              <Typography variant="caption" className="company-name">{user?.companyName}</Typography>
+              <Typography variant="subtitle2" className="username">
+                {user?.username}
+              </Typography>
+              <Typography variant="caption" className="company-name">
+                {user?.companyName}
+              </Typography>
             </div>
             <IconButton className="dropdown-arrow" size="small">
               <KeyboardArrowDownIcon />

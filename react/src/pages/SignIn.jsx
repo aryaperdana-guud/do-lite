@@ -53,10 +53,8 @@ const SignIn = () => {
 
         if (rememberMe) {
           localStorage.setItem("savedId", formData.id);
-          localStorage.setItem("savedPassword", formData.password);
         } else {
           localStorage.removeItem("savedId");
-          localStorage.removeItem("savedPassword");
         }
 
         // Fetch user profile immediately after login
@@ -101,7 +99,8 @@ const SignIn = () => {
             Welcome Back
           </Typography>
           <Typography variant="h4">
-            <span className="white-text">Let's</span> <span className="blue-text">Sign In</span>
+            <span className="white-text">Let's</span>{" "}
+            <span className="blue-text">Sign In</span>
           </Typography>
           <SignInForm
             formData={formData}

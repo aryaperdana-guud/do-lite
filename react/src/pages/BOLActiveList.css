@@ -2,9 +2,9 @@
   width: 100vw;
   height: 100vh;
   background-color: #eaeaea;
-  all:16px;
+  all: 16px;
   overflow: hidden;
-  }
+}
 
 .main-content {
   margin-left: 280px; /*width navgation 240 */
@@ -22,4 +22,3 @@
   height: 50px;
   text-align: left;
 }
-

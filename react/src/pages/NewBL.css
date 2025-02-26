@@ -35,13 +35,13 @@
   outline: none;
 }
 
-.claim-button{
+.claim-button {
   background-color: #0070c0;
   color: #ffffff;
   width: 200px;
 }
 
-.claim-button:hover{
+.claim-button:hover {
   background-color: #263754;
 }
 
@@ -78,9 +78,6 @@
   cursor: not-allowed; /* Indicates it's non-interactive */
 }
 
-
-
-
 .cards-container {
   display: flex;
   flex-direction: row;
@@ -95,7 +92,8 @@
   }
 }
 
-.left-group, .right-group {
+.left-group,
+.right-group {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -103,14 +101,14 @@
   min-width: 0;
 }
 
-.general-details, .party-details, .bl-details {
+.general-details,
+.party-details,
+.bl-details {
   background-color: #f0f0f0;
   border-radius: 15px;
   padding: 16px;
   border: 1px solid #eaeaea;
 }
-
-
 
 .general-details {
   flex: 3;
@@ -139,7 +137,9 @@
   color: #333b4d;
 }
 
-.shipping-option, .remarks-field, .BLNumber-field {
+.shipping-option,
+.remarks-field,
+.BLNumber-field {
   margin-bottom: 15px;
   width: 100%;
 }
@@ -223,7 +223,8 @@
   border-color: #2637548d;
 }
 
-.MuiSelect-root, .MuiInput-root {
+.MuiSelect-root,
+.MuiInput-root {
   max-height: 40px !important;
   outline: none;
 }
@@ -238,7 +239,9 @@
     gap: 16px;
   }
 
-  .general-details, .party-details, .bl-details {
+  .general-details,
+  .party-details,
+  .bl-details {
     padding: 12px;
   }
 }
@@ -259,7 +262,8 @@
     flex-direction: column;
   }
 
-  .left-group, .right-group {
+  .left-group,
+  .right-group {
     height: auto;
   }
 }
