@@ -132,6 +132,15 @@
   justify-content: center;
 }
 
+.action-button_DO:hover {
+  color: #2563eb;
+}
+
+.action-button_DO:focus {
+  border: none;
+  outline: none;
+}
+
 .active-lists__footer {
   position: sticky;
   bottom: 0;

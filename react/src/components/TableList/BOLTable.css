@@ -237,8 +237,13 @@
   transition: color 0.2s;
 }
 
-.action-button:hover {
+.action-button_BOL:hover {
   color: #2563eb;
+}
+
+.action-button_BOL:focus {
+  border: none;
+  outline: none;
 }
 
 .active-lists__footer {

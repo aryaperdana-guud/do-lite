@@ -32,9 +32,14 @@
     outline: none;
 }
 
+.action-button-delete:focus, .action-button-exit:focus, .action-button-save:focus{
+    border: none;
+    outline: none;
+}
 .main-content {
     margin-left: 280px;
     padding: 20px;
+    
     overflow: hidden;
 }
 
@@ -59,6 +64,15 @@
     background: none;
     border: none;
 }
+
+.action-button_sbol:hover {
+    color: #2563eb;
+  }
+
+  .action-button_sbol:focus {
+    border: none;
+    outline: none;
+  }
 
 .edit-title{
     margin-top: 5px;
@@ -94,6 +108,16 @@
     color: #ffffff;
     background-color: #A0AEC0;
     width: 180px;
+  }
+
+  .tab:hover{
+    border: none;
+    outline: none;
+  }
+
+  .tab:focus{
+    border: none;
+    outline: none;
   }
 
   .edit-do-form{
@@ -154,10 +178,11 @@
 
   .selected-bol table {
     width: 100%;
-    border-collapse: collapse;
+    border-spacing: 0 10px;
+    border-collapse: separate !important;
     padding-bottom: 20px;
     text-align: center;
-    border-radius: 12px; /* Border radius untuk seluruh tabel */
+    border-radius: 12px;
     overflow: hidden;
 }
 
@@ -175,6 +200,7 @@
     justify-content: space-between;
     align-items: center;
 }
+
 .selected-bol td{
     margin-top: 10px;
     background: #ffffff;
