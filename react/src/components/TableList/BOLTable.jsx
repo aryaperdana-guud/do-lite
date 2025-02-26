@@ -165,7 +165,7 @@ export const BOLTable = ({
                     <td>
                       <div className="action-buttons">
                         <button
-                          className="action-button"
+                          className="action-button_BOL"
                           onClick={() =>
                             navigate(`/bol/active/view/${row.id}`, {
                               state: row,
@@ -177,7 +177,7 @@ export const BOLTable = ({
                         </button>
 
                         <button
-                          className="action-button"
+                          className="action-button_BOL"
                           onClick={() => onDownloadItem?.(row)}
                           title="Download"
                         >
@@ -185,7 +185,7 @@ export const BOLTable = ({
                         </button>
 
                         <button
-                          className="action-button"
+                          className="action-button_BOL"
                           onClick={() => onDeleteItem?.(row)}
                           title="Delete"
                         >

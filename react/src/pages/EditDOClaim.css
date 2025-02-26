@@ -1,4 +1,4 @@
-.dashboard {
+.dashboard_claim {
     width: 100vw;
     height: 100vh;
     background-color: #eaeaea;
@@ -50,11 +50,13 @@
     gap: 5px;
 }
 
-.action-button:hover{
+.action-button_sbol{
     display: flex;
     align-items: center;
     gap: 3px;
     padding: 8px 12px;
+    border: none;
+    background: none;
     border: none;
 }
 

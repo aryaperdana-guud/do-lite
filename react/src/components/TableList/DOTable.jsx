@@ -106,14 +106,14 @@ export const DataTable = ({
                     <td>
                       <div className="action-buttons">
                         <button
-                          className="action-button"
+                          className="action-button_DO"
                           onClick={() => navigate(`/edit-do-claim/${row.id}`)}
                         >
                           <Edit size={16} />
                         </button>
 
                         <button
-                          className="action-button"
+                          className="action-button_DO"
                           onClick={() => onViewItem?.(row)}
                         >
                           <Eye size={16} />

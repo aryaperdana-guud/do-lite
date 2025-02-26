@@ -10,7 +10,7 @@ const EditDOClaim = () => {
     const navigate = useNavigate();
   
     return (
-      <div className="dashboard">
+      <div className="dashboard_claim">
         <NavigationBar />
         <main className="main-content">
             <h1 className="title"><Pencil size={40}/>  Edit DO</h1>
@@ -94,10 +94,10 @@ const EditDOClaim = () => {
                         <td>10/02/2025 15:51:07</td>
                         <td>
                             <div className="button-action">
-                            <button className="action-button delete" onClick={() => console.log("Delete clicked")}>
+                            <button className="action-button_sbol" onClick={() => console.log("Delete clicked")}>
                                 <X size={16} />
                             </button>
-                            <button className="action-button delete" onClick={() => console.log("Download clicked")}>
+                            <button className="action-button_sbol" onClick={() => console.log("Download clicked")}>
                                 <Download size={16} />
                             </button>
                             </div>

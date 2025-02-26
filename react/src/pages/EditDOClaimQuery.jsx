@@ -22,7 +22,7 @@ const EditDOClaimQuery = () => {
     }, [id]);
   
     return (
-        <div className="dashboard">
+        <div className="dashboard_q">
             <NavigationBar />
             <main className="main-content">
                 <h1 className="title"><Pencil size={40}/>  Edit DO</h1>
