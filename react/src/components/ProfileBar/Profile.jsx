@@ -1,6 +1,4 @@
-"use client";
-
-import { useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -16,22 +14,30 @@ import {
   Logout as LogoutIcon,
   KeyboardArrowDown as KeyboardArrowDownIcon,
 } from "@mui/icons-material";
-import { UserContext } from "../UserContext"; // Import context
+import { useUserStore } from "../../useUserStore.jsx"; // Import Zustand store
 import "./profile.css";
 
 const ProfileDropdown = () => {
   const router = useNavigate();
-  const { user, setUser, loading } = useContext(UserContext); // Get user data from context
+  const { user, setUser, clearUser } = useUserStore(); // Get Zustand state
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
+  useEffect(() => {
+    console.log("🔥 Zustand Debug: user state =", user);
+  }, [user]);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
-    localStorage.removeItem("user"); // Clear stored user data
-    setUser(null); // Reset context
+    clearUser(); // Clear Zustand state
     router("/");
   };
 
@@ -46,28 +52,28 @@ const ProfileDropdown = () => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
       >
-        {loading ? (
-          <CircularProgress size={24} /> // Show loading spinner while fetching data
+        {!user ? (
+          <CircularProgress size={24} />
         ) : (
           <>
             <Avatar
-              src={user?.avatarUrl}
-              alt={user?.username}
+              src={user.avatarUrl}
+              alt={user.username}
               className="profile-avatar"
               sx={{
-                bgcolor: user?.avatarUrl ? "transparent" : "#1976d2",
+                bgcolor: user.avatarUrl ? "transparent" : "#1976d2",
                 color: "#ffffff",
               }}
             >
-              {user?.username?.charAt(0) || "U"}
+              {user.username?.charAt(0) || "U"}
             </Avatar>
 
             <div className="profile-info">
               <Typography variant="subtitle2" className="username">
-                {user?.username}
+                {user.username}
               </Typography>
               <Typography variant="caption" className="company-name">
-                {user?.companyName}
+                {user.companyName}
               </Typography>
             </div>
             <IconButton className="dropdown-arrow" size="small">

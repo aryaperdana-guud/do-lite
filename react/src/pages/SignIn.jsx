@@ -1,14 +1,14 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../components/UserContext.jsx";
+import { useUserStore } from "../useUserStore";
 import "./SignIn.css";
 import LeftImage from "../assets/LoginImage1.png";
 import MovingBackground from "../components/MovingBackground";
 import SignInForm from "../components/SignInForm";
 
 const SignIn = () => {
-  const { setUser } = useContext(UserContext);
+  const { setUser } = useUserStore();
   const [formData, setFormData] = useState({
     id: localStorage.getItem("savedId") || "",
     password: localStorage.getItem("savedPassword") || "",
@@ -57,7 +57,7 @@ const SignIn = () => {
           localStorage.removeItem("savedId");
         }
 
-        // Fetch user profile immediately after login
+        // ✅ Fetch user profile after successful login
         const profileResponse = await fetch(
           "https://cdo-dev-id2.clickargo.com/be/clicdo/api/co/cac/profile/",
           {
@@ -65,8 +65,12 @@ const SignIn = () => {
           }
         );
 
+        if (!profileResponse.ok) {
+          alert("Failed to fetch user profile.");
+          return;
+        }
+
         const profileData = await profileResponse.json();
-        console.log("Fetched Profile:", profileData);
 
         const userData = {
           username: profileData.user?.name || "Unknown",
@@ -74,8 +78,8 @@ const SignIn = () => {
           avatarUrl: profileData.user?.avatar || "",
         };
 
-        setUser(userData); // Update user context
-        localStorage.setItem("user", JSON.stringify(userData)); // Store user in localStorage
+        console.log("Storing user in Zustand:", userData);
+        useUserStore.getState().setUser(userData); // Store user in Zustand
 
         setTimeout(() => navigate("/bol/active"), 100);
       } else {

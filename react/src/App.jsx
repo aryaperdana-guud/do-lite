@@ -11,119 +11,116 @@ import { BOLHistory } from "./pages/BOLHistoryList.jsx";
 import { ViewBL } from "./pages/ViewBL.jsx";
 import { BOLClaim } from "./pages/BOLClaim.jsx";
 import AuthGuard from "./components/AuthGuard.jsx";
-import { UserProvider } from "./components/UserContext.jsx";
 import { ExtensionActive } from "./pages/DOExtensionActive.jsx";
 import { ExtensionHistory } from "./pages/DOExtensionHistory.jsx";
 import EditDOClaim from "./pages/EditDOClaim.jsx";
 import EditDOClaimAttachments from "./pages/EditDOClaimAttachments.jsx";
 import EditDOClaimAudit from "./pages/EditDOClaimAudit.jsx";
 import EditDOClaimQuery from "./pages/EditDOClaimQuery.jsx";
-// import { ExtensionEdit } from './pages/DOExtensionedit.jsx';
+import { useUserStore } from "./useUserStore";
+import { useEffect } from "react";
 
 function App() {
+  const { user, setUser } = useUserStore();
+  useEffect(() => {
+    console.log("🔥 Zustand Debug: App mounted, user state =", user);
+  }, [user]);
+
   return (
-    <UserProvider>
-      <Router>
-        <Routes>
-          {/* Default route */}
-          <Route path="/" element={<SignIn />} />
+    <Router>
+      <Routes>
+        {/* Default route */}
+        <Route path="/" element={<SignIn />} />
 
-          {/* Other routes */}
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/signup" element={<SignUp />} />
+        {/* Other routes */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/signup" element={<SignUp />} />
 
-          <Route
-            path="/do-claims/active"
-            element={
-              <AuthGuard>
-                <DOActive />
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/do-claims/history"
-            element={
-              <AuthGuard>
-                <DOHistory />
-              </AuthGuard>
-            }
-          />
+        <Route
+          path="/do-claims/active"
+          element={
+            <AuthGuard>
+              <DOActive />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/do-claims/history"
+          element={
+            <AuthGuard>
+              <DOHistory />
+            </AuthGuard>
+          }
+        />
 
-          <Route
-            path="/bol/newbl"
-            element={
-              <AuthGuard>
-                <NewBL />
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/bol/history"
-            element={
-              <AuthGuard>
-                <BOLHistory />
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/bol/active"
-            element={
-              <AuthGuard>
-                <BOLActive />
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/bol/claim"
-            element={
-              <AuthGuard>
-                <BOLClaim />
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/bol/active/view/:id"
-            element={
-              <AuthGuard>
-                <ViewBL />
-              </AuthGuard>
-            }
-          />
+        <Route
+          path="/bol/newbl"
+          element={
+            <AuthGuard>
+              <NewBL />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/bol/history"
+          element={
+            <AuthGuard>
+              <BOLHistory />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/bol/active"
+          element={
+            <AuthGuard>
+              <BOLActive />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/bol/claim"
+          element={
+            <AuthGuard>
+              <BOLClaim />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/bol/active/view/:id"
+          element={
+            <AuthGuard>
+              <ViewBL />
+            </AuthGuard>
+          }
+        />
 
-          <Route
-            path="/do-extension/active"
-            element={
-              <AuthGuard>
-                <ExtensionActive />
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/do-extension/history"
-            element={
-              <AuthGuard>
-                <ExtensionHistory />
-              </AuthGuard>
-            }
-          />
-          {/* <Route path="/do-extension/active/edit" element={<AuthGuard><ExtensionEdit /></AuthGuard>}/> */}
+        <Route
+          path="/do-extension/active"
+          element={
+            <AuthGuard>
+              <ExtensionActive />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/do-extension/history"
+          element={
+            <AuthGuard>
+              <ExtensionHistory />
+            </AuthGuard>
+          }
+        />
+        {/* <Route path="/do-extension/active/edit" element={<AuthGuard><ExtensionEdit /></AuthGuard>}/> */}
 
-          <Route path="/edit-do-claim/:id" element={<EditDOClaim />} />
-          <Route
-            path="/edit-do-claim-attachments/:id"
-            element={<EditDOClaimAttachments />}
-          />
-          <Route
-            path="/edit-do-claim-query/:id"
-            element={<EditDOClaimQuery />}
-          />
-          <Route
-            path="/edit-do-claim-audit/:id"
-            element={<EditDOClaimAudit />}
-          />
-        </Routes>
-      </Router>
-    </UserProvider>
+        <Route path="/edit-do-claim/:id" element={<EditDOClaim />} />
+        <Route
+          path="/edit-do-claim-attachments/:id"
+          element={<EditDOClaimAttachments />}
+        />
+        <Route path="/edit-do-claim-query/:id" element={<EditDOClaimQuery />} />
+        <Route path="/edit-do-claim-audit/:id" element={<EditDOClaimAudit />} />
+      </Routes>
+    </Router>
   );
 }
 
