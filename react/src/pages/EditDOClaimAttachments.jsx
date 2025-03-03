@@ -11,25 +11,25 @@ const EditDOClaimAttachments = () => {
     const navigate = useNavigate();
     const [data] = useState([]);
 
-    const [isConfirmed, setIsConfirmed] = useState(
-        localStorage.getItem(`confirmed-${id}`) === "true"
-    );
-
+    const [showAddPopup, setShowAddPopup] = useState(false); 
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
+  
+    const handleAddClick = () => {
+        setShowAddPopup(true); // Menampilkan pop-up saat tombol ADD diklik
+    };
+
+    const handleCloseAddPopup = () => {
+        setShowAddPopup(false); // Menutup pop-up
+    };
+
     const handleConfirmClick = () => {
-        setShowConfirmPopup(true); // pop-up konfirmasi
-    };
+        setShowConfirmPopup(true); //confirm pop-up
+    }
 
-    const handleSaveConfirm = () => {
-        setIsConfirmed(true);
-        localStorage.setItem(`confirmed-${id}`, "true");
-        setShowConfirmPopup(false); // Tutup pop-up setelah save
-    };
-
-    const handleCancelConfirm = () => {
-        setShowConfirmPopup(false); // Tutup pop-up tanpa menyimpan konfirmasi
-    };
+    const handleCloseConfirmPopup = () => {
+        setShowConfirmPopup(false); //close confirm
+    }
   
     return (
         <div className="dashboard_att">
@@ -102,28 +102,87 @@ const EditDOClaimAttachments = () => {
                         </table>
 
                         <div className="bottom-buttons">
-                            <button className="add-button">
+                            <button className="add-button" onClick={handleAddClick}>
                                 ADD
                             </button>
-                            <button className="confirm-button">
+                            <button className="confirm-button" onClick={handleConfirmClick}>
                                 CONFIRM
                             </button>
                         </div>
-
-
-                        {/* <div className="bottom-buttons">
-                            {!isConfirmed && (
-                                <button className="add-button">
-                                    Add
-                                </button>
-                            )}
-                            <button className="confirm-button" onClick={handleConfirmClick} disabled={isConfirmed}>
-                                {isConfirmed ? "Confirmed" : "Confirm"}
-                            </button>
-                        </div> */}
                     </div>
                 </div>
             </main>  
+
+            {showAddPopup && (
+                <div className="popup-overlay">
+                    <div className="popup-content">
+                        <button className="close-popup" onClick={handleCloseAddPopup}><X size={16}/></button>
+                        <h2 className="popup-title">ATTACHMENTS</h2>
+                        <div className="form-layout">
+                            <div className="form-1">
+                                <div>
+                                    <label className="popup-label">Document Type</label>
+                                    <div>
+                                        <select placeholder="Select document type">
+                                            <option value="">Select document type</option>
+                                            <option value="Invoice">Bill of Lading</option>
+                                            <option value="Packing List">Container Guarantee</option>
+                                            <option value="Bill of Lading">Power of Authority</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="popup-label">Validity Date</label>
+                                    <div>
+                                        <input type="date" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-2">
+                                <div>
+                                    <label className="popup-label">BL No.</label>
+                                    <div>
+                                        <input type="text" placeholder="Enter BL No." />
+                                    </div>  
+                                </div>
+                                <div>
+                                    <label className="popup-label">Document File</label>
+                                    <div>
+                                        <input type="file" />
+                                    </div> 
+                                </div>                    
+                            </div>
+                        </div>
+                        
+                        <button className="submit-button">SUBMIT</button>
+                    </div>
+                </div>
+            )}
+
+            {showConfirmPopup && (
+                <div className="conf-popup-overlay">
+                    <div className="conf-popup-content">
+                        <h2 className="conf-popup-title">CONFIRMATION</h2>
+                        <p>Are you sure want to confirm 
+                            <div>
+                                <strong>DO1234567890</strong> ?
+                            </div>
+                        </p>
+
+                        <div className="conf-popup-buttons">
+                            <button className="no-button" onClick={handleCloseConfirmPopup}>NO</button>
+                            <button className="yes-button" onClick={() => alert("Confirmed!")}>YES</button>
+                        </div>
+
+                        <div className="conf-popup-warning">
+                            DO submissions will be processed for the DO request on <strong>8:30 AM until 4:30 PM</strong>. 
+                            Late submissions will be handled the next working day. Please ensure your documents are complete and meet the requirements.
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };

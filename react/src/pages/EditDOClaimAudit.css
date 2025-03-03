@@ -3,6 +3,7 @@
     height: 100vh;
     background-color: #eaeaea;
     all:16px;
+    overflow: hidden;
 }
 
 .title {
