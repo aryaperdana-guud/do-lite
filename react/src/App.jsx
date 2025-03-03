@@ -11,6 +11,7 @@ import { BOLHistory } from "./pages/BOLHistoryList.jsx";
 import { ViewBL } from "./pages/ViewBL.jsx";
 import { BOLClaim } from "./pages/BOLClaim.jsx";
 import AuthGuard from "./components/AuthGuard.jsx";
+
 import { ExtensionActive } from "./pages/DOExtensionActive.jsx";
 import { ExtensionHistory } from "./pages/DOExtensionHistory.jsx";
 import EditDOClaim from "./pages/EditDOClaim.jsx";
@@ -19,6 +20,9 @@ import EditDOClaimAudit from "./pages/EditDOClaimAudit.jsx";
 import EditDOClaimQuery from "./pages/EditDOClaimQuery.jsx";
 import { useUserStore } from "./useUserStore";
 import { useEffect } from "react";
+
+import { MyDOActive } from "./pages/MyDOActive.jsx";
+import { MyDOHistory } from "./pages/MyDOHistory.jsx";
 
 function App() {
   const { user, setUser } = useUserStore();
@@ -110,7 +114,22 @@ function App() {
             </AuthGuard>
           }
         />
-        {/* <Route path="/do-extension/active/edit" element={<AuthGuard><ExtensionEdit /></AuthGuard>}/> */}
+        <Route
+          path="/my-do/active"
+          element={
+            <AuthGuard>
+              <MyDOActive />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/my-do/history"
+          element={
+            <AuthGuard>
+              <MyDOHistory />
+            </AuthGuard>
+          }
+        />
 
         <Route path="/edit-do-claim/:id" element={<EditDOClaim />} />
         <Route

@@ -37,8 +37,8 @@ const navigation = [
     href: "/my-do",
     icon: <FaFolder />,
     submenu: [
-      { title: "Active List", href: "#" },
-      { title: "History List", href: "#" },
+      { title: "Active List", href: "/my-do/active" },
+      { title: "History List", href: "/my-do/history" },
       { title: "Nav 3", href: "#" },
     ],
   },
@@ -49,7 +49,6 @@ const navigation = [
     submenu: [
       { title: "Active List", href: "/do-extension/active" },
       { title: "History List", href: "/do-extension/history" },
-      { title: "Nav 3", href: "#" },
     ],
   },
   {
