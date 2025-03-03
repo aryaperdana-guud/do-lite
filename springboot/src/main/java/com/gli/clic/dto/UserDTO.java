@@ -1,7 +1,6 @@
 package com.gli.clic.dto;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 
 public class UserDTO {
 

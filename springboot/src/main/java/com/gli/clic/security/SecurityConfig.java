@@ -28,9 +28,10 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .antMatchers("/auth/register", "/auth/login").permitAll()
-                .antMatchers(HttpMethod.PUT, "/auth/update/**").authenticated()
-                .antMatchers(HttpMethod.DELETE, "/auth/delete/**").authenticated()
+                .requestMatchers("/auth/register", "/auth/login").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/auth/update/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/auth/delete/**").authenticated()
+                .requestMatchers("/transactions/**").permitAll() 
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -1,6 +1,6 @@
 package com.gli.clic.dto;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 public class UpdatePasswordDTO {
 
