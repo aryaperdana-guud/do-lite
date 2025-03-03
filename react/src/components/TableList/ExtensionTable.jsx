@@ -135,7 +135,6 @@ export const ExtensionTable = ({
                             <span className="action-button placeholder"></span>
                             <button
                               className="action-button-extension"
-                              onClick={() => onView?.(row)}
                               title="View"
                             >
                               <Eye size={16} />
@@ -146,7 +145,7 @@ export const ExtensionTable = ({
                           <>
                             <button
                               className="action-button-extension"
-                              onClick={() => onEdit?.(row)}
+                              onClick={() => navigate(`/edit-do-extension/${row.id}`)}
                               title="Edit"
                             >
                               <Pencil size={16} />

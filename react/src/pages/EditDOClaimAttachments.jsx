@@ -13,7 +13,10 @@ const EditDOClaimAttachments = () => {
 
     const [showAddPopup, setShowAddPopup] = useState(false); 
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
-
+    const [documentType, setDocumentType] = useState(""); // Tambahkan state ini
+    const [validityDate, setValidityDate] = useState("");
+    const [blNo, setBlNo] = useState("");
+    const [documentFile, setDocumentFile] = useState(null);
   
     const handleAddClick = () => {
         setShowAddPopup(true); // Menampilkan pop-up saat tombol ADD diklik
@@ -30,6 +33,35 @@ const EditDOClaimAttachments = () => {
     const handleCloseConfirmPopup = () => {
         setShowConfirmPopup(false); //close confirm
     }
+
+    const handleFileChange = (event) => {
+        setDocumentFile(event.target.files[0]);
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if (!documentType || !validityDate || !blNo || !documentFile) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        console.log("Submitting Data:", {
+            documentType,
+            validityDate,
+            blNo,
+            documentFile,
+        });
+
+        alert("File uploaded successfully!");
+
+        //reset form
+        setDocumentType("");
+        setValidityDate("");
+        setBlNo("");
+        setDocumentFile(null);
+
+        setShowAddPopup(false); // Close pop-up after submit
+    };
   
     return (
         <div className="dashboard_att">
@@ -114,50 +146,52 @@ const EditDOClaimAttachments = () => {
             </main>  
 
             {showAddPopup && (
-                <div className="popup-overlay">
-                    <div className="popup-content">
-                        <button className="close-popup" onClick={handleCloseAddPopup}><X size={16}/></button>
-                        <h2 className="popup-title">ATTACHMENTS</h2>
-                        <div className="form-layout">
-                            <div className="form-1">
-                                <div>
-                                    <label className="popup-label">Document Type</label>
+                <form onSubmit={handleSubmit}>
+                    <div className="popup-overlay">
+                        <div className="popup-content">
+                            <button className="close-popup" onClick={handleCloseAddPopup}><X size={16}/></button>
+                            <h2 className="popup-title">ATTACHMENTS</h2>
+                            <div className="form-layout">
+                                <div className="form-1">
                                     <div>
-                                        <select placeholder="Select document type">
-                                            <option value="">Select document type</option>
-                                            <option value="Invoice">Bill of Lading</option>
-                                            <option value="Packing List">Container Guarantee</option>
-                                            <option value="Bill of Lading">Power of Authority</option>
-                                            <option value="Other">Other</option>
-                                        </select>
+                                        <label className="popup-label">Document Type</label>
+                                        <div>
+                                            <select placeholder="Select document type" value={documentType} onChange={(e) => setDocumentType(e.target.value)}>
+                                                <option value="">Select document type</option>
+                                                <option value="Invoice">Bill of Lading</option>
+                                                <option value="Packing List">Container Guarantee</option>
+                                                <option value="Bill of Lading">Power of Authority</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="popup-label">Validity Date</label>
+                                        <div>
+                                            <input type="date" value={validityDate} onChange={(e) => setValidityDate(e.target.value)} />
+                                        </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <label className="popup-label">Validity Date</label>
+                                <div className="form-2">
                                     <div>
-                                        <input type="date" />
+                                        <label className="popup-label">BL No.</label>
+                                        <div>
+                                            <input type="text" placeholder="Enter BL No." value={blNo} onChange={(e) => setBlNo(e.target.value)}/>
+                                        </div>  
                                     </div>
+                                    <div>
+                                        <label className="popup-label">Document File</label>
+                                        <div>
+                                            <input type="file" onChange={handleFileChange}/>
+                                        </div> 
+                                    </div>                    
                                 </div>
                             </div>
-                            <div className="form-2">
-                                <div>
-                                    <label className="popup-label">BL No.</label>
-                                    <div>
-                                        <input type="text" placeholder="Enter BL No." />
-                                    </div>  
-                                </div>
-                                <div>
-                                    <label className="popup-label">Document File</label>
-                                    <div>
-                                        <input type="file" />
-                                    </div> 
-                                </div>                    
-                            </div>
+                            
+                            <button className="submit-button">SUBMIT</button>
                         </div>
-                        
-                        <button className="submit-button">SUBMIT</button>
                     </div>
-                </div>
+                </form>
             )}
 
             {showConfirmPopup && (

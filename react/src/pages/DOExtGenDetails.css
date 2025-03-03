@@ -1,0 +1,183 @@
+.dashboard_ext_genDet {
+    width: 100vw;
+    height: 100vh;
+    background-color: #eaeaea;
+    all:16px;
+    overflow: hidden;
+}
+
+.detail-container{
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.detail-header{
+    display: flex;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.h2{
+    margin-top: 5px;
+}
+
+.logout-button{
+    background: none;
+    border: none;
+    color: orange;
+}
+
+.tabs{
+    display: flex;
+    gap: 60px;
+    padding-bottom: 20px;
+}
+
+.active-tab{
+    color: #ffffff;
+    background-color: #0070c0;
+    width: 180px;
+}
+
+.tab{
+    color: #ffffff;
+    background-color: #A0AEC0;
+    width: 180px;
+}
+
+.ext-form{
+    display: flex;
+    justify-content: space-between; 
+    gap: 20px;
+    padding-bottom: 20px;
+    flex-wrap: nowrap;
+}
+
+.gen-details, .ext-det, .con4ext{
+    background: #eaeaea;
+    padding: 5px;
+    border-radius: 10px;
+    max-width: 100%;
+    min-width: 700px;
+    flex: 1;
+    align-items: center;
+    box-sizing: border-box;
+}
+  
+.gen-details, .ext-det {
+    flex: 1; 
+}
+  
+.right-form, .con4ext {
+    flex: 1.5;
+}
+
+.gd-title, .ext-title, .con-title{
+    text-align: center;
+}
+
+.label{
+    font-size: 18px; 
+    width: 150px;
+    padding-left: 10px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.data{
+    width: 90%;
+    padding: 10px; 
+    margin: 10px;
+    font-size: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #ffffff;
+}
+
+.right-form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width:100% ;
+}
+
+.charge-det{
+    background: #eaeaea;
+    padding: 5px;
+    border-radius: 10px;
+    max-width: 100%;
+    min-width: 700px;
+    flex: 1;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.charge-title, .newVTD{
+    text-align: center;
+}
+
+.newVTD input{
+    margin: 0 auto;
+    width: 20%;
+    padding: 10px; 
+    margin: 10px;
+    font-size: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #ffffff;
+}
+
+.calc{
+    margin: 0 auto;
+    width: 100px;
+    padding: 10px; 
+    margin: 10px;
+    font-size: 12px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    background-color:#263754;
+}
+
+.fees{
+    display: flex;
+    gap: 20%;
+    justify-content: center;
+}
+
+.rightside, .leftside {
+    display: flex;
+    padding: 5px;
+    flex-direction: column;
+    width: 450px;
+    min-width: 100px;
+    gap: 5px;
+}
+
+.data-chrg{
+    width: 90%;
+    padding: 10px; 
+    margin: 10px;
+    font-size: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: white;
+}
+
+.buttons{
+    display: flex;
+    gap: 5px;
+    justify-content: right;
+}
+
+.s-btn, .c-btn{
+    background-color: #263754;
+    color: white;
+    height: fit-content;
+    margin-top: 20px;
+}
