@@ -78,7 +78,7 @@ function App() {
           }
         />
         <Route
-          path="/bol/claim"
+          path="/bol/active/claim"
           element={
             <AuthGuard>
               <BOLClaim />

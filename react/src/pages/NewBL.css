@@ -176,15 +176,19 @@
 }
 
 .submit-button {
-  margin-top: 16px;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: row; /* or column */
+  justify-content: flex-end !important;
   gap: 8px;
+  margin: 10px auto !important;
+  background: #ffffff !important;
+  color: white !important;
 }
 
 .submit-button .MuiButton-root {
   padding: 6px 16px;
   font-weight: 500;
+  background-color: none;
 }
 
 .submit-button .MuiButton-root[type="submit"] {
@@ -195,6 +199,11 @@
 
 .submit-button .MuiButton-root[type="submit"]:hover {
   background-color: #263754;
+}
+
+.submit-button .MuiButton-root[type="clear"]:focus {
+  outline: none;
+  border: none;
 }
 
 .required {

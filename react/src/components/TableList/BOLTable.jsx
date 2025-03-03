@@ -14,7 +14,7 @@ import "./BOLTable.css";
 import { Navigate, useNavigate } from "react-router-dom";
 import { StatusIcon } from "../StatusRender.jsx"; // Make sure path is correct
 import { Badge, IconButton, Typography } from "@mui/material";
-import FileIcon from "@mui/icons-material/InsertDriveFile";
+import { Snackbar, Alert } from "@mui/material";
 
 export const BOLTable = ({
   title,
@@ -37,6 +37,14 @@ export const BOLTable = ({
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(1);
+  };
+  const [openAlert, setOpenAlert] = useState(false);
+  const handleClaimClick = () => {
+    if (selectedItems.length < 1) {
+      setOpenAlert(true); // Show alert
+    } else {
+      navigate(`/bol/active/claim`);
+    }
   };
 
   const handleSelectAll = (e) => {
@@ -65,25 +73,40 @@ export const BOLTable = ({
         <div className="active-lists__title-section">
           <h2 className="active-lists__title">{title}</h2>
           <div className="active-lists__actions">
-            <button className="active-lists__download" onClick={onDownload}>
-              {title !== "History List" && (
-                <Badge
-                  badgeContent={selectedItems.length}
-                  color="primary"
-                  overlap="circular"
-                  title="Selected"
-                >
-                  <File size={30} />
-                </Badge>
-              )}
+            <button
+              className="active-lists__download"
+              onClick={handleClaimClick}
+              title="Selected"
+            >
+              <Badge
+                badgeContent={selectedItems.length}
+                color="primary"
+                overlap="circular"
+              >
+                <File size={25} />
+              </Badge>
             </button>
+            <Snackbar
+              open={openAlert}
+              autoHideDuration={2000}
+              onClose={() => setOpenAlert(false)}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }} // Adjust position
+            >
+              <Alert
+                onClose={() => setOpenAlert(false)}
+                severity="warning"
+                sx={{ width: "100%" }}
+              >
+                Please select at least one item before claiming!
+              </Alert>
+            </Snackbar>
 
             <button
               className="active-lists__download"
               onClick={onDownload}
               title="Download Lists"
             >
-              <Download size={30} />
+              <Download size={25} />
             </button>
           </div>
         </div>

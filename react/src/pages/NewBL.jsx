@@ -197,14 +197,12 @@ export function NewBL() {
             </div>
           </div>
 
-          <Box
-            className="submit-button"
-            sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}
-          >
+          <Box className="submit-button" sx={{ gap: 2, flexWrap: "wrap" }}>
             <Button type="submit">Submit</Button>
             <Button
               variant="outlined"
               color="neutral"
+              type="clear"
               onClick={() => {
                 setFormData({
                   shippingLine: "",
