@@ -145,7 +145,7 @@ export const ExtensionTable = ({
                           <>
                             <button
                               className="action-button-extension"
-                              onClick={() => navigate(`/edit-do-extension/${row.id}`)}
+                              onClick={() => navigate(`/edit-do-extension/GenDetails/${row.id}`)}
                               title="Edit"
                             >
                               <Pencil size={16} />

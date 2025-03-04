@@ -26,7 +26,7 @@ const DOExtGenDetails = () => {
                 </div>
                 <div className="tabs">
                     <button className="active-tab">GENERAL DETAILS</button>
-                    <button className="tab">AUDIT</button>
+                    <button className="tab" onClick={() => navigate(`/edit-do-extension/Audit/${id}`)}>AUDIT</button>
                 </div>
                 <div className="ext-form">
                     <div className="gen-details">
@@ -74,7 +74,7 @@ const DOExtGenDetails = () => {
                 <div className="charge-det">
                     <h4 className="charge-title"><ReceiptText size={16} /> Extension Charge</h4>
                     <div className="newVTD">
-                        <label>New Valid Till Date</label>
+                        <label>New Valid Till Date</label><span className="required">*</span>
                         <div>
                             <input type="date" />
                             <button className="calc">CALCULATE</button>
@@ -84,21 +84,21 @@ const DOExtGenDetails = () => {
                         <div className="leftside">
                             <div>
                                 <label className="label">Admin Fee</label>
-                                <div className="data-chrg">Rp 20.000</div>
+                                <div className="data-chrg">Rp 20.000,-</div>
                             </div>
                             <div>
-                                <label className="label">Admin Fee</label>
-                                <div className="data-chrg">Rp 20.000</div>
+                                <label className="label">Platform Fee</label>
+                                <div className="data-chrg">Rp 75.000,-</div>
                             </div>
                         </div>
                         <div className="rightside">
                             <div>
-                                <label className="label">Admin Fee</label>
-                                <div className="data-chrg">Rp 20.000</div>
+                                <label className="label">Demurrage</label>
+                                <div className="data-chrg">Rp 1.254.720.000,-</div>
                             </div>
                             <div>
-                                <label className="label">Admin Fee</label>
-                                <div className="data-chrg">Rp 20.000</div>
+                                <label className="label">Total Charges</label>
+                                <div className="data-chrg">Rp 1.254.815.000,-</div>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,111 @@
+.dashboard_ext_audit {
+    width: 100vw;
+    height: 100vh;
+    background-color: #eaeaea;
+    all:16px;
+    overflow: hidden;
+}
+
+.detail-container{
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.detail-header{
+    display: flex;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.h2{
+    margin-top: 5px;
+}
+
+.logout-button{
+    background: none;
+    border: none;
+    color: orange;
+}
+
+.tabs{
+    display: flex;
+    gap: 60px;
+    padding-bottom: 20px;
+}
+
+.active-tab{
+    color: #ffffff;
+    background-color: #0070c0;
+    width: 180px;
+}
+
+.tab{
+    color: #ffffff;
+    background-color: #A0AEC0;
+    width: 180px;
+}
+
+.audit-table{
+    background: #eaeaea;
+    color: black;
+    padding: 5px;
+    border-radius: 10px;
+    border-collapse: collapse;
+    max-width: 100%;
+    min-width: 100%;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    font-size: 18px;
+}
+
+.t-head {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.t-head th {
+    padding: 12px;
+    border-bottom: 1px solid black;
+}
+
+.t-body td {
+    padding: 10px;
+}
+
+.t-body tr {
+    margin-top: 10px; 
+}
+.audit-title{
+    text-align: center;
+}
+
+.table-buttons{
+    display: flex;
+    gap: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.print-btn, .csv-btn{
+    background-color: #263754;
+    color: white;
+}
+
+.buttons{
+    display: flex;
+    gap: 5px;
+    justify-content: right;
+}
+
+.s-btn, .c-btn{
+    background-color: #263754;
+    color: white;
+    height: fit-content;
+    margin-top: 20px;
+}
