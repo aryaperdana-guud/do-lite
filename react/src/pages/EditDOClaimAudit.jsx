@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./EditDOClaimAudit.css"
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom";
+import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
 const EditDOClaimAudit = () => {
     const { id } = useParams();
@@ -25,6 +26,7 @@ const EditDOClaimAudit = () => {
         <div className="dashboard_a">
             <NavigationBar />
             <main className="main-content">
+                <ProfileDropdown />
                 <h1 className="title"><Pencil size={40}/>  Edit DO</h1>
                 <div className="edit-do-container">
                     <div className="edit-header">

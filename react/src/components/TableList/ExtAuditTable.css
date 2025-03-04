@@ -18,15 +18,30 @@
     margin: 0 auto;
 }
 
+.audit-table{
+  background: #eaeaea;
+  color: black;
+  padding: 5px;
+  border-radius: 10px;
+  border-collapse: collapse;
+  max-width: 100%;
+  min-width: 100%;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  font-size: 18px;
+}
+
+
 .t-head {
     background-color: #f3f4f6;
     font-weight: bold;
-    font-size: 20px; /* Memperbesar font header */
+    font-size: 20px;
 }
 
 .t-head th {
     padding: 12px;
-    border-bottom: 3px solid black; /* Menambahkan border bawah hitam */
+    border-bottom: 3px solid black; 
 }
 
 .t-body td {
@@ -34,21 +49,8 @@
 }
 
 .t-body tr {
-    margin-top: 10px; /* Memberikan jarak antara baris dalam tbody */
+    margin-top: 10px;
 }
-  
-  .audit-table th {
-    background-color: #f3f4f6;
-    color: black;
-    text-align: left;
-    font-weight: bold;
-  }
-  
-  .audit-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-  }
   
   .audit-table tr:last-child td {
     border-bottom: none;

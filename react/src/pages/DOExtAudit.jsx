@@ -5,6 +5,7 @@ import ExtAuditTable from "../components/TableList/ExtAuditTable.jsx";
 import "./DOExtAudit.css"
 import React, {useState, useEffect} from "react"
 import { useParams } from "react-router-dom";
+import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
 const DOExtAudit = () => {
     const { id } = useParams();
@@ -27,6 +28,7 @@ const DOExtAudit = () => {
       <div className="dashboard_ext_audit">
         <NavigationBar />
         <main className="main-content">
+            <ProfileDropdown />
             <h1 className="title"><FileSearch size={40}/> DO Extension Details</h1>
             <div className="detail-container">
                 <div className="detail-header">
@@ -40,7 +42,7 @@ const DOExtAudit = () => {
 
                 <div className="audit-table">
                     <h4 className="audit-title"><Clock size={16}/> Audit</h4>
-                    <div>
+                    <div className="audit-data">
                         <ExtAuditTable data={auditData} />
                     </div>
                     <div className="table-buttons">

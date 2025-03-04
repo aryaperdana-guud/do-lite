@@ -2,8 +2,10 @@ import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx"
 import { FileSearch, LogOut,Ship, CalendarPlus2, Container, ReceiptText} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./DOExtGenDetails.css"
-import React from "react"
+import ContainerTable from "../components/TableList/ContainerTable.jsx";
+import React , {useState, useEffect} from "react"
 import { useParams } from "react-router-dom";
+import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
 const DOExtGenDetails = () => {
     const { id } = useParams();
@@ -13,11 +15,53 @@ const DOExtGenDetails = () => {
     const DateComponent = ({ date }) => {
         return <p>{new Date(date).toLocaleDateString("id-ID")}</p>;
     }; //date hari ini
+
+    const [containerData, setContainerData] = useState([]);
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+
+    const handleConfirmClick = () => {
+        setShowConfirmPopup(true); //confirm pop-up
+    }
+
+    const handleCloseConfirmPopup = () => {
+        setShowConfirmPopup(false); //close confirm
+    }
+
+    useEffect(() => {
+        setContainerData([
+            { marksAndNumber: "MSDU760099 / 45DV", 
+            containerCat: "STANDARD", 
+            dangerousGood: "YES", 
+            vtd: "20/02/2025",
+            nextvtd: "20/03/2025", 
+            extDays: "30" },
+            { marksAndNumber: "MSDU760099 / 45DV", 
+            containerCat: "STANDARD", 
+            dangerousGood: "YES", 
+            vtd: "20/02/2025", 
+            nextvtd: "20/03/2025", 
+            extDays: "30" }, 
+            { marksAndNumber: "MSDU760099 / 45DV", 
+            containerCat: "STANDARD", 
+            dangerousGood: "YES", 
+            vtd: "20/02/2025",
+            nextvtd: "20/03/2025", 
+            extDays: "30" },
+            { marksAndNumber: "MSDU760099 / 45DV", 
+            containerCat: "STANDARD", 
+            dangerousGood: "YES", 
+            vtd: "20/02/2025", 
+            nextvtd: "20/03/2025", 
+            extDays: "30" }, 
+            
+        ]);
+      }, []);
   
     return (
       <div className="dashboard_ext_genDet">
         <NavigationBar />
         <main className="main-content">
+            <ProfileDropdown />
             <h1 className="title"><FileSearch size={40}/> DO Extension Details</h1>
             <div className="detail-container">
                 <div className="detail-header">
@@ -68,6 +112,9 @@ const DOExtGenDetails = () => {
 
                         <div className="con4ext">
                             <h4 className="con-title"> <Container size={16}/> Containers for Extension</h4>
+                            <div>
+                                <ContainerTable data={containerData} />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -105,10 +152,33 @@ const DOExtGenDetails = () => {
                 </div>
                 <div className="buttons">
                     <button className="s-btn">SAVE</button>
-                    <button className="c-btn">CONFIRM</button>
+                    <button className="c-btn" onClick={handleConfirmClick}>CONFIRM</button>
                 </div>
             </div>
         </main>  
+
+        {showConfirmPopup && (
+                <div className="conf-popup-overlay">
+                    <div className="conf-popup-content">
+                        <h2 className="conf-popup-title">CONFIRMATION</h2>
+                        <p>Are you sure want to ?</p>
+                        <p>Extensions Job cannot be delete or change after confirmed</p>
+
+                        <div className="conf-popup-buttons">
+                            <button className="no-button" onClick={handleCloseConfirmPopup}>NO</button>
+                            <button className="yes-button" onClick={() => { alert("Confirmed!");
+                                handleCloseConfirmPopup(); 
+                                }}>YES
+                            </button>
+                        </div>
+
+                        <div className="conf-popup-warning">
+                            DO submissions will be processed for the DO request on <strong>8:30 AM until 4:30 PM</strong>. 
+                            Late submissions will be handled the next working day. Please ensure your documents are complete and meet the requirements.
+                        </div>
+                    </div>
+                </div>
+            )}
       </div>
     );
 };

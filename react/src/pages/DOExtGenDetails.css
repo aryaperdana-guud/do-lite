@@ -67,6 +67,7 @@
     flex: 1;
     align-items: center;
     box-sizing: border-box;
+    overflow: auto;
 }
   
 .gen-details, .ext-det {
@@ -80,6 +81,38 @@
 .gd-title, .ext-title, .con-title{
     text-align: center;
 }
+
+.c-table{
+    border-collapse: collapse ;
+    background: #eaeaea;
+    color: black;
+    padding: 5px;
+    border-radius: 10px;
+    max-width: 100%;
+    min-width: 100%;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+.c-head {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.c-head th {
+    padding: 12px;
+    border-bottom: 1px solid black;
+}
+
+.c-body td {
+    padding: 8px;
+}
+
+.c-body tr {
+    margin-top: 8px; 
+}
+
 
 .label{
     font-size: 18px; 

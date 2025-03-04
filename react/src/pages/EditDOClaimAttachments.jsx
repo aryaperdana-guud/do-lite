@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./EditDOClaimAttachments.css"
 import React, { useState } from "react"
 import { useParams } from "react-router-dom";
+import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
 const EditDOClaimAttachments = () => {
     const { id } = useParams();
@@ -67,6 +68,7 @@ const EditDOClaimAttachments = () => {
         <div className="dashboard_att">
             <NavigationBar />
             <main className="main-content">
+                <ProfileDropdown />
                 <h1 className="title"><Pencil size={40}/>  Edit DO</h1>
                 <div className="edit-do-container">
                     <div className="edit-header">
@@ -206,7 +208,10 @@ const EditDOClaimAttachments = () => {
 
                         <div className="conf-popup-buttons">
                             <button className="no-button" onClick={handleCloseConfirmPopup}>NO</button>
-                            <button className="yes-button" onClick={() => alert("Confirmed!")}>YES</button>
+                            <button className="yes-button" onClick={() => { alert("Confirmed!");
+                                handleCloseConfirmPopup();
+                                }}>YES
+                            </button>
                         </div>
 
                         <div className="conf-popup-warning">
