@@ -1,21 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, FilterList } from "@mui/icons-material";
-import { Checkbox, IconButton } from "@mui/material";
-import "./DOTable.css";
+import { Visibility, FilterList, Download } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
+import "./DOTable.css"; // Reusing the same CSS file
 import { StatusIcon } from "../StatusRender.jsx";
 
-export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
+export const TransactionTable = ({ data = [], loading = false }) => {
   const [selectedRows, setSelectedRows] = useState([]);
-
-  const handleSelectAll = (event) => {
-    if (event.target.checked) {
-      setSelectedRows(data.map((item) => item.id));
-    } else {
-      setSelectedRows([]);
-    }
-  };
 
   const handleSelectRow = (id) => {
     setSelectedRows((prev) =>
@@ -32,7 +24,7 @@ export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
         style={{ position: "sticky", top: 0, zIndex: 10, background: "white" }}
       >
         <div className="active-lists__title-section">
-          <h2 className="active-lists__title">CONFIRMED JOBS FOR PAYMENT</h2>
+          <h2 className="active-lists__title">Transactions</h2>
           <IconButton size="small">
             <FilterList />
           </IconButton>
@@ -56,30 +48,22 @@ export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
               }}
             >
               <tr>
-                <th>
-                  <input
-                    type="checkbox"
-                    onChange={handleSelectAll}
-                    checked={
-                      data.length > 0 && selectedRows.length === data.length
-                    }
-                    className="checkbox-input"
-                  />
-                </th>
                 <th>Status</th>
-                <th>Job ID</th>
-                <th>Job Type</th>
-                <th>Shipment Type</th>
-                <th>Submitted Date</th>
+                <th>Payment ID</th>
+                <th>Billing Date</th>
                 <th>Amount</th>
+                <th>Currency</th>
+                <th>Payment Date</th>
+                <th>Paid Date</th>
                 <th>Details</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {data.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="8"
+                    colSpan="9"
                     style={{
                       textAlign: "center",
                       padding: "30px",
@@ -96,25 +80,27 @@ export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
                     className={index % 2 === 0 ? "even-row" : "odd-row"}
                   >
                     <td>
-                      <input
-                        type="checkbox"
-                        checked={isSelected(row.id)}
-                        onChange={() => handleSelectRow(row.id)}
-                        className="checkbox-input"
-                      />
-                    </td>
-                    <td>
                       <StatusIcon type="payment" status={row.status} />
                     </td>
-                    <td>{row.jobId}</td>
-                    <td>{row.jobType}</td>
-                    <td>{row.shipmentType}</td>
-                    <td>{row.submittedDate}</td>
+                    <td>{row.paymentId}</td>
+                    <td>{row.billingDate}</td>
                     <td>{row.amount}</td>
+                    <td>{row.currency}</td>
+                    <td>{row.paymentDate}</td>
+                    <td>{row.paidDate || "..."}</td>
                     <td>
                       <div className="action-buttons">
                         <button className="action-button_DO">
-                          <Search style={{ fontSize: 16 }} />
+                          <Visibility
+                            style={{ fontSize: 16, color: "#1a73e8" }}
+                          />
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="action-buttons">
+                        <button className="action-button_DO">
+                          <Download style={{ fontSize: 16 }} />
                         </button>
                       </div>
                     </td>
@@ -135,37 +121,13 @@ export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
           zIndex: 10,
           padding: "10px 0",
           borderTop: "1px solid #eee",
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
         }}
-      >
-        <div
-          className="active-lists__controls"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <button
-            className="pay-button"
-            onClick={() => onPaySelected?.(selectedRows)}
-            disabled={selectedRows.length === 0}
-            style={{
-              backgroundColor: "#1a3a54",
-              width: "200px",
-              color: "white",
-              padding: "8px 16px",
-              border: "none",
-              borderRadius: "4px",
-              cursor: selectedRows.length === 0 ? "not-allowed" : "pointer",
-              opacity: selectedRows.length === 0 ? 0.7 : 1,
-            }}
-          >
-            Pay
-          </button>
-        </div>
-      </div>
+      ></div>
     </div>
   );
 };
 
-export default PaymentTable;
+export default TransactionTable;

@@ -33,6 +33,10 @@
   margin-bottom: 16px;
 }
 
+.pay-button:focus {
+  outline: none;
+}
+
 .inline-content {
   display: flex;
   align-items: center;

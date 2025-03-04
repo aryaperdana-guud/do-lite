@@ -56,7 +56,7 @@ const navigation = [
     icon: <FaCreditCard />,
     submenu: [
       { title: "Payments", href: "/do-payment/payment" },
-      { title: "Transactions", href: "#" },
+      { title: "Transactions", href: "/do-payment/transactions" },
     ],
   },
 ];

@@ -174,9 +174,7 @@ export const BOLTable = ({
                       </div>
                     </td>
                     <td>
-                      <td>
-                        <StatusIcon status={row.status} />
-                      </td>
+                      <StatusIcon status={row.status} />
                     </td>
                     <td>{row.blNo}</td>
                     <td>{row.containerNo}</td>

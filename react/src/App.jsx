@@ -25,7 +25,8 @@ import { useEffect } from "react";
 import { MyDOActive } from "./pages/MyDOActive.jsx";
 import { MyDOHistory } from "./pages/MyDOHistory.jsx";
 
-import { DoPayment } from "./pages/DoPayment.jsx";
+import { DoPayment } from "./pages/DoPayment-payment.jsx";
+import { DoTransaction } from "./pages/DoPayment-transaction.jsx";
 
 function App() {
   const { user, setUser } = useUserStore();
@@ -147,6 +148,14 @@ function App() {
           element={
             <AuthGuard>
               <DoPayment />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/do-payment/transactions"
+          element={
+            <AuthGuard>
+              <DoTransaction />
             </AuthGuard>
           }
         />
