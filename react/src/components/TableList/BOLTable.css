@@ -22,6 +22,10 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
+.table-header {
+  font-weight: bold !important;
+}
+
 .active-lists__title-section {
   display: flex;
   justify-content: space-between;

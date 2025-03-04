@@ -196,7 +196,7 @@ export const BOLTable = ({
                           }
                           title="View"
                         >
-                          <Eye size={16} />
+                          <Eye size={16} sx={{ color: "#3b82f6" }} />
                         </button>
 
                         <button

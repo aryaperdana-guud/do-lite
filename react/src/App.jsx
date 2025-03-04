@@ -25,6 +25,8 @@ import { useEffect } from "react";
 import { MyDOActive } from "./pages/MyDOActive.jsx";
 import { MyDOHistory } from "./pages/MyDOHistory.jsx";
 
+import { DoPayment } from "./pages/DoPayment.jsx";
+
 function App() {
   const { user, setUser } = useUserStore();
   useEffect(() => {
@@ -132,7 +134,7 @@ function App() {
           }
         />
 
-        <Route path="/edit-do-extension/:id" element={<DOExtGenDetails/>} />
+        <Route path="/edit-do-extension/:id" element={<DOExtGenDetails />} />
         <Route path="/edit-do-claim/:id" element={<EditDOClaim />} />
         <Route
           path="/edit-do-claim-attachments/:id"
@@ -140,6 +142,14 @@ function App() {
         />
         <Route path="/edit-do-claim-query/:id" element={<EditDOClaimQuery />} />
         <Route path="/edit-do-claim-audit/:id" element={<EditDOClaimAudit />} />
+        <Route
+          path="/do-payment/payment"
+          element={
+            <AuthGuard>
+              <DoPayment />
+            </AuthGuard>
+          }
+        />
       </Routes>
     </Router>
   );

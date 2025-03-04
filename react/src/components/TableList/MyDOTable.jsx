@@ -1,5 +1,5 @@
 "use client";
-import { Eye } from "lucide-react";
+import { AlignCenter, Eye } from "lucide-react";
 import "./BOLTable.css"; // Reusing the existing CSS
 import {
   Typography,
@@ -58,7 +58,14 @@ export const MyDOTable = ({ data = [], loading = false, onViewDetails }) => {
               <TableBody>
                 {displayData.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="no-records">
+                    <TableCell
+                      colSpan={8}
+                      align="center"
+                      sx={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
                       Sorry, no matching records found.
                     </TableCell>
                   </TableRow>

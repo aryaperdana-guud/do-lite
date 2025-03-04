@@ -39,7 +39,6 @@ const navigation = [
     submenu: [
       { title: "Active List", href: "/my-do/active" },
       { title: "History List", href: "/my-do/history" },
-      { title: "Nav 3", href: "#" },
     ],
   },
   {
@@ -56,7 +55,7 @@ const navigation = [
     href: "/do-payments",
     icon: <FaCreditCard />,
     submenu: [
-      { title: "Payments", href: "#" },
+      { title: "Payments", href: "/do-payment/payment" },
       { title: "Transactions", href: "#" },
     ],
   },
