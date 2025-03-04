@@ -61,16 +61,32 @@ const navigation = [
   },
 ];
 
+// Find the parent menu for a given submenu href
+const findParentMenu = (submenuHref) => {
+  for (const item of navigation) {
+    if (item.submenu) {
+      const found = item.submenu.find((sub) => sub.href === submenuHref);
+      if (found) return item.href;
+    }
+  }
+  return null;
+};
+
 export function NavigationBar() {
-  const [activeMenu, setActiveMenu] = useState("/bill-of-ladings");
-  const [expandedMenu, setExpandedMenu] = useState(null); // Track expanded menu
-  const [activeSubmenu, setActiveSubmenu] = useState(null); // Track active submenu
+  // Default to the active list on initial load if no session data
+  const defaultActiveSubmenu = "/bol/active";
+  const defaultActiveMenu =
+    findParentMenu(defaultActiveSubmenu) || "/bill-of-ladings";
+
+  const [activeMenu, setActiveMenu] = useState(defaultActiveMenu);
+  const [expandedMenu, setExpandedMenu] = useState(null);
+  const [activeSubmenu, setActiveSubmenu] = useState(defaultActiveSubmenu);
   const [isMinimized, setIsMinimized] = useState(false);
 
   useLayoutEffect(() => {
-    const storedExpandedMenu = localStorage.getItem("expandedMenu");
-    const storedActiveMenu = localStorage.getItem("activeMenu");
-    const storedActiveSubmenu = localStorage.getItem("activeSubmenu");
+    const storedExpandedMenu = sessionStorage.getItem("expandedMenu");
+    const storedActiveMenu = sessionStorage.getItem("activeMenu");
+    const storedActiveSubmenu = sessionStorage.getItem("activeSubmenu");
 
     if (storedExpandedMenu) {
       setExpandedMenu(storedExpandedMenu);
@@ -80,34 +96,46 @@ export function NavigationBar() {
     }
     if (storedActiveSubmenu) {
       setActiveSubmenu(storedActiveSubmenu);
+    } else {
+      // If no active submenu is stored, default to "/bol/active"
+      setActiveSubmenu(defaultActiveSubmenu);
+      setActiveMenu(defaultActiveMenu);
+
+      // Store the defaults
+      sessionStorage.setItem("activeSubmenu", defaultActiveSubmenu);
+      sessionStorage.setItem("activeMenu", defaultActiveMenu);
     }
   }, []);
 
   const handleMenuClick = (href) => {
-    setExpandedMenu((prev) => (prev === href ? null : href)); // Toggle if clicked again
-    setActiveMenu(href); // Set the active menu
-    localStorage.setItem("expandedMenu", expandedMenu === href ? "" : href); // Save expanded state
-    localStorage.setItem("activeMenu", href);
+    setExpandedMenu((prev) => (prev === href ? null : href));
+    setActiveMenu(href);
+    sessionStorage.setItem("expandedMenu", expandedMenu === href ? "" : href);
+    sessionStorage.setItem("activeMenu", href);
   };
 
   const handleSubmenuClick = (href) => {
-    setActiveSubmenu(href); // Set the active submenu
-    setExpandedMenu(null); // Collapse the parent menu after submenu selection
-    localStorage.setItem("activeSubmenu", href); // Save submenu active state
+    setActiveSubmenu(href);
+    setExpandedMenu(null);
+    sessionStorage.setItem("activeSubmenu", href);
+
+    const parentMenu = findParentMenu(href);
+    if (parentMenu) {
+      setActiveMenu(parentMenu);
+      sessionStorage.setItem("activeMenu", parentMenu);
+    }
   };
 
   const toggleMinimize = () => {
     setIsMinimized((prev) => {
       if (!prev) {
-        // Before minimizing, save the current expanded menu
         if (expandedMenu) {
-          localStorage.setItem("lastExpandedMenu", expandedMenu);
+          sessionStorage.setItem("lastExpandedMenu", expandedMenu);
         }
         setExpandedMenu(null);
-        localStorage.removeItem("expandedMenu");
+        sessionStorage.removeItem("expandedMenu");
       } else {
-        // When expanding back, restore the last expanded menu
-        const lastExpanded = localStorage.getItem("lastExpandedMenu");
+        const lastExpanded = sessionStorage.getItem("lastExpandedMenu");
         if (lastExpanded) {
           setExpandedMenu(lastExpanded);
         }
@@ -157,7 +185,12 @@ export function NavigationBar() {
                     key={subitem.href}
                     href={subitem.href}
                     className={`submenu-item ${activeSubmenu === subitem.href ? "active" : ""}`}
-                    onClick={() => handleSubmenuClick(subitem.href)} // Handle submenu click
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSubmenuClick(subitem.href);
+
+                      window.location.href = subitem.href;
+                    }}
                   >
                     {subitem.title}
                   </a>

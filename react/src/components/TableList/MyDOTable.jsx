@@ -84,7 +84,7 @@ export const MyDOTable = ({ data = [], loading = false, onViewDetails }) => {
                           <IconButton
                             size="small"
                             color="primary"
-                            onClick={() => onViewDetails?.(row)}
+                            onClick={() => navigate("/my-do/active/details")}
                             sx={{ color: "#3b82f6" }}
                           >
                             <Eye size={16} />

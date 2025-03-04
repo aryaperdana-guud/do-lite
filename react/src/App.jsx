@@ -26,6 +26,7 @@ import { useEffect } from "react";
 
 import { MyDOActive } from "./pages/MyDOActive.jsx";
 import { MyDOHistory } from "./pages/MyDOHistory.jsx";
+import { MyDODetails } from "./pages/MyDODetails.jsx";
 
 import { DoPayment } from "./pages/DoPayment-payment.jsx";
 import { DoTransaction } from "./pages/DoPayment-transaction.jsx";
@@ -136,9 +137,20 @@ function App() {
             </AuthGuard>
           }
         />
+        <Route
+          path="/my-do/active/details"
+          element={
+            <AuthGuard>
+              <MyDODetails />
+            </AuthGuard>
+          }
+        />
 
-        <Route path="/edit-do-extension/GenDetails/:id" element={<DOExtGenDetails/>} />
-        <Route path="/edit-do-extension/Audit/:id" element={<DOExtAudit/>} />
+        <Route
+          path="/edit-do-extension/GenDetails/:id"
+          element={<DOExtGenDetails />}
+        />
+        <Route path="/edit-do-extension/Audit/:id" element={<DOExtAudit />} />
         <Route path="/edit-do-claim/:id" element={<EditDOClaim />} />
         <Route
           path="/edit-do-claim-attachments/:id"

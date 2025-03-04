@@ -141,6 +141,15 @@
   outline: none;
 }
 
+.action-buttons {
+  display: flex;
+  flex-direction: row !important;
+  gap: 16px;
+  margin: 20px auto 0;
+  width: 100%;
+  max-width: 400px;
+}
+
 .active-lists__footer {
   position: sticky;
   bottom: 0;
