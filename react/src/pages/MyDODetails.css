@@ -155,9 +155,10 @@
   flex-direction: column;
   gap: 16px;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   /* justify-content: flex-end !important; */
   margin: 0px;
+  margin-top: 20px;
   margin-left: auto !important;
 }
 
@@ -173,6 +174,11 @@
 .extend-do {
   background-color: #0070c0 !important;
   color: white !important;
+}
+
+.back-do {
+  background-color: #eaeaea !important;
+  color: #0070c0 !important;
 }
 
 /* Table styling for invoice tab */

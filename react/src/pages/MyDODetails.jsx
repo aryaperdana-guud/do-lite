@@ -15,6 +15,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./MyDODetails.css";
+import { useNavigate } from "react-router-dom";
 import { InvoiceTab } from "../components/InvoiceTab.jsx";
 
 export function MyDODetails() {
@@ -41,6 +42,8 @@ export function MyDODetails() {
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
+
+  const navigate = useNavigate();
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -283,7 +286,7 @@ export function MyDODetails() {
         <h1 className="Title">Bill of Ladings</h1>
 
         <div className="form">
-          <div className="form-title">DO DETAILS</div>
+          <div className="form-title">Do Details</div>
 
           {/* Navigation Tabs */}
           <div style={{ marginBottom: "20px" }}>
@@ -322,7 +325,7 @@ export function MyDODetails() {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  GENERAL DETAILS
+                  General Details
                 </Tab>
                 <Tab
                   value="invoices"
@@ -338,7 +341,7 @@ export function MyDODetails() {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  INVOICES
+                  Invoices
                 </Tab>
                 <Tab
                   value="tax-invoices"
@@ -355,7 +358,7 @@ export function MyDODetails() {
                     gap: "4px",
                   }}
                 >
-                  TAX INVOICES
+                  Tax Invoices
                 </Tab>
                 <Tab
                   value="containers"
@@ -369,7 +372,7 @@ export function MyDODetails() {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  CONTAINERS
+                  Containers
                 </Tab>
                 <Tab
                   value="extensions"
@@ -383,7 +386,7 @@ export function MyDODetails() {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  EXTENSIONS
+                  Extentions
                 </Tab>
               </TabList>
             </Tabs>
@@ -392,14 +395,21 @@ export function MyDODetails() {
           {renderTabContent()}
 
           {/* Action Buttons */}
+
           <Box className="action-buttons">
+            <Button
+              onClick={() => navigate(-1)}
+              className="action-button back-do"
+            >
+              Back
+            </Button>
             <Button
               className="action-button download-do"
               startIcon={<FileDownloadOutlinedIcon />}
             >
-              DOWNLOAD DO
+              Download DO
             </Button>
-            <Button className="action-button extend-do">EXTEND DO</Button>
+            <Button className="action-button extend-do">Extend DO</Button>
           </Box>
         </div>
       </main>

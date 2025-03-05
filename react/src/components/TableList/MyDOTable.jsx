@@ -13,8 +13,14 @@ import {
   IconButton,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Title } from "@mui/icons-material";
 
-export const MyDOTable = ({ data = [], loading = false, onViewDetails }) => {
+export const MyDOTable = ({
+  data = [],
+  loading = false,
+  title,
+  onViewDetails,
+}) => {
   const navigate = useNavigate();
 
   // Ensure data is properly assigned
@@ -24,7 +30,7 @@ export const MyDOTable = ({ data = [], loading = false, onViewDetails }) => {
     <div className="active-lists">
       <div className="active-lists__header">
         <Typography variant="h5" className="header-title">
-          ACTIVE LIST
+          {title}
         </Typography>
       </div>
 

@@ -18,6 +18,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { Bold } from "lucide-react";
 
 // Sample data
 const invoices = [
@@ -74,7 +75,7 @@ export function InvoiceTab() {
       }}
     >
       <Typography
-        variant="h6"
+        variant="h5"
         style={{
           marginBottom: "20px",
           display: "flex",
@@ -83,7 +84,6 @@ export function InvoiceTab() {
           color: "#263754",
         }}
       >
-        <FileDownloadIcon />
         Invoices
       </Typography>
 
@@ -105,22 +105,22 @@ export function InvoiceTab() {
                   style={{ color: "#0070c0" }}
                 />
               </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 500 }}>
+              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
                 Invoice Number
               </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 500 }}>
+              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
                 Invoice Type
               </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 500 }}>
+              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
                 Invoice Region
               </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 500 }}>
+              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
                 Invoice Currency
               </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 500 }}>
+              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
                 Invoice Amount
               </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 500 }}>
+              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
                 Action
               </TableCell>
             </TableRow>
@@ -171,9 +171,11 @@ export function InvoiceTab() {
             color: "white",
             textTransform: "none",
             fontWeight: 500,
+            borderRadius: 5,
+            padding: 13,
           }}
         >
-          DOWNLOAD ALL INVOICES
+          Download All Invoices
         </Button>
 
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
