@@ -79,11 +79,11 @@
 }
 
 .edit-do-container{
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 30px;
-    height: 100%;
-    overflow-y: auto;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .title {

@@ -74,7 +74,7 @@ const DOExtGenDetails = () => {
                 </div>
                 <div className="ext-form">
                     <div className="gen-details">
-                        <h4 className="gd-title"><Ship size={16}/> General Details</h4>
+                        <h4 style={{textAlign: 'center', fontSize: '20px'}}><Ship size={16}/> General Details</h4>
                         <div>
                             <label className="label">Ext Job Number</label>
                             <div className="data">
@@ -103,7 +103,7 @@ const DOExtGenDetails = () => {
 
                     <div className="right-form">
                         <div className="ext-det">
-                            <h4 className="ext-title"><CalendarPlus2 size={16}/> Extension Details</h4>
+                            <h4 style={{textAlign: 'center', fontSize: '20px'}}><CalendarPlus2 size={16}/> Extension Details</h4>
                             <div>
                                 <label className="label">No of Container</label>
                                 <div className="data">2</div>
@@ -111,7 +111,7 @@ const DOExtGenDetails = () => {
                         </div>
 
                         <div className="con4ext">
-                            <h4 className="con-title"> <Container size={16}/> Containers for Extension</h4>
+                            <h4 style={{textAlign: 'center', fontSize: '20px'}}> <Container size={16}/> Containers for Extension</h4>
                             <div>
                                 <ContainerTable data={containerData} />
                             </div>
@@ -119,7 +119,7 @@ const DOExtGenDetails = () => {
                     </div>
                 </div>
                 <div className="charge-det">
-                    <h4 className="charge-title"><ReceiptText size={16} /> Extension Charge</h4>
+                    <h4 style={{textAlign: 'center', fontSize: '20px'}}><ReceiptText size={16} /> Extension Charge</h4>
                     <div className="newVTD">
                         <label>New Valid Till Date</label><span className="required">*</span>
                         <div>

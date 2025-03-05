@@ -67,7 +67,7 @@ const EditDOClaimAudit = () => {
                     </div>
 
                     <div style={{backgroundColor: '#eaeaea', padding: '20px', borderRadius: '10px', textAlign: 'center', paddingBottom: '20px'}}>
-                        <h4 className="form-title"><Clock size={16}/> Audit</h4>
+                        <h4 style={{textAlign: 'center', fontSize: '20px'}}><Clock size={16}/> Audit</h4>
                         <ExtAuditTable data={auditData} /> 
 
                         <div style={{ display: 'flex', alignItems: 'left', justifyContent: 'left', gap: '10px' }}>

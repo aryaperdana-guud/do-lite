@@ -53,7 +53,7 @@ const EditDOClaimQuery = () => {
                     </div>
 
                     <div className="selected-bol">
-                        <h4 className="form-title"><CircleHelp size={16}/> Query</h4>
+                        <h4 style={{textAlign: 'center', fontSize: '20px'}}><CircleHelp size={16}/> Query</h4>
                         <table>
                             <thead className="table-head">
                                 <tr>

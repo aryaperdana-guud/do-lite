@@ -2,7 +2,8 @@ import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx"
 import { MousePointer, Pencil, Save, Trash2, LogOut, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./EditDOClaimAttachments.css"
-import React, { useState } from "react"
+import SelectedBOL from "../components/TableList/SelectedBOL.jsx";
+import React, {useState, useEffect} from "react"
 import { useParams } from "react-router-dom";
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
@@ -18,6 +19,25 @@ const EditDOClaimAttachments = () => {
     const [validityDate, setValidityDate] = useState("");
     const [blNo, setBlNo] = useState("");
     const [documentFile, setDocumentFile] = useState(null);
+    const [selectedbol, setSelectedbol] = useState([]);
+
+    useEffect(() => {
+        // Simulasi Fetch Data
+        setSelectedbol([
+            {blNo: "MEDUU12345",
+                containerNo: "MSDU1234567890",
+                shippingLine: "SHIPPING LINE 1",
+                authoriser: "CARGO OWNER 1",
+                blDateSubmitted: "10/02/2025 15:51:07"
+            },
+            {blNo: "MEDUU12345",
+                containerNo: "MSDU1234567890",
+                shippingLine: "SHIPPING LINE 1",
+                authoriser: "CARGO OWNER 1",
+                blDateSubmitted: "10/02/2025 15:51:07"
+            },
+        ]);
+      }, []);
   
     const handleAddClick = () => {
         setShowAddPopup(true); // Menampilkan pop-up saat tombol ADD diklik
@@ -95,45 +115,7 @@ const EditDOClaimAttachments = () => {
                     </div>
 
                     <div className="selected-bol">
-                        <h4 className="form-title"><MousePointer size={16}/> Selected Bill of Ladings</h4>
-                        <table>
-                            <thead className="table-head">
-                                <tr>
-                                <th>Document ID</th>
-                                <th>Document Type</th>
-                                <th>Authoriser</th>
-                                <th>BL No.</th>
-                                <th>DO No.</th>
-                                <th>Created At</th>
-                                <th>Validity Date</th>
-                                <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody className={`table-content ${data.length === 0 ? "empty" : "filled"}`}>
-                                {data.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="8" style={{ textAlign: "center", padding: "30px", color: "#888", background: "#eaeaea"}}>
-                                            Sorry, no matching records found.
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    data.map((row, index) => (
-                                        <tr key={index}>
-                                            <td>{row.DocumentID}</td>
-                                            <td>{row.DocumentType}</td>
-                                            <td>{row.Authoriser}</td>
-                                            <td>{row.BLNo}</td>
-                                            <td>{row.DONo}</td>
-                                            <td>{row.CreatedAt}</td>
-                                            <td>{row.ValidityDate}</td>
-                                            <td>
-                                                <button className="action-button"><X size={16}/></button>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
+                        <SelectedBOL data={selectedbol} />
 
                         <div className="bottom-buttons">
                             <button className="add-button" onClick={handleAddClick}>

@@ -63,7 +63,7 @@ const EditDOClaim = () => {
 
                 <div className="edit-do-form">
                     <div className="form-group-1">
-                        <h4 className="form-title"><Ship size={16}/> General Details</h4>
+                        <h4 style={{textAlign: 'center', fontSize: '20px'}}><Ship size={16}/> General Details</h4>
                         <div>
                             <label>Job ID</label>
                             <div>
@@ -79,7 +79,7 @@ const EditDOClaim = () => {
                     </div>
             
                     <div className="form-group-2">
-                        <h4 className="form-title"><CalendarDays size={16}/> Job Date Details</h4>
+                        <h4 style={{textAlign: 'center', fontSize: '20px'}}><CalendarDays size={16}/> Job Date Details</h4>
                         <div className="form-content">
                             <label>Start Date</label>
                             <div>
@@ -100,7 +100,7 @@ const EditDOClaim = () => {
                 </div>                
 
                 <div className="charge-details">
-                    <h4 className="form-title"><ReceiptText size={16}/> Charge Details</h4>
+                    <h4 style={{textAlign: 'center', fontSize: '20px'}}><ReceiptText size={16}/> Charge Details</h4>
                     <div className="charge-row">
                         <label>Job Charge</label>
                         <div className="charge-amount">

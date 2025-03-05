@@ -5,7 +5,7 @@ const SelectedBOL = ({ data }) => {
   return (
     <div>
         <div style={{background: '#eaeaea', padding: '20px', borderRadius: '10px', textAlign: 'center', paddingBottom: '20px'}}>
-            <h4 className="form-title"><MousePointer size={16}/> Selected Bill of Ladings</h4>
+            <h4 style={{textAlign: 'center', fontSize: '20px'}}><MousePointer size={16}/> Selected Bill of Ladings</h4>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
             <table style={{ borderCollapse: 'separate', borderSpacing: '0 10px', width: '100%' }}>
                 <thead className="table-head" style={{borderBottom: '1px solid #000000'}}>

@@ -78,10 +78,6 @@
     flex: 1.5;
 }
 
-.gd-title, .ext-title, .con-title{
-    text-align: center;
-}
-
 .c-table{
     border-collapse: collapse ;
     background: #eaeaea;
