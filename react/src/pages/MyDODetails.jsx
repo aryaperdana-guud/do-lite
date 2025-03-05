@@ -13,10 +13,12 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { TaxInvoiceTab } from "../components/TaxInvoiceTab.jsx";
 import "./MyDODetails.css";
 import { useNavigate } from "react-router-dom";
 import { InvoiceTab } from "../components/InvoiceTab.jsx";
+import { ContainersTab } from "../components/ContainersTab.jsx";
+import { ExtensionsTab } from "../components/ExtensionTab.jsx";
 
 export function MyDODetails() {
   const [activeTab, setActiveTab] = useState("general-details");
@@ -47,6 +49,12 @@ export function MyDODetails() {
 
   const renderTabContent = () => {
     switch (activeTab) {
+      case "extensions":
+        return <ExtensionsTab />;
+      case "containers":
+        return <ContainersTab />;
+      case "tax-invoices":
+        return <TaxInvoiceTab />;
       case "invoices":
         return <InvoiceTab />;
       case "general-details":
