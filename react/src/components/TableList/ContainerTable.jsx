@@ -13,9 +13,9 @@ const ContainerTable = ({ data }) => {
     };
 
     return (
-        <div className="table-container">
-            <div className="wrapper">
-                <table className="c-table">
+        <div style={{background: '#eaeaea', padding: '10px', borderRadius: '10px', textAlign: 'center', paddingBottom: '20px'}}>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <table style={{ borderCollapse: 'separate', borderSpacing: '0 10px', width: '100%' }}>
                     <thead className="c-head">
                         <tr>
                             <th>Marks and Number</th>
@@ -26,10 +26,10 @@ const ContainerTable = ({ data }) => {
                             <th>Extension Days</th>
                         </tr>
                     </thead>
-                    <tbody className="c-body">
+                    <tbody style={{ backgroundColor: 'white', borderCollapse: 'collapse', fontSize: '16px', height: '200px', overflow: 'auto'}}>
                         {data.map((row, index) => (
                         <tr key={index}>
-                        <td>{row.marksAndNumber}</td>
+                        <td style={{borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px'}}>{row.marksAndNumber}</td>
                         <td>{row.containerCat}</td>
                         <td>
                             {row.dangerousGood && row.dangerousGood !== "-" ? (
@@ -47,7 +47,7 @@ const ContainerTable = ({ data }) => {
                         </td>
                         <td>{row.vtd}</td>
                         <td>{row.nextvtd}</td>
-                        <td>{row.extDays}</td>
+                        <td style={{borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>{row.extDays}</td>
                         </tr>
                         ))}
                     </tbody>

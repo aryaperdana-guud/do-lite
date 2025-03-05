@@ -53,7 +53,7 @@ const EditDOClaimQuery = () => {
                     </div>
 
                     <div className="selected-bol">
-                        <h4 className="form-title"><CircleHelp size={16}/> QUERY</h4>
+                        <h4 className="form-title"><CircleHelp size={16}/> Query</h4>
                         <table>
                             <thead className="table-head">
                                 <tr>
@@ -95,7 +95,7 @@ const EditDOClaimQuery = () => {
 
 
                         {isConfirmed && (
-                            <div className="confirmed">
+                            <div className="confirmed" style={{textAlign: 'left', fontSize: '12px', fontWeight: 'bold', color: '#6B8E23', display: 'flex', alignItems: 'center'}}>
                                 CONFIRMED
                             </div>
                         )}

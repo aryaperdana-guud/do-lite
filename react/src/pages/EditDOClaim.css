@@ -162,61 +162,7 @@
     border: none;
   }
 
-  .selected-bol{
-    background: #eaeaea;
-    padding: 20px;
-    border-radius: 10px;
-    gap: 10px;
-    align-items: center;
-    text-align: center;
-    padding-bottom: 20px;
-  }
-
-  .selected-bol .form-title {
-    font-size: 20px;
-  }
-
-  .selected-bol table {
-    width: 100%;
-    border-spacing: 0 10px;
-    border-collapse: separate !important;
-    padding-bottom: 20px;
-    text-align: center;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.selected-bol th, .selected-bol td {
-    padding: 10px;
-    margin: 10px;
-}
-
-.selected-bol th{
-    border-bottom: 2px solid #ccc;
-}
-
-.button-action{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.selected-bol td{
-    margin-top: 10px;
-    background: #ffffff;
-}
-.selected-bol tbody tr:first-child td:first-child {
-    border-top-left-radius: 12px;
-}
-.selected-bol tbody tr:first-child td:last-child {
-    border-top-right-radius: 12px;
-}
-.selected-bol tbody tr:last-child td:first-child {
-    border-bottom-left-radius: 12px;
-}
-.selected-bol tbody tr:last-child td:last-child {
-    border-bottom-right-radius: 12px;
-}
+  
 
 .charge-details{
     background: #eaeaea;

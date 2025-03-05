@@ -90,61 +90,6 @@
     padding: 10px;
 }
 
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-}
 
-.selected-bol {
-    background: #eaeaea;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    padding-bottom: 20px;
-    overflow: hidden;
-}
 
-.selected-bol .form-title {
-    font-size: 20px;
-}
 
-.selected-bol table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-}
-
-.selected-bol th,
-.selected-bol td {
-    padding: 10px;
-}
-
-.selected-bol th {
-    border-bottom: 2px solid #ccc;
-}
-
-.selected-bol tbody tr:first-child td:first-child {
-    border-top-left-radius: 12px;
-}
-.selected-bol tbody tr:first-child td:last-child {
-    border-top-right-radius: 12px;
-}
-.selected-bol tbody tr:last-child td:first-child {
-    border-bottom-left-radius: 12px;
-}
-.selected-bol tbody tr:last-child td:last-child {
-    border-bottom-right-radius: 12px;
-}
-
-.button-action {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.confirmed{
-    text-align: left;
-    font-size: 12px;
-    font-weight: bold;
-    color: #6B8E23;
-}

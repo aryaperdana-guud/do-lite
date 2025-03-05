@@ -141,10 +141,3 @@
     justify-content: space-between;
     align-items: center;
 }
-
-.confirmed{
-    text-align: left;
-    font-size: 12px;
-    font-weight: bold;
-    color: #6B8E23;
-}

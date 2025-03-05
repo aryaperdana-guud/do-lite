@@ -1,7 +1,8 @@
 import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx"
-import { Pencil, Save, Trash2, LogOut, X , Clock} from "lucide-react";
+import { Pencil, Save, Trash2, LogOut, Printer, Download , Clock} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./EditDOClaimAudit.css"
+import ExtAuditTable from "../components/TableList/ExtAuditTable.jsx";
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom";
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
@@ -12,7 +13,20 @@ const EditDOClaimAudit = () => {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
 
-    const [isConfirmed, setIsConfirmed] = useState(false);
+    const [isConfirmed,setIsConfirmed] = useState(false);
+
+    const [auditData, setAuditData] = useState([]);
+
+
+    useEffect(() => {
+        // Simulasi Fetch Data
+        setAuditData([
+          { event: "JOB CREATE EVENT", timestamp: "17/02/2025 17:30:56", remarks: "-", userId: "COMLG_U002", userName: "Adli Ifkar" },
+          { event: "JOB CREATE EVENT", timestamp: "17/02/2025 17:30:56", remarks: "-", userId: "COMLG_U002", userName: "Adli Ifkar" },
+          { event: "JOB CREATE EVENT", timestamp: "17/02/2025 17:30:56", remarks: "-", userId: "COMLG_U002", userName: "Adli Ifkar" },
+          { event: "JOB CREATE EVENT", timestamp: "17/02/2025 17:30:56", remarks: "-", userId: "COMLG_U002", userName: "Adli Ifkar" },
+        ]);
+      }, []);
 
     useEffect(() => {
         //check confirmed status di local storage
@@ -52,45 +66,23 @@ const EditDOClaimAudit = () => {
                         <button className="tab-active">AUDIT</button>
                     </div>
 
-                    <div className="selected-bol">
+                    <div style={{backgroundColor: '#eaeaea', padding: '20px', borderRadius: '10px', textAlign: 'center', paddingBottom: '20px'}}>
                         <h4 className="form-title"><Clock size={16}/> Audit</h4>
-                        <table>
-                            <thead className="table-head">
-                                <tr>
-                                <th>Event</th>
-                                <th>Timestamp</th>
-                                <th>Remarks</th>
-                                <th>User ID</th>
-                                <th>Username</th>
-                                </tr>
-                            </thead>
-                            <tbody className={`table-content ${data.length === 0 ? "empty" : "filled"}`}>
-                                {data.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="5" style={{ textAlign: "center", padding: "30px", color: "#888", background: "#eaeaea"}}>
-                                            Sorry, no matching records found.
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    data.map((row, index) => (
-                                        <tr key={index}>
-                                            <td>{row.Event}</td>
-                                            <td>{row.Timestamp}</td>
-                                            <td>{row.Remarks}</td>
-                                            <td>{row.UserID}</td>
-                                            <td>{row.Username}</td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
+                        <ExtAuditTable data={auditData} /> 
 
+                        <div style={{ display: 'flex', alignItems: 'left', justifyContent: 'left', gap: '10px' }}>
+                            {isConfirmed && (
+                                <div className="confirmed" style={{textAlign: 'left', fontSize: '12px', fontWeight: 'bold', color: '#6B8E23', display: 'flex', alignItems: 'center'}}>
+                                    CONFIRMED
+                                </div>
+                            )}
 
-                        {isConfirmed && (
-                            <div className="confirmed">
-                                CONFIRMED
+                            <div className="table-buttons" style={{ display: 'flex', gap: '10px'}}>
+                                <button className="print-btn" style={{backgroundColor: '#263754', color: 'white', borderRadius: '10px'}}><Printer size={16}/> PRINT</button>
+                                <button className="csv-btn" style={{backgroundColor: '#263754', color: 'white', borderRadius: '10px'}}><Download size={16}/> CSV</button>
                             </div>
-                        )}
+                        </div>
+                        
                     </div>     
                 </div>
             </main>  

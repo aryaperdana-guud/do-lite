@@ -2,26 +2,26 @@ import React from "react";
 
 const ExtAuditTable = ({ data }) => {
   return (
-    <div className="audit-table-container">
-        <div className="table-wrapper">
-            <table className="audit-table">
-                <thead className="t-head">
+    <div style={{background: '#eaeaea', padding: '20px', borderRadius: '10px', textAlign: 'center', paddingBottom: '20px'}}> 
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <table style={{ borderCollapse: 'separate', borderSpacing: '0 10px', width: '100%' }}>
+                <thead>
                     <tr>
-                        <th>Event</th>
-                        <th>Timestamp</th>
-                        <th>Remarks</th>
-                        <th>User ID</th>
-                        <th>User Name</th>
+                        <th style={{borderBottom: '2px solid #ccc', padding: '10px'}}>Event</th>
+                        <th style={{borderBottom: '2px solid #ccc', padding: '10px'}}>Timestamp</th>
+                        <th style={{borderBottom: '2px solid #ccc', padding: '10px'}}>Remarks</th>
+                        <th style={{borderBottom: '2px solid #ccc', padding: '10px'}}>User ID</th>
+                        <th style={{borderBottom: '2px solid #ccc', padding: '10px'}}>User Name</th>
                     </tr>
                 </thead>
-                <tbody className="t-body">
+                <tbody style={{ backgroundColor: 'white', borderCollapse: 'collapse', fontSize: '18px', height: '200px'}}>
                     {data.map((row, index) => (
                     <tr key={index}>
-                    <td>{row.event}</td>
+                    <td style={{borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px'}}>{row.event}</td>
                     <td>{row.timestamp}</td>
                     <td>{row.remarks || "-"}</td>
                     <td>{row.userId}</td>
-                    <td>{row.userName}</td>
+                    <td  style={{borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>{row.userName}</td>
                     </tr>
                     ))}
                 </tbody>

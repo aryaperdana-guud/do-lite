@@ -40,20 +40,18 @@ const DOExtAudit = () => {
                     <button className="active-tab">AUDIT</button>
                 </div>
 
-                <div className="audit-table">
-                    <h4 className="audit-title"><Clock size={16}/> Audit</h4>
-                    <div className="audit-data">
-                        <ExtAuditTable data={auditData} />
-                    </div>
-                    <div className="table-buttons">
-                        <button className="print-btn"><Printer size={16}/> PRINT</button>
-                        <button className="csv-btn"><Download size={16}/> CSV</button>
+                <div style={{backgroundColor: '#eaeaea', padding: '20px', borderRadius: '10px', textAlign: 'center', paddingBottom: '20px'}}>
+                    <h4 className="form-title"><Clock size={16}/> Audit</h4>
+                    <ExtAuditTable data={auditData} />
+                    <div className="table-buttons" style={{ display: 'flex', gap: '10px', padding: '10px'}}>
+                        <button className="print-btn" style={{backgroundColor: '#263754', color: 'white', borderRadius: '10px'}}><Printer size={16}/> PRINT</button>
+                        <button className="csv-btn" style={{backgroundColor: '#263754', color: 'white', borderRadius: '10px'}}><Download size={16}/> CSV</button>
                     </div>
                 </div>
                
-                <div className="buttons">
-                    <button className="s-btn">SAVE</button>
-                    <button className="c-btn">CONFIRM</button>
+                <div className="buttons" style={{display: 'flex', gap: '5px', justifyContent: 'right'}}>
+                    <button className="s-btn" style={{backgroundColor: '#263754', color: 'white', height: 'fit-content'}}>SAVE</button>
+                    <button className="c-btn" style={{backgroundColor: '#263754', color: 'white', height: 'fit-content'}}>CONFIRM</button>
                 </div>
             </div>
         </main>  
