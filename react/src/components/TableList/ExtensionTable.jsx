@@ -132,20 +132,24 @@ export const ExtensionTable = ({
                       <div className="action-buttons">
                         {temp === "History List" ? (
                           <>
-                            <span className="action-button placeholder"></span>
+                            <span></span>
                             <button
                               className="action-button-extension"
                               title="View"
                             >
                               <Eye size={16} />
                             </button>
-                            <span className="action-button placeholder"></span>
+                            <span></span>
                           </>
                         ) : (
                           <>
                             <button
                               className="action-button-extension"
-                              onClick={() => navigate(`/edit-do-extension/GenDetails/${row.id}`)}
+                              onClick={() =>
+                                navigate(
+                                  `/edit-do-extension/GenDetails/${row.id}`
+                                )
+                              }
                               title="Edit"
                             >
                               <Pencil size={16} />

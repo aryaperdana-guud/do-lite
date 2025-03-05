@@ -69,6 +69,7 @@
 }
 
 .action-buttons {
+  justify-content: flex-start !important;
   display: flex;
   gap: 4px;
 }
@@ -104,8 +105,8 @@
 }
 
 .active-lists__actions {
-  display: flex;
-  gap: 8px;
+  display: flex !important;
+  gap: 8px !important;
 }
 
 .active-lists__download {
