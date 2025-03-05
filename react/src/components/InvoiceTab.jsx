@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useState, useMemo } from "react";
 import {
   Table,
   TableBody,
@@ -10,40 +12,40 @@ import {
   Checkbox,
   IconButton,
   Typography,
-  Select,
-  MenuItem,
   Button,
+  Box,
 } from "@mui/material";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { Bold } from "lucide-react";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
-// Sample data
-const invoices = [
-  {
-    id: 1,
-    invoiceNumber: "PLF241223143408147",
-    invoiceType: "INVOICE PLATFORM FEE",
-    invoiceRegion: "...",
-    invoiceCurrency: "IDR",
-    invoiceAmount: "Rp 2.000",
-  },
-  {
-    id: 2,
-    invoiceNumber: "PLF241223143408147",
-    invoiceType: "INVOICE PLATFORM FEE",
-    invoiceRegion: "...",
-    invoiceCurrency: "IDR",
-    invoiceAmount: "Rp 2.000",
-  },
-];
+// Generate a large sample dataset
+const generateInvoices = (count) => {
+  const invoices = [];
+  for (let i = 1; i <= count; i++) {
+    invoices.push({
+      id: i,
+      invoiceNumber: `PLF24${i.toString().padStart(12, "0")}`,
+      invoiceType: "INVOICE PLATFORM FEE",
+      invoiceRegion: "...",
+      invoiceCurrency: "IDR",
+      invoiceAmount: `Rp ${(Math.random() * 10000).toFixed(2)}`,
+    });
+  }
+  return invoices;
+};
+
+// Sample data with 100 items
+const initialInvoices = generateInvoices(100);
 
 export function InvoiceTab() {
+  const [invoices] = useState(initialInvoices);
   const [selectedInvoices, setSelectedInvoices] = useState([]);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [page, setPage] = useState(1);
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
 
   const handleSelectAll = (event) => {
     if (event.target.checked) {
@@ -66,35 +68,108 @@ export function InvoiceTab() {
     setSelectedInvoices(newSelected);
   };
 
+  const handleSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+
+    setSortConfig({ key, direction });
+  };
+
+  const sortedInvoices = useMemo(() => {
+    if (!sortConfig.key) return invoices;
+
+    return [...invoices].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key])
+        return sortConfig.direction === "ascending" ? -1 : 1;
+      if (a[sortConfig.key] > b[sortConfig.key])
+        return sortConfig.direction === "ascending" ? 1 : -1;
+      return 0;
+    });
+  }, [invoices, sortConfig]);
+
+  const SortableHeaderCell = ({ children, sortKey }) => (
+    <TableCell
+      onClick={() => handleSort(sortKey)}
+      style={{
+        color: "#455571",
+        fontWeight: 700,
+        backgroundColor: "#f5f5f5",
+        position: "sticky",
+        top: 0,
+        zIndex: 1,
+        cursor: "pointer",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "4px",
+        }}
+      >
+        {children}
+        {sortConfig.key === sortKey &&
+          (sortConfig.direction === "ascending" ? (
+            <ArrowUpwardIcon fontSize="small" />
+          ) : (
+            <ArrowDownwardIcon fontSize="small" />
+          ))}
+      </div>
+    </TableCell>
+  );
+
   return (
     <div
       style={{
         padding: "20px",
         backgroundColor: "#f5f5f5",
         borderRadius: "8px",
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        maxHeight: "55vh", // Limit the maximum height
       }}
     >
-      <Typography
-        variant="h5"
-        style={{
-          marginBottom: "20px",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          color: "#263754",
-        }}
-      >
-        Invoices
-      </Typography>
+      {/* Header - Sticky */}
+      <Box sx={{ mb: 2 }}>
+        <Typography
+          variant="h5"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            color: "#263754",
+          }}
+        >
+          Invoices
+        </Typography>
+      </Box>
 
+      {/* Table Container with fixed height and scrollable content */}
       <TableContainer
         component={Paper}
-        style={{ backgroundColor: "#f5f5f5", boxShadow: "none" }}
+        style={{
+          backgroundColor: "#f5f5f5",
+          boxShadow: "none",
+          flex: 1,
+          overflow: "auto",
+          height: "calc(100% - 120px)", // Adjust based on header and footer height
+        }}
       >
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              <TableCell
+                padding="checkbox"
+                style={{
+                  backgroundColor: "#f5f5f5",
+                  position: "sticky",
+                  top: 0,
+                  zIndex: 1,
+                }}
+              >
                 <Checkbox
                   indeterminate={
                     selectedInvoices.length > 0 &&
@@ -105,28 +180,37 @@ export function InvoiceTab() {
                   style={{ color: "#0070c0" }}
                 />
               </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
+              <SortableHeaderCell sortKey="invoiceNumber">
                 Invoice Number
-              </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
+              </SortableHeaderCell>
+              <SortableHeaderCell sortKey="invoiceType">
                 Invoice Type
-              </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
+              </SortableHeaderCell>
+              <SortableHeaderCell sortKey="invoiceRegion">
                 Invoice Region
-              </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
+              </SortableHeaderCell>
+              <SortableHeaderCell sortKey="invoiceCurrency">
                 Invoice Currency
-              </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
+              </SortableHeaderCell>
+              <SortableHeaderCell sortKey="invoiceAmount">
                 Invoice Amount
-              </TableCell>
-              <TableCell style={{ color: "#455571", fontWeight: 700 }}>
+              </SortableHeaderCell>
+              <TableCell
+                style={{
+                  color: "#455571",
+                  fontWeight: 700,
+                  backgroundColor: "#f5f5f5",
+                  position: "sticky",
+                  top: 0,
+                  zIndex: 1,
+                }}
+              >
                 Action
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {invoices.map((invoice) => (
+            {sortedInvoices.map((invoice) => (
               <TableRow
                 key={invoice.id}
                 hover
@@ -155,12 +239,18 @@ export function InvoiceTab() {
         </Table>
       </TableContainer>
 
-      <div
-        style={{
+      {/* Footer - Sticky */}
+      <Box
+        sx={{
+          mt: 2,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginTop: "20px",
+          backgroundColor: "#f5f5f5",
+          position: "sticky",
+          bottom: 0,
+          zIndex: 1,
+          pt: 2,
         }}
       >
         <Button
@@ -178,58 +268,12 @@ export function InvoiceTab() {
           Download All Invoices
         </Button>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Typography style={{ color: "#455571" }}>Column :</Typography>
-            <Select
-              value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(e.target.value)}
-              size="small"
-              style={{
-                backgroundColor: "white",
-                width: "80px",
-                height: "32px",
-              }}
-            >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={20}>20</MenuItem>
-              <MenuItem value={50}>50</MenuItem>
-            </Select>
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <IconButton
-              size="small"
-              onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-              style={{ color: "#455571" }}
-            >
-              <KeyboardArrowLeftIcon />
-            </IconButton>
-            <Typography style={{ color: "#455571" }}>Page :</Typography>
-            <Select
-              value={page}
-              onChange={(e) => setPage(e.target.value)}
-              size="small"
-              style={{
-                backgroundColor: "white",
-                width: "80px",
-                height: "32px",
-              }}
-            >
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-            </Select>
-            <IconButton
-              size="small"
-              onClick={() => setPage((prev) => prev + 1)}
-              style={{ color: "#455571" }}
-            >
-              <KeyboardArrowRightIcon />
-            </IconButton>
-          </div>
-        </div>
-      </div>
+        <Typography style={{ color: "#455571" }}>
+          Showing {sortedInvoices.length} invoices
+        </Typography>
+      </Box>
     </div>
   );
 }
+
+export default InvoiceTab;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Table,
   TableBody,
@@ -11,63 +11,143 @@ import {
   Paper,
   IconButton,
   Typography,
-  Select,
-  MenuItem,
   Switch,
   FormControlLabel,
   Box,
 } from "@mui/material";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import HistoryIcon from "@mui/icons-material/History";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { StatusIcon } from "./StatusRender";
 
-// Sample data for active tax invoices
-const activeTaxInvoices = [
-  {
-    id: 1,
-    status: "accepted",
-    invoiceNo: "PLF24122314340814",
-    invoiceIssueDate: "24/12/2024 00:20:00",
-    taxNumber: "111.007.23.00000118",
-    customer: "Combi Logistics",
-  },
-];
+// Generate a large sample dataset for active tax invoices
+const generateActiveTaxInvoices = (count) => {
+  const invoices = [
+    {
+      id: 1,
+      status: "accepted",
+      invoiceNo: "PLF24122314340814",
+      invoiceIssueDate: "24/12/2024 00:20:00",
+      taxNumber: "111.007.23.00000118",
+      customer: "Combi Logistics",
+    },
+  ];
+  return invoices;
+};
 
-// Sample data for history tax invoices
-const historyTaxInvoices = [
-  {
-    id: 2,
-    status: "accepted",
-    invoiceNo: "PLF24110514220917",
-    invoiceIssueDate: "05/11/2024 14:30:00",
-    taxNumber: "111.007.23.00000095",
-    customer: "Global Transport Co.",
-  },
-  {
-    id: 3,
-    status: "accepted",
-    invoiceNo: "PLF24100812150633",
-    invoiceIssueDate: "08/10/2024 09:45:00",
-    taxNumber: "111.007.23.00000082",
-    customer: "FastTrack Logistics",
-  },
-];
+// Generate a large sample dataset for history tax invoices
+const generateHistoryTaxInvoices = (count) => {
+  const invoices = [];
+  for (let i = 1; i <= count; i++) {
+    invoices.push({
+      id: i + 1000,
+      status: i % 5 === 0 ? "rejected" : i % 3 === 0 ? "pending" : "accepted",
+      invoiceNo: `PLF23${i.toString().padStart(12, "0")}`,
+      invoiceIssueDate: `${(i % 30) + 1}/${(i % 12) + 1}/2023 ${Math.floor(i % 24)}:${Math.floor(i % 60)}:00`,
+      taxNumber: `111.007.22.${i.toString().padStart(8, "0")}`,
+      customer:
+        i % 4 === 0
+          ? "Combi Logistics"
+          : i % 4 === 1
+            ? "Global Transport Co."
+            : i % 4 === 2
+              ? "FastTrack Logistics"
+              : "Express Shipping Inc.",
+    });
+  }
+  return invoices;
+};
+
+// Sample data with 50 items each
+const initialActiveTaxInvoices = generateActiveTaxInvoices(50);
+const initialHistoryTaxInvoices = generateHistoryTaxInvoices(50);
 
 export function TaxInvoiceTab() {
   const [isActive, setIsActive] = useState(true);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [page, setPage] = useState(1);
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
 
   // Get the appropriate data based on the active/history toggle
-  const taxInvoices = isActive ? activeTaxInvoices : historyTaxInvoices;
+  const currentInvoices = isActive
+    ? initialActiveTaxInvoices
+    : initialHistoryTaxInvoices;
 
   const handleToggleChange = (event) => {
     setIsActive(event.target.checked);
-    setPage(1); // Reset to first page when switching views
+    // Reset sorting when switching between active and history
+    setSortConfig({ key: null, direction: "ascending" });
   };
+
+  // Sorting function
+  const sortedInvoices = useMemo(() => {
+    if (!sortConfig.key) return currentInvoices;
+
+    return [...currentInvoices].sort((a, b) => {
+      // Special handling for status sorting (alphabetical)
+      if (sortConfig.key === "status") {
+        const comparison = a.status.localeCompare(b.status);
+        return sortConfig.direction === "ascending" ? comparison : -comparison;
+      }
+
+      // Default sorting for other fields
+      if (a[sortConfig.key] < b[sortConfig.key])
+        return sortConfig.direction === "ascending" ? -1 : 1;
+      if (a[sortConfig.key] > b[sortConfig.key])
+        return sortConfig.direction === "ascending" ? 1 : -1;
+      return 0;
+    });
+  }, [currentInvoices, sortConfig]);
+
+  // Handle sorting for a column
+  const handleSort = (key) => {
+    setSortConfig((prev) => ({
+      key,
+      direction:
+        prev.key === key && prev.direction === "ascending"
+          ? "descending"
+          : "ascending",
+    }));
+  };
+
+  // Render sort icon based on current sort configuration
+  const renderSortIcon = (key) => {
+    if (sortConfig.key !== key) return null;
+    return sortConfig.direction === "ascending" ? (
+      <ArrowUpwardIcon fontSize="small" />
+    ) : (
+      <ArrowDownwardIcon fontSize="small" />
+    );
+  };
+
+  // Sortable header component
+  const SortableHeader = ({ children, sortKey }) => (
+    <TableCell
+      onClick={() => handleSort(sortKey)}
+      style={{
+        color: "#455571",
+        fontWeight: 500,
+        backgroundColor: "#f5f5f5",
+        borderBottom: "1px solid #e0e0e0",
+        position: "sticky",
+        top: 0,
+        zIndex: 1,
+        cursor: sortKey ? "pointer" : "default",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "4px",
+        }}
+      >
+        {children}
+        {renderSortIcon(sortKey)}
+      </div>
+    </TableCell>
+  );
 
   return (
     <div
@@ -76,29 +156,38 @@ export function TaxInvoiceTab() {
         backgroundColor: "#f5f5f5",
         borderRadius: "8px",
         border: "1px solid #e0e0e0",
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        maxHeight: "55vh",
       }}
     >
+      {/* Header - Sticky */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "20px",
+          mb: 2,
+          position: "sticky",
+          top: 0,
+          zIndex: 2,
+          backgroundColor: "#f5f5f5",
+          borderTopLeftRadius: "8px",
+          borderTopRightRadius: "8px",
+          pb: 2,
         }}
       >
         <Typography
-          variant="h6"
+          variant="h5"
           style={{
             display: "flex",
             alignItems: "center",
             gap: "8px",
             color: "#263754",
-            fontWeight: 500,
           }}
         >
-          <span style={{ display: "flex", alignItems: "center" }}>
-            ⊙ Tax Invoices List
-          </span>
+          Tax Invoices
         </Typography>
 
         <FormControlLabel
@@ -121,74 +210,38 @@ export function TaxInvoiceTab() {
         />
       </Box>
 
+      {/* Table Container with fixed height and scrollable content */}
       <TableContainer
         component={Paper}
         style={{
           backgroundColor: "#f5f5f5",
           boxShadow: "none",
           borderRadius: "8px",
-          overflow: "hidden",
+          fontWeight: "700",
+          flex: 1,
+          overflow: "auto",
+          height: "calc(100% - 120px)", // Adjust based on header and footer height
         }}
       >
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell
-                style={{
-                  color: "#455571",
-                  fontWeight: 500,
-                  backgroundColor: "#f5f5f5",
-                  borderBottom: "1px solid #e0e0e0",
-                }}
-              >
-                Status
-              </TableCell>
-              <TableCell
-                style={{
-                  color: "#455571",
-                  fontWeight: 500,
-                  backgroundColor: "#f5f5f5",
-                  borderBottom: "1px solid #e0e0e0",
-                }}
-              >
-                Invoice No
-              </TableCell>
-              <TableCell
-                style={{
-                  color: "#455571",
-                  fontWeight: 500,
-                  backgroundColor: "#f5f5f5",
-                  borderBottom: "1px solid #e0e0e0",
-                }}
-              >
+              <SortableHeader sortKey="status">Status</SortableHeader>
+              <SortableHeader sortKey="invoiceNo">Invoice No</SortableHeader>
+              <SortableHeader sortKey="invoiceIssueDate">
                 Invoice Issue Date
-              </TableCell>
+              </SortableHeader>
+              <SortableHeader sortKey="taxNumber">Tax Number</SortableHeader>
+              <SortableHeader sortKey="customer">Customer</SortableHeader>
               <TableCell
                 style={{
                   color: "#455571",
-                  fontWeight: 500,
+                  fontWeight: 700,
                   backgroundColor: "#f5f5f5",
                   borderBottom: "1px solid #e0e0e0",
-                }}
-              >
-                Tax Number
-              </TableCell>
-              <TableCell
-                style={{
-                  color: "#455571",
-                  fontWeight: 500,
-                  backgroundColor: "#f5f5f5",
-                  borderBottom: "1px solid #e0e0e0",
-                }}
-              >
-                Customer
-              </TableCell>
-              <TableCell
-                style={{
-                  color: "#455571",
-                  fontWeight: 500,
-                  backgroundColor: "#f5f5f5",
-                  borderBottom: "1px solid #e0e0e0",
+                  position: "sticky",
+                  top: 0,
+                  zIndex: 1,
                 }}
               >
                 Action
@@ -196,7 +249,7 @@ export function TaxInvoiceTab() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {taxInvoices.map((invoice) => (
+            {sortedInvoices.map((invoice) => (
               <TableRow
                 key={invoice.id}
                 hover
@@ -219,7 +272,7 @@ export function TaxInvoiceTab() {
                 </TableCell>
               </TableRow>
             ))}
-            {taxInvoices.length === 0 && (
+            {sortedInvoices.length === 0 && (
               <TableRow>
                 <TableCell
                   colSpan={6}
@@ -234,84 +287,39 @@ export function TaxInvoiceTab() {
         </Table>
       </TableContainer>
 
-      <div
-        style={{
+      {/* Footer - Sticky */}
+      <Box
+        sx={{
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
           alignItems: "center",
-          marginTop: "20px",
+          mt: 2,
+          position: "sticky",
+          bottom: 0,
+          zIndex: 2,
+          backgroundColor: "#f5f5f5",
+          borderBottomLeftRadius: "8px",
+          borderBottomRightRadius: "8px",
+          pt: 2,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Typography style={{ color: "#455571" }}>Column :</Typography>
-            <Select
-              value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(e.target.value)}
-              size="small"
-              style={{
-                backgroundColor: "white",
-                width: "80px",
-                height: "32px",
-                borderRadius: "4px",
-              }}
-            >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={20}>20</MenuItem>
-              <MenuItem value={50}>50</MenuItem>
-            </Select>
-          </div>
+        <Typography style={{ color: "#455571" }}>
+          {isActive ? "Active" : "History"} Tax Invoices:{" "}
+          {sortedInvoices.length} records
+        </Typography>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <IconButton
-              size="small"
-              onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-              style={{
-                color: "#455571",
-                backgroundColor: "#e0e0e0",
-                borderRadius: "4px",
-                padding: "4px",
-              }}
-              disabled={page === 1}
-            >
-              <KeyboardArrowLeftIcon />
-            </IconButton>
-            <Typography style={{ color: "#455571" }}>Page :</Typography>
-            <Select
-              value={page}
-              onChange={(e) => setPage(e.target.value)}
-              size="small"
-              style={{
-                backgroundColor: "white",
-                width: "80px",
-                height: "32px",
-                borderRadius: "4px",
-              }}
-            >
-              <MenuItem value={1}>1</MenuItem>
-              {taxInvoices.length > rowsPerPage && (
-                <MenuItem value={2}>2</MenuItem>
-              )}
-              {taxInvoices.length > rowsPerPage * 2 && (
-                <MenuItem value={3}>3</MenuItem>
-              )}
-            </Select>
-            <IconButton
-              size="small"
-              onClick={() => setPage((prev) => prev + 1)}
-              style={{
-                color: "#455571",
-                backgroundColor: "#e0e0e0",
-                borderRadius: "4px",
-                padding: "4px",
-              }}
-              disabled={page * rowsPerPage >= taxInvoices.length}
-            >
-              <KeyboardArrowRightIcon />
-            </IconButton>
-          </div>
-        </div>
-      </div>
+        <IconButton
+          size="small"
+          style={{
+            backgroundColor: "#263754",
+            color: "white",
+            padding: "8px",
+            borderRadius: "4px",
+          }}
+        >
+          <FileDownloadIcon />
+        </IconButton>
+      </Box>
     </div>
   );
 }

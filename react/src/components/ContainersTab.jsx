@@ -1,6 +1,5 @@
 "use client";
-
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -10,37 +9,78 @@ import {
   TableRow,
   Paper,
   Typography,
-  Select,
-  MenuItem,
   IconButton,
   Box,
 } from "@mui/material";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
-// Sample data for containers
-const containers = [
-  {
-    id: 1,
-    marksNumber: "MSGU8630323 / 40HC",
-    packages: "89",
-    description: "-",
-    measurements: "21018",
-    validateTill: "20/02/2024",
-  },
-  {
-    id: 2,
-    marksNumber: "MSGU8630323 / 40HC",
-    packages: "89",
-    description: "-",
-    measurements: "21018",
-    validateTill: "20/02/2024",
-  },
-];
+// Generate a large sample dataset for containers
+const generateContainers = (count) => {
+  const containerTypes = ["20HC", "40HC", "45HC", "20FR", "40FR"];
+  const containers = [];
+
+  for (let i = 1; i <= count; i++) {
+    const containerType =
+      containerTypes[Math.floor(Math.random() * containerTypes.length)];
+    const containerNumber = `MSGU${Math.floor(1000000 + Math.random() * 9000000)}`;
+
+    containers.push({
+      id: i,
+      marksNumber: `${containerNumber} / ${containerType}`,
+      packages: Math.floor(50 + Math.random() * 100).toString(),
+      description:
+        i % 5 === 0
+          ? "Electronics"
+          : i % 4 === 0
+            ? "Textiles"
+            : i % 3 === 0
+              ? "Machinery"
+              : "-",
+      measurements: Math.floor(10000 + Math.random() * 30000).toString(),
+      validateTill: `${(i % 28) + 1}/0${(i % 12) + 1}/2024`,
+    });
+  }
+
+  return containers;
+};
 
 export function ContainersTab() {
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [page, setPage] = useState(1);
+  // Sample data with 50 items
+  const [containers, setContainers] = useState(generateContainers(50));
+
+  // Sorting state
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "asc",
+  });
+
+  // Sorting function
+  const sortContainers = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+
+    const sortedContainers = [...containers].sort((a, b) => {
+      if (a[key] < b[key]) return direction === "asc" ? -1 : 1;
+      if (a[key] > b[key]) return direction === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    setContainers(sortedContainers);
+    setSortConfig({ key, direction });
+  };
+
+  // Mapping between display headers and object keys
+  const headerMapping = {
+    "Marks and Number": "marksNumber",
+    "Number of Packages": "packages",
+    Description: "description",
+    "Weight and Measurements": "measurements",
+    "Validate Till Date": "validateTill",
+  };
 
   return (
     <div
@@ -49,93 +89,86 @@ export function ContainersTab() {
         backgroundColor: "#f5f5f5",
         borderRadius: "8px",
         border: "1px solid #e0e0e0",
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        maxHeight: "55vh", // Limit the maximum height
       }}
     >
+      {/* Header - Fixed Position */}
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          marginBottom: "20px",
+          mb: 2,
+          position: "relative", // Changed from sticky
+          width: "100%",
+          backgroundColor: "#f5f5f5",
+          borderTopLeftRadius: "8px",
+          borderTopRightRadius: "8px",
+          pb: 2,
         }}
       >
         <Typography
-          variant="h6"
+          variant="h5"
           style={{
             display: "flex",
             alignItems: "center",
             gap: "8px",
             color: "#263754",
-            fontWeight: 500,
           }}
         >
-          <span style={{ display: "flex", alignItems: "center" }}>
-            ⊙ Containers
-          </span>
+          Containers
         </Typography>
       </Box>
 
+      {/* Table Container with fixed height and scrollable content */}
       <TableContainer
         component={Paper}
         style={{
           backgroundColor: "#f5f5f5",
           boxShadow: "none",
           borderRadius: "8px",
-          overflow: "hidden",
+          flex: 1,
+          overflow: "auto",
+          height: "calc(100% - 120px)", // Adjust based on header and footer height
         }}
       >
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell
-                style={{
-                  color: "#455571",
-                  fontWeight: 500,
-                  backgroundColor: "#f5f5f5",
-                  borderBottom: "1px solid #e0e0e0",
-                }}
-              >
-                Marks and Number
-              </TableCell>
-              <TableCell
-                style={{
-                  color: "#455571",
-                  fontWeight: 500,
-                  backgroundColor: "#f5f5f5",
-                  borderBottom: "1px solid #e0e0e0",
-                }}
-              >
-                Number of Packages
-              </TableCell>
-              <TableCell
-                style={{
-                  color: "#455571",
-                  fontWeight: 500,
-                  backgroundColor: "#f5f5f5",
-                  borderBottom: "1px solid #e0e0e0",
-                }}
-              >
-                Description
-              </TableCell>
-              <TableCell
-                style={{
-                  color: "#455571",
-                  fontWeight: 500,
-                  backgroundColor: "#f5f5f5",
-                  borderBottom: "1px solid #e0e0e0",
-                }}
-              >
-                Weight and Measurements
-              </TableCell>
-              <TableCell
-                style={{
-                  color: "#455571",
-                  fontWeight: 500,
-                  backgroundColor: "#f5f5f5",
-                  borderBottom: "1px solid #e0e0e0",
-                }}
-              >
-                Validate Till Date
-              </TableCell>
+              {Object.keys(headerMapping).map((header) => (
+                <TableCell
+                  key={header}
+                  style={{
+                    color: "#455571",
+                    fontWeight: 700,
+                    backgroundColor: "#f5f5f5",
+                    borderBottom: "1px solid #e0e0e0",
+                    position: "sticky",
+                    top: 0,
+                    zIndex: 1,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => sortContainers(headerMapping[header])}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    {header}
+                    {sortConfig.key === headerMapping[header] &&
+                      (sortConfig.direction === "asc" ? (
+                        <ArrowUpwardIcon fontSize="small" />
+                      ) : (
+                        <ArrowDownwardIcon fontSize="small" />
+                      ))}
+                  </div>
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -170,84 +203,37 @@ export function ContainersTab() {
         </Table>
       </TableContainer>
 
-      <div
-        style={{
+      {/* Footer - Fixed Position */}
+      <Box
+        sx={{
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
           alignItems: "center",
-          marginTop: "20px",
+          mt: 2,
+          position: "relative", // Changed from sticky
+          width: "100%",
+          backgroundColor: "#f5f5f5",
+          borderBottomLeftRadius: "8px",
+          borderBottomRightRadius: "8px",
+          pt: 2,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Typography style={{ color: "#455571" }}>Column :</Typography>
-            <Select
-              value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(e.target.value)}
-              size="small"
-              style={{
-                backgroundColor: "white",
-                width: "80px",
-                height: "32px",
-                borderRadius: "4px",
-              }}
-            >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={20}>20</MenuItem>
-              <MenuItem value={50}>50</MenuItem>
-            </Select>
-          </div>
+        <Typography style={{ color: "#455571" }}>
+          Total Containers: {containers.length} records
+        </Typography>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <IconButton
-              size="small"
-              onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-              style={{
-                color: "#455571",
-                backgroundColor: "#e0e0e0",
-                borderRadius: "4px",
-                padding: "4px",
-              }}
-              disabled={page === 1}
-            >
-              <KeyboardArrowLeftIcon />
-            </IconButton>
-            <Typography style={{ color: "#455571" }}>Page :</Typography>
-            <Select
-              value={page}
-              onChange={(e) => setPage(e.target.value)}
-              size="small"
-              style={{
-                backgroundColor: "white",
-                width: "80px",
-                height: "32px",
-                borderRadius: "4px",
-              }}
-            >
-              <MenuItem value={1}>1</MenuItem>
-              {containers.length > rowsPerPage && (
-                <MenuItem value={2}>2</MenuItem>
-              )}
-              {containers.length > rowsPerPage * 2 && (
-                <MenuItem value={3}>3</MenuItem>
-              )}
-            </Select>
-            <IconButton
-              size="small"
-              onClick={() => setPage((prev) => prev + 1)}
-              style={{
-                color: "#455571",
-                backgroundColor: "#e0e0e0",
-                borderRadius: "4px",
-                padding: "4px",
-              }}
-              disabled={page * rowsPerPage >= containers.length}
-            >
-              <KeyboardArrowRightIcon />
-            </IconButton>
-          </div>
-        </div>
-      </div>
+        <IconButton
+          size="small"
+          style={{
+            backgroundColor: "#263754",
+            color: "white",
+            padding: "8px",
+            borderRadius: "4px",
+          }}
+        >
+          <FileDownloadIcon />
+        </IconButton>
+      </Box>
     </div>
   );
 }
