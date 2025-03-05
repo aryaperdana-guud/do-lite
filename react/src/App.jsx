@@ -1,5 +1,7 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useUserStore } from "./useUserStore";
+
 import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import SignUp from "./pages/SignUp";
@@ -21,8 +23,6 @@ import EditDOClaim from "./pages/EditDOClaim.jsx";
 import EditDOClaimAttachments from "./pages/EditDOClaimAttachments.jsx";
 import EditDOClaimAudit from "./pages/EditDOClaimAudit.jsx";
 import EditDOClaimQuery from "./pages/EditDOClaimQuery.jsx";
-import { useUserStore } from "./useUserStore";
-import { useEffect } from "react";
 
 import { MyDOActive } from "./pages/MyDOActive.jsx";
 import { MyDOHistory } from "./pages/MyDOHistory.jsx";
@@ -30,12 +30,10 @@ import { MyDODetails } from "./pages/MyDODetails.jsx";
 
 import { DoPayment } from "./pages/DoPayment-payment.jsx";
 import { DoTransaction } from "./pages/DoPayment-transaction.jsx";
+import { DoPaymentPay } from "./pages/DOPayment-Pay.jsx";
 
 function App() {
   const { user, setUser } = useUserStore();
-  useEffect(() => {
-    console.log("🔥 Zustand Debug: App mounted, user state =", user);
-  }, [user]);
 
   return (
     <Router>
@@ -163,6 +161,14 @@ function App() {
           element={
             <AuthGuard>
               <DoPayment />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/do-payment/payment/pay"
+          element={
+            <AuthGuard>
+              <DoPaymentPay />
             </AuthGuard>
           }
         />

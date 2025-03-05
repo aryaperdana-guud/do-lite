@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Search, FilterList } from "@mui/icons-material";
 import { Checkbox, IconButton } from "@mui/material";
 import "./DOTable.css";
+import { useNavigate } from "react-router-dom";
 import { StatusIcon } from "../StatusRender.jsx";
 
 export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
@@ -16,6 +17,8 @@ export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
       setSelectedRows([]);
     }
   };
+
+  const navigate = useNavigate();
 
   const handleSelectRow = (id) => {
     setSelectedRows((prev) =>
@@ -32,7 +35,15 @@ export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
         style={{ position: "sticky", top: 0, zIndex: 10, background: "white" }}
       >
         <div className="active-lists__title-section">
-          <h2 className="active-lists__title">CONFIRMED JOBS FOR PAYMENT</h2>
+          <h2
+            style={{
+              color: "#263754",
+              marginBottom: "20px",
+              marginTop: "none",
+            }}
+          >
+            Confirmed Jobs for Payments
+          </h2>
           <IconButton size="small">
             <FilterList />
           </IconButton>
@@ -147,7 +158,7 @@ export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
         >
           <button
             className="pay-button"
-            onClick={() => onPaySelected?.(selectedRows)}
+            onClick={() => navigate("/do-payment/payment/pay")}
             disabled={selectedRows.length === 0}
             style={{
               backgroundColor: "#1a3a54",

@@ -159,7 +159,7 @@ export function TaxInvoiceTab() {
         display: "flex",
         flexDirection: "column",
         height: "100%",
-        maxHeight: "55vh",
+        maxHeight: "50vh",
       }}
     >
       {/* Header - Sticky */}

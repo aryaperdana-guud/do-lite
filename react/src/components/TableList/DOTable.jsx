@@ -1,18 +1,16 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Eye,
   Edit,
-  Trash,
   Download,
   ChevronLeft,
   ChevronRight,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import "./DOTable.css";
-import { StatusIcon } from "../StatusRender.jsx"; // Make sure path is correct
+import { StatusIcon } from "../StatusRender.jsx";
 import { useNavigate } from "react-router-dom";
-
-// Keeping the mock data for development
 
 export const DataTable = ({
   title,
@@ -20,13 +18,43 @@ export const DataTable = ({
   loading = false,
   onDownload,
   onViewItem,
-  onEditItem,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
   const navigate = useNavigate();
 
-  const totalPages = Math.ceil((data?.length || 0) / itemsPerPage);
+  // Sorting function
+  const sortedData = useMemo(() => {
+    if (!data || !sortConfig.key) return data || [];
+
+    return [...data].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [data, sortConfig]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil((sortedData?.length || 0) / itemsPerPage);
+
+  const handleSort = (key) => {
+    setSortConfig((prevConfig) => ({
+      key,
+      direction:
+        prevConfig.key === key && prevConfig.direction === "ascending"
+          ? "descending"
+          : "ascending",
+    }));
+    setCurrentPage(1);
+  };
 
   const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const handleNextPage = () =>
@@ -36,9 +64,33 @@ export const DataTable = ({
     setCurrentPage(1);
   };
 
+  // Paginate sorted data
   const paginatedData =
-    data?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) ||
-    [];
+    sortedData?.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    ) || [];
+
+  // Sorting icon component
+  const SortIcon = ({ sortKey }) => {
+    const isActive = sortConfig.key === sortKey;
+    const isAscending = isActive && sortConfig.direction === "ascending";
+
+    return (
+      <span className="sort-icon-container">
+        <ArrowUp
+          size={12}
+          color={isActive && isAscending ? "blue" : "gray"}
+          className={`sort-icon ${isActive && isAscending ? "active" : ""}`}
+        />
+        <ArrowDown
+          size={12}
+          color={isActive && !isAscending ? "blue" : "gray"}
+          className={`sort-icon ${isActive && !isAscending ? "active" : ""}`}
+        />
+      </span>
+    );
+  };
 
   return (
     <div className="active-lists">
@@ -58,14 +110,30 @@ export const DataTable = ({
           <table className="active-lists__table">
             <thead>
               <tr>
-                <th>Payment</th>
-                <th>Document</th>
-                <th>Surrender</th>
-                <th>Job ID</th>
-                <th>Shipment Type</th>
-                <th>Shipping Line</th>
-                <th>Date Submitted</th>
-                <th>No of BL</th>
+                <th onClick={() => handleSort("payment")}>
+                  Payment <SortIcon sortKey="payment" />
+                </th>
+                <th onClick={() => handleSort("document")}>
+                  Document <SortIcon sortKey="document" />
+                </th>
+                <th onClick={() => handleSort("surrender")}>
+                  Surrender <SortIcon sortKey="surrender" />
+                </th>
+                <th onClick={() => handleSort("jobId")}>
+                  Job ID <SortIcon sortKey="jobId" />
+                </th>
+                <th onClick={() => handleSort("shipmentType")}>
+                  Shipment Type <SortIcon sortKey="shipmentType" />
+                </th>
+                <th onClick={() => handleSort("shippingLine")}>
+                  Shipping Line <SortIcon sortKey="shippingLine" />
+                </th>
+                <th onClick={() => handleSort("dateSubmitted")}>
+                  Date Submitted <SortIcon sortKey="dateSubmitted" />
+                </th>
+                <th onClick={() => handleSort("noOfBl")}>
+                  No of BL <SortIcon sortKey="noOfBl" />
+                </th>
                 <th>Action</th>
               </tr>
             </thead>

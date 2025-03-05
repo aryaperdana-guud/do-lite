@@ -23,10 +23,6 @@ const ProfileDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  useEffect(() => {
-    console.log("🔥 Zustand Debug: user state =", user);
-  }, [user]);
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };

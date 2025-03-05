@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Eye,
   Pencil,
@@ -9,10 +9,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Download,
+  ChevronsUpDown,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { StatusIcon } from "../StatusRender"; // Make sure path is correct
-import "./BOLTable.css"; // Import the existing CSS file
+import { StatusIcon } from "../StatusRender";
+import "./BOLTable.css";
 
 export const ExtensionTable = ({
   title,
@@ -25,13 +28,58 @@ export const ExtensionTable = ({
   onViewDO,
   onViewContainers,
 }) => {
-  const temp = title;
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "asc",
+  });
   const navigate = useNavigate();
 
-  const totalPages = Math.ceil((data?.length || 0) / itemsPerPage);
+  // Sorting function
+  const sortedData = useMemo(() => {
+    if (!sortConfig.key) return data;
 
+    return [...data].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === "asc" ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === "asc" ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [data, sortConfig]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil((sortedData?.length || 0) / itemsPerPage);
+
+  // Sort handler
+  const handleSort = (key) => {
+    setSortConfig((prevConfig) => ({
+      key,
+      direction:
+        prevConfig.key === key && prevConfig.direction === "asc"
+          ? "desc"
+          : "asc",
+    }));
+    setCurrentPage(1);
+  };
+
+  // Custom sort icon component
+  const SortIcon = ({ active, direction }) => {
+    if (!active) {
+      return <ChevronsUpDown size={16} className="text-gray-400" />;
+    }
+
+    return direction === "asc" ? (
+      <ArrowUp size={16} className="text-blue-600" />
+    ) : (
+      <ArrowDown size={16} className="text-blue-600" />
+    );
+  };
+
+  // Pagination handlers
   const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const handleNextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
@@ -40,9 +88,25 @@ export const ExtensionTable = ({
     setCurrentPage(1);
   };
 
+  // Paginate sorted data
   const paginatedData =
-    data?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) ||
-    [];
+    sortedData?.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    ) || [];
+
+  // Define sortable headers
+  const headers = [
+    { key: "status", label: "Status" },
+    { key: "jobNo", label: "Job No" },
+    { key: "blNo", label: "BL No" },
+    { key: "originalDoNo", label: "Original DO No" },
+    { key: "noOfContainers", label: "No of Containers" },
+    { key: "extendedValidDate", label: "Extended Valid Date" },
+    { key: "amount", label: "Amount (IDR)" },
+    { key: "paymentDate", label: "Payment Date" },
+    { label: "Action", disableSort: true },
+  ];
 
   return (
     <div className="active-lists">
@@ -68,15 +132,25 @@ export const ExtensionTable = ({
           <table className="active-lists__table">
             <thead>
               <tr>
-                <th>Status</th>
-                <th>Job No</th>
-                <th>BL No</th>
-                <th>Original DO No</th>
-                <th>No of Containers</th>
-                <th>Extended Valid Date</th>
-                <th>Amount (IDR)</th>
-                <th>Payment Date</th>
-                <th>Action</th>
+                {headers.map((header) => (
+                  <th
+                    key={header.label}
+                    onClick={() =>
+                      !header.disableSort && handleSort(header.key)
+                    }
+                    className={!header.disableSort ? "sortable-header" : ""}
+                  >
+                    <div className="flex items-center gap-2">
+                      {header.label}
+                      {!header.disableSort && (
+                        <SortIcon
+                          active={sortConfig.key === header.key}
+                          direction={sortConfig.direction}
+                        />
+                      )}
+                    </div>
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -130,7 +204,7 @@ export const ExtensionTable = ({
                     <td>{row.paymentDate}</td>
                     <td>
                       <div className="action-buttons">
-                        {temp === "History List" ? (
+                        {title === "History List" ? (
                           <>
                             <span></span>
                             <button

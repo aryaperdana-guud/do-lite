@@ -114,7 +114,7 @@ export function ExtensionsTab() {
         display: "flex",
         flexDirection: "column",
         height: "100%",
-        maxHeight: "55vh", // Limit the maximum height
+        maxHeight: "50vh", // Limit the maximum height
       }}
     >
       {/* Header - Relative Position */}

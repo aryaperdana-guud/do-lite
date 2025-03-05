@@ -1,18 +1,16 @@
 "use client";
-import React from "react";
-import { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Download,
   File,
   ChevronLeft,
   ChevronRight,
   Eye,
-  Edit,
   Trash2,
 } from "lucide-react";
 import "./BOLTable.css";
-import { Navigate, useNavigate } from "react-router-dom";
-import { StatusIcon } from "../StatusRender.jsx"; // Make sure path is correct
+import { useNavigate } from "react-router-dom";
+import { StatusIcon } from "../StatusRender.jsx";
 import { Badge, IconButton, Typography } from "@mui/material";
 import { Snackbar, Alert } from "@mui/material";
 
@@ -29,19 +27,74 @@ export const BOLTable = ({
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const totalPages = Math.ceil((data?.length || 0) / itemsPerPage);
+  // Sorting state
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "asc",
+  });
+
+  const navigate = useNavigate();
+
+  const [openAlert, setOpenAlert] = useState(false);
+
+  // Sorting function
+  const sortedData = useMemo(() => {
+    if (!data || data.length === 0) return [];
+
+    return [...data].sort((a, b) => {
+      if (!sortConfig.key) return 0;
+
+      const key = sortConfig.key;
+      const aValue = a[key];
+      const bValue = b[key];
+
+      // Handle different types of sorting
+      if (typeof aValue === "string") {
+        return sortConfig.direction === "asc"
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (typeof aValue === "number") {
+        return sortConfig.direction === "asc"
+          ? aValue - bValue
+          : bValue - aValue;
+      }
+
+      return 0;
+    });
+  }, [data, sortConfig]);
+
+  // Pagination logic with sorted data
+  const totalPages = Math.ceil((sortedData?.length || 0) / itemsPerPage);
+
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return sortedData.slice(startIndex, startIndex + itemsPerPage);
+  }, [sortedData, currentPage, itemsPerPage]);
+
+  // Sorting handler
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+    setCurrentPage(1); // Reset to first page when sorting
+  };
 
   const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const handleNextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(1);
   };
-  const [openAlert, setOpenAlert] = useState(false);
+
   const handleClaimClick = () => {
     if (selectedItems.length < 1) {
-      setOpenAlert(true); // Show alert
+      setOpenAlert(true);
     } else {
       navigate(`/bol/active/claim`);
     }
@@ -55,17 +108,38 @@ export const BOLTable = ({
     }
   };
 
-  const navigate = useNavigate();
-
   const handleSelectItem = (id) => {
     setSelectedItems((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
-  const paginatedData =
-    data?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) ||
-    [];
+  // Sorting header with indicator
+  const SortableHeader = ({ label, sortKey }) => (
+    <th
+      onClick={() => handleSort(sortKey)}
+      style={{
+        cursor: "pointer",
+        userSelect: "none",
+        position: "relative",
+      }}
+    >
+      {label}
+      {sortConfig.key === sortKey && (
+        <span
+          style={{
+            marginLeft: "5px",
+            fontSize: "0.7em",
+            position: "absolute",
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        >
+          {sortConfig.direction === "asc" ? "▲" : "▼"}
+        </span>
+      )}
+    </th>
+  );
 
   return (
     <div className="active-lists">
@@ -90,7 +164,7 @@ export const BOLTable = ({
               open={openAlert}
               autoHideDuration={2000}
               onClose={() => setOpenAlert(false)}
-              anchorOrigin={{ vertical: "top", horizontal: "center" }} // Adjust position
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
             >
               <Alert
                 onClose={() => setOpenAlert(false)}
@@ -132,14 +206,20 @@ export const BOLTable = ({
                     />
                   </div>
                 </th>
-                <th>Status</th>
-                <th>BL No.</th>
-                <th>Container No.</th>
-                <th>Shipping Line</th>
-                <th>Submitted Date</th>
-                <th>Submitted By</th>
-                <th>Assigned Job No.</th>
-                <th>Assigned Date</th>
+                <SortableHeader label="Status" sortKey="status" />
+                <SortableHeader label="BL No." sortKey="blNo" />
+                <SortableHeader label="Container No." sortKey="containerNo" />
+                <SortableHeader label="Shipping Line" sortKey="shippingLine" />
+                <SortableHeader
+                  label="Submitted Date"
+                  sortKey="submittedDate"
+                />
+                <SortableHeader label="Submitted By" sortKey="submittedBy" />
+                <SortableHeader
+                  label="Assigned Job No."
+                  sortKey="assignedJobNo"
+                />
+                <SortableHeader label="Assigned Date" sortKey="assignedDate" />
                 <th>Action</th>
               </tr>
             </thead>
