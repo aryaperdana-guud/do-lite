@@ -2,6 +2,7 @@
 import React, { useState, useMemo } from "react";
 import { Eye, ChevronsUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import "./BOLTable.css";
+import { useEffect } from "react";
 import {
   Typography,
   Paper,
@@ -28,8 +29,54 @@ export const MyDOTable = ({
     direction: "asc",
   });
 
+  const [tableData, setTableData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const token = localStorage.getItem("jwtToken");
+
+  useEffect(() => {
+    async function fetchTableData() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(
+          "https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/do/list?sEcho=3&iDisplayStart=0&iDisplayLength=1000&iSortCol_0=0&sSortDir_0=desc&iSortingCols=1&mDataProp_0=doDtCreate&mDataProp_1=history&sSearch_1=default&iColumns=2",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const responseData = await response.json();
+        const formattedData =
+          responseData.aaData?.map((item) => ({
+            doNumber: item.doNo || "N/A",
+            consignee: item.tcoreAccnByDoCoAccn?.accnName || "Unknown",
+            vesselName: item.doVesselName || "Unknown",
+            voyageNumber: item.doVoyageNo || "N/A",
+            blNumber: item.doBlNo || "N/A",
+            blType: item.doBlType || "N/A",
+            numberOfContainers: item.doNoCnt || 0,
+          })) || [];
+
+        setTableData(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setTableData([]);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    if (token) {
+      fetchTableData();
+    }
+  }, [token]);
+
   // Ensure data is properly assigned
-  const displayData = Array.isArray(data) && data.length > 0 ? data : [];
+  const displayData = tableData;
 
   // Sorting function
   const sortedData = useMemo(() => {
@@ -94,7 +141,7 @@ export const MyDOTable = ({
         className="active-lists__content"
         style={{ maxHeight: "calc(100vh - 200px)", overflow: "auto" }}
       >
-        {loading ? (
+        {loadingData ? (
           <div className="active-lists__loading">Loading...</div>
         ) : (
           <TableContainer component={Paper} elevation={0}>
