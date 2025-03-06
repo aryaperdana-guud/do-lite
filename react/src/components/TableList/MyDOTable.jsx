@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 export const MyDOTable = ({
   data = [],
   loading = false,
+  apiUrl,
   title,
   onViewDetails,
 }) => {
@@ -38,16 +39,13 @@ export const MyDOTable = ({
       setLoadingData(true);
 
       try {
-        const response = await fetch(
-          "https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/do/list?sEcho=3&iDisplayStart=0&iDisplayLength=1000&iSortCol_0=0&sSortDir_0=desc&iSortingCols=1&mDataProp_0=doDtCreate&mDataProp_1=history&sSearch_1=default&iColumns=2",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         const responseData = await response.json();
         const formattedData =
