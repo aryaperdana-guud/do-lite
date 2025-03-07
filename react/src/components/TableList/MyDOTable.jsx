@@ -17,13 +17,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export const MyDOTable = ({
-  data = [],
-  loading = false,
-  apiUrl,
-  title,
-  onViewDetails,
-}) => {
+export const MyDOTable = ({ apiUrl, title }) => {
   const navigate = useNavigate();
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -73,7 +67,6 @@ export const MyDOTable = ({
     }
   }, [token]);
 
-  // Ensure data is properly assigned
   const displayData = tableData;
 
   // Sorting function

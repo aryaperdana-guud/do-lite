@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Eye,
   Pencil,
@@ -16,6 +16,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { StatusIcon } from "../StatusRender";
 import "./BOLTable.css";
+import { formatDate } from "../Utility/formatDate";
+import { formatCurrency } from "../Utility/formatCurrency";
 
 export const ExtensionTable = ({
   title,
@@ -23,6 +25,7 @@ export const ExtensionTable = ({
   loading = false,
   onView,
   onEdit,
+  apiUrl,
   onDelete,
   onDownload,
   onViewDO,
@@ -36,11 +39,59 @@ export const ExtensionTable = ({
   });
   const navigate = useNavigate();
 
+  const [tableData, setTableData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const token = localStorage.getItem("jwtToken");
+  useEffect(() => {
+    async function fetchTableData() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const responseData = await response.json();
+
+        const formattedData =
+          responseData.aaData?.map((item) => ({
+            status: item.tckMstDoState.dostId || "N/A",
+            jobNo: item.tckJobDoExt.tckJob.jobId || "N/A",
+            blNo: item.tckDo.doBlNo || "Unknown",
+            originalDoNo: item.tckDo.doNo || "N/A",
+            noOfContainers: item.doxNoCnt || "N/A",
+            extendedValidDate: formatDate(item.doxValidDate),
+            amount: formatCurrency(item.doxChargesTotal),
+            paymentDate: formatDate(
+              item.tckJobDoExt.tckJob.tckRecordDate.rcdDtPaid
+            ),
+          })) || [];
+
+        setTableData(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setTableData([]);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    if (token) {
+      fetchTableData();
+    }
+  }, [token]);
+
+  const displayData = tableData;
+
   // Sorting function
   const sortedData = useMemo(() => {
-    if (!sortConfig.key) return data;
+    if (!sortConfig.key) return displayData;
 
-    return [...data].sort((a, b) => {
+    return [...displayData].sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
         return sortConfig.direction === "asc" ? -1 : 1;
       }
@@ -49,10 +100,7 @@ export const ExtensionTable = ({
       }
       return 0;
     });
-  }, [data, sortConfig]);
-
-  // Pagination calculations
-  const totalPages = Math.ceil((sortedData?.length || 0) / itemsPerPage);
+  }, [displayData, sortConfig]);
 
   // Sort handler
   const handleSort = (key) => {
@@ -63,7 +111,6 @@ export const ExtensionTable = ({
           ? "desc"
           : "asc",
     }));
-    setCurrentPage(1);
   };
 
   // Custom sort icon component
@@ -78,22 +125,6 @@ export const ExtensionTable = ({
       <ArrowDown size={16} className="text-blue-600" />
     );
   };
-
-  // Pagination handlers
-  const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const handleNextPage = () =>
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  const handleItemsPerPageChange = (e) => {
-    setItemsPerPage(Number(e.target.value));
-    setCurrentPage(1);
-  };
-
-  // Paginate sorted data
-  const paginatedData =
-    sortedData?.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
-    ) || [];
 
   // Define sortable headers
   const headers = [
@@ -154,7 +185,7 @@ export const ExtensionTable = ({
               </tr>
             </thead>
             <tbody>
-              {paginatedData.length === 0 ? (
+              {displayData.length === 0 ? (
                 <tr>
                   <td
                     colSpan="9"
@@ -168,7 +199,7 @@ export const ExtensionTable = ({
                   </td>
                 </tr>
               ) : (
-                paginatedData.map((row) => (
+                sortedData.map((row) => (
                   <tr key={row.id}>
                     <td>
                       <StatusIcon status={row.status} />
@@ -257,37 +288,7 @@ export const ExtensionTable = ({
       </div>
 
       <div className="active-lists__footer">
-        <div className="active-lists__controls">
-          <div className="active-lists__column-select">
-            <span>Column:</span>
-            <select
-              className="row-number"
-              value={itemsPerPage}
-              onChange={handleItemsPerPageChange}
-            >
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-            </select>
-          </div>
-          <div className="active-lists__pagination">
-            <button
-              className="pagination-button"
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span>{`Page ${currentPage} of ${totalPages}`}</span>
-            <button
-              className="pagination-button"
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-        </div>
+        <div className="active-lists__controls"></div>
       </div>
     </div>
   );
