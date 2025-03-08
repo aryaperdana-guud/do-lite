@@ -1,18 +1,64 @@
 import React from "react";
-import { Check, X, MoreHorizontal, Plus } from "lucide-react";
+import { Check, X, Plus, Hourglass, RotateCcw } from "lucide-react";
 
 export const StatusIcon = ({ status }) => {
   const statusMap = {
-    NEW: { title: "New", icon: <Plus />, color: "#007bff" }, // Blue
-    CNF: { title: "Confirmed", icon: <Check />, color: "#28a745" }, // Green
-    CNCL: { title: "Cancel", icon: <X />, color: "#dc3545" }, // Red
-    PAID: { title: "Paid", icon: <Check />, color: "#ffc107" }, // Yellow
+    NEW: {
+      title: "New",
+      icon: <Plus />,
+      color: "#0d6efd",
+      backgroundColor: "#e3f2fd",
+    }, // Blue
+    CNF: {
+      title: "Confirmed",
+      icon: <Check />,
+      color: "#198754",
+      backgroundColor: "#d1e7dd",
+    }, // Green
+    CNCL: {
+      title: "Cancelled",
+      icon: <X />,
+      color: "#721c24",
+      backgroundColor: "#f8d7da",
+    }, //red
+    PAID: {
+      title: "Paid",
+      icon: <Check />,
+      color: "#198754",
+      backgroundColor: "#d1e7dd",
+    }, // Green
+    ONGOING_VERIF: {
+      title: "Ongoing Verification",
+      icon: <Hourglass />,
+      color: "#b35f00",
+      backgroundColor: "#ffe8cc",
+    }, // Orange
+
+    //"ASSIGNED","CANCELLED","INVALID"(try Again)
+    CANCELLED: {
+      title: "Cancelled",
+      icon: <X />,
+      color: "#721c24",
+      backgroundColor: "#f8d7da",
+    }, // red
+    ASSIGNED: {
+      title: "Assigned",
+      icon: <Check />,
+      color: "#0d6efd",
+      backgroundColor: "#e3f2fd",
+    }, // blue
+    INVALID: {
+      title: "Try Again",
+      icon: <RotateCcw />,
+      color: "#b35f00",
+      backgroundColor: "#ffe8cc",
+    }, // Orange
   };
 
   const statusData = statusMap[status] || {
     title: "Unknown",
     icon: <div />,
-    color: "#6c757d",
+    color: "#EAEAEA",
   }; // Default Gray
 
   const iconStyle = {
@@ -23,8 +69,8 @@ export const StatusIcon = ({ status }) => {
     height: "32px",
     borderRadius: "25%",
     fontSize: "16px",
-    color: "white",
-    backgroundColor: statusData.color, // Dynamically set background color
+    color: statusData.color,
+    backgroundColor: statusData.backgroundColor, // Dynamically set background color
   };
 
   return (

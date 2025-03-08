@@ -18,6 +18,7 @@ import { StatusIcon } from "../StatusRender";
 import "./BOLTable.css";
 import { formatDate } from "../Utility/formatDate";
 import { formatCurrency } from "../Utility/formatCurrency";
+import { TableRow } from "@mui/material";
 
 export const ExtensionTable = ({
   title,
@@ -31,8 +32,6 @@ export const ExtensionTable = ({
   onViewDO,
   onViewContainers,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "asc",
@@ -157,7 +156,7 @@ export const ExtensionTable = ({
       </div>
 
       <div className="active-lists__content">
-        {loading ? (
+        {loadingData ? (
           <div className="active-lists__loading">Loading...</div>
         ) : (
           <table className="active-lists__table">
@@ -199,8 +198,8 @@ export const ExtensionTable = ({
                   </td>
                 </tr>
               ) : (
-                sortedData.map((row) => (
-                  <tr key={row.id}>
+                sortedData.map((row, index) => (
+                  <TableRow key={row.id || index}>
                     <td>
                       <StatusIcon status={row.status} />
                     </td>
@@ -279,7 +278,7 @@ export const ExtensionTable = ({
                         )}
                       </div>
                     </td>
-                  </tr>
+                  </TableRow>
                 ))
               )}
             </tbody>

@@ -1,30 +1,20 @@
 "use client";
-import React, { useState, useMemo } from "react";
-import {
-  Download,
-  File,
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  Trash2,
-} from "lucide-react";
+import React, { useState, useEffect, useMemo } from "react";
+import { Download, File, Eye, Trash2 } from "lucide-react";
 import "./BOLTable.css";
 import { useNavigate } from "react-router-dom";
 import { StatusIcon } from "../StatusRender.jsx";
-import { Badge, IconButton, Typography } from "@mui/material";
+import { Badge, TableRow } from "@mui/material";
 import { Snackbar, Alert } from "@mui/material";
+import { formatDate } from "../Utility/formatDate.jsx";
 
 export const BOLTable = ({
   title,
-  data,
-  loading = false,
   onDownload,
   onDownloadItem,
-  onViewItem,
+  apiUrl,
   onDeleteItem,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [selectedItems, setSelectedItems] = useState([]);
 
   // Sorting state
@@ -36,13 +26,64 @@ export const BOLTable = ({
   const navigate = useNavigate();
 
   const [openAlert, setOpenAlert] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const token = localStorage.getItem("jwtToken");
+
+  useEffect(() => {
+    async function fetchTableData() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const responseData = await response.json();
+        const formattedData =
+          responseData.aaData?.map((item) => {
+            let status = item.tckMstBlState.blstId || "N/A";
+            if (status === "NEW") {
+              status = "ONGOING_VERIF";
+            }
+            return {
+              status,
+              blNo: item.blBlNo || "N/A",
+              containerNo: item.blCntNo || "N/A",
+              shippingLine: item.tcoreAccnByBlSlAccn.accnId || "N/A",
+              submittedDate: formatDate(item.blDtSubmitted) || "N/A",
+              submittedBy: item.tcoreAccnByBlOwnerAccn.accnName || "N/A",
+              assignedJobNo: item.blAssignedJobNo || "N/A",
+              assignedDate: formatDate(item.blDtAssigned) || "N/A",
+            };
+          }) || [];
+
+        setTableData(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setTableData([]);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    if (token) {
+      fetchTableData();
+    }
+  }, [token]);
+
+  const displayData = tableData;
 
   // Sorting function
   const sortedData = useMemo(() => {
-    if (!data || data.length === 0) return [];
+    if (!displayData || displayData.length === 0) return [];
 
-    return [...data].sort((a, b) => {
-      if (!sortConfig.key) return 0;
+    return [...displayData].sort((a, b) => {
+      if (!sortConfig.key) return displayData;
 
       const key = sortConfig.key;
       const aValue = a[key];
@@ -63,33 +104,14 @@ export const BOLTable = ({
 
       return 0;
     });
-  }, [data, sortConfig]);
+  }, [displayData, sortConfig]);
 
-  // Pagination logic with sorted data
-  const totalPages = Math.ceil((sortedData?.length || 0) / itemsPerPage);
-
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return sortedData.slice(startIndex, startIndex + itemsPerPage);
-  }, [sortedData, currentPage, itemsPerPage]);
-
-  // Sorting handler
   const handleSort = (key) => {
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
     }
     setSortConfig({ key, direction });
-    setCurrentPage(1); // Reset to first page when sorting
-  };
-
-  const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const handleNextPage = () =>
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-
-  const handleItemsPerPageChange = (e) => {
-    setItemsPerPage(Number(e.target.value));
-    setCurrentPage(1);
   };
 
   const handleClaimClick = () => {
@@ -102,7 +124,7 @@ export const BOLTable = ({
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      setSelectedItems(paginatedData.map((item) => item.id));
+      setSelectedItems(sortedData.map((item) => item.id));
     } else {
       setSelectedItems([]);
     }
@@ -187,153 +209,127 @@ export const BOLTable = ({
       </div>
 
       <div className="active-lists__content">
-        {loading ? (
+        {loadingData ? (
           <div className="active-lists__loading">Loading...</div>
         ) : (
-          <table className="active-lists__table">
-            <thead>
-              <tr>
-                <th className="checkbox-column">
-                  <div className="checkbox-wrapper">
-                    <input
-                      type="checkbox"
-                      onChange={handleSelectAll}
-                      checked={
-                        paginatedData.length > 0 &&
-                        selectedItems.length === paginatedData.length
-                      }
-                      className="checkbox-input"
-                    />
-                  </div>
-                </th>
-                <SortableHeader label="Status" sortKey="status" />
-                <SortableHeader label="BL No." sortKey="blNo" />
-                <SortableHeader label="Container No." sortKey="containerNo" />
-                <SortableHeader label="Shipping Line" sortKey="shippingLine" />
-                <SortableHeader
-                  label="Submitted Date"
-                  sortKey="submittedDate"
-                />
-                <SortableHeader label="Submitted By" sortKey="submittedBy" />
-                <SortableHeader
-                  label="Assigned Job No."
-                  sortKey="assignedJobNo"
-                />
-                <SortableHeader label="Assigned Date" sortKey="assignedDate" />
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedData.length === 0 ? (
+          <div className="table-wrapper">
+            <table className="active-lists__table">
+              <thead>
                 <tr>
-                  <td
-                    colSpan="10"
-                    style={{
-                      textAlign: "center",
-                      padding: "30px",
-                      color: "#888",
-                    }}
-                  >
-                    Sorry, no matching records found.
-                  </td>
+                  <th className="checkbox-column">
+                    <div className="checkbox-wrapper">
+                      <input
+                        type="checkbox"
+                        onChange={handleSelectAll}
+                        checked={
+                          sortedData.length > 0 &&
+                          selectedItems.length === sortedData.length
+                        }
+                        className="checkbox-input"
+                      />
+                    </div>
+                  </th>
+                  <SortableHeader label="Status" sortKey="status" />
+                  <SortableHeader label="BL No." sortKey="blNo" />
+                  <SortableHeader label="Container No." sortKey="containerNo" />
+                  <SortableHeader
+                    label="Shipping Line"
+                    sortKey="shippingLine"
+                  />
+                  <SortableHeader
+                    label="Submitted Date"
+                    sortKey="submittedDate"
+                  />
+                  <SortableHeader label="Submitted By" sortKey="submittedBy" />
+                  <SortableHeader
+                    label="Assigned Job No."
+                    sortKey="assignedJobNo"
+                  />
+                  <SortableHeader
+                    label="Assigned Date"
+                    sortKey="assignedDate"
+                  />
+                  <th>Action</th>
                 </tr>
-              ) : (
-                paginatedData.map((row, index) => (
-                  <tr
-                    key={row.id}
-                    className={index % 2 === 0 ? "even-row" : "odd-row"}
-                  >
-                    <td className="checkbox-column">
-                      <div className="checkbox-wrapper">
-                        <input
-                          type="checkbox"
-                          checked={selectedItems.includes(row.id)}
-                          onChange={() => handleSelectItem(row.id)}
-                          className="checkbox-input"
-                        />
-                      </div>
-                    </td>
-                    <td>
-                      <StatusIcon status={row.status} />
-                    </td>
-                    <td>{row.blNo}</td>
-                    <td>{row.containerNo}</td>
-                    <td>{row.shippingLine}</td>
-                    <td>{row.submittedDate}</td>
-                    <td>{row.submittedBy}</td>
-                    <td>{row.assignedJobNo}</td>
-                    <td>{row.assignedDate}</td>
-                    <td>
-                      <div className="action-buttons">
-                        <button
-                          className="action-button_BOL"
-                          onClick={() =>
-                            navigate(`/bol/active/view/${row.id}`, {
-                              state: row,
-                            })
-                          }
-                          title="View"
-                        >
-                          <Eye size={16} sx={{ color: "#3b82f6" }} />
-                        </button>
-
-                        <button
-                          className="action-button_BOL"
-                          onClick={() => onDownloadItem?.(row)}
-                          title="Download"
-                        >
-                          <Download size={16} />
-                        </button>
-
-                        <button
-                          className="action-button_BOL"
-                          onClick={() => onDeleteItem?.(row)}
-                          title="Delete"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
+              </thead>
+              <tbody>
+                {sortedData.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan="10"
+                      style={{
+                        textAlign: "center",
+                        padding: "30px",
+                        color: "#888",
+                      }}
+                    >
+                      Sorry, no matching records found.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        )}
-      </div>
+                ) : (
+                  sortedData.map((row, index) => (
+                    <TableRow
+                      key={row.id || index}
+                      className={index % 2 === 0 ? "even-row" : "odd-row"}
+                    >
+                      <td className="checkbox-column">
+                        <div className="checkbox-wrapper">
+                          <input
+                            type="checkbox"
+                            checked={selectedItems.includes(row.id)}
+                            onChange={() => handleSelectItem(row.id)}
+                            className="checkbox-input"
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <StatusIcon status={row.status} />
+                      </td>
+                      <td>{row.blNo}</td>
+                      <td>{row.containerNo}</td>
+                      <td>{row.shippingLine}</td>
+                      <td>{row.submittedDate}</td>
+                      <td>{row.submittedBy}</td>
+                      <td>{row.assignedJobNo}</td>
+                      <td>{row.assignedDate}</td>
+                      <td>
+                        <div className="action-buttons">
+                          <button
+                            className="action-button_BOL"
+                            onClick={() =>
+                              navigate(`/bol/active/view/${row.id}`, {
+                                state: row,
+                              })
+                            }
+                            title="View"
+                          >
+                            <Eye size={16} />
+                          </button>
 
-      <div className="active-lists__footer">
-        <div className="active-lists__controls">
-          <div className="active-lists__column-select">
-            <span>Column:</span>
-            <select
-              className="row-number"
-              value={itemsPerPage}
-              onChange={handleItemsPerPageChange}
-            >
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-            </select>
+                          <button
+                            className="action-button_BOL"
+                            onClick={() => onDownloadItem?.(row)}
+                            title="Download"
+                          >
+                            <Download size={16} />
+                          </button>
+
+                          <button
+                            className="action-button_BOL"
+                            onClick={() => onDeleteItem?.(row)}
+                            title="Delete"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </TableRow>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
-          <div className="active-lists__pagination">
-            <button
-              className="pagination-button"
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span>{`Page ${currentPage} of ${totalPages}`}</span>
-            <button
-              className="pagination-button"
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
