@@ -1,187 +1,8 @@
 import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx";
 import "./DOActiveList.css";
 import React from "react";
-import { DataTable } from "../components/TableList/DOTable.jsx";
+import { DOTable } from "../components/TableList/DOTable.jsx";
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
-
-const ACTIVE_DATA = [
-  {
-    id: 1,
-    payment: "rejected",
-    surrender: "pending",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 2,
-    payment: "accepted",
-    surrender: "pending",
-    document: "rejected",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 1,
-    payment: "rejected",
-    surrender: "accepted",
-    document: "accepted",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 2,
-    payment: "accepted",
-    surrender: "pending",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 1,
-    payment: "rejected",
-    surrender: "pending",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 2,
-    payment: "accepted",
-    surrender: "pending",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 1,
-    payment: "rejected",
-    surrender: "pending",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 2,
-    payment: "accepted",
-    surrender: "pending",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 1,
-    payment: "rejected",
-    surrender: "pending",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 2,
-    payment: "accepted",
-    surrender: "rejected",
-    document: "rejected",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 1,
-    payment: "rejected",
-    surrender: "accepted",
-    document: "accepted",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 2,
-    payment: "accepted",
-    surrender: "rejected",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 1,
-    payment: "rejected",
-    surrender: "accepted",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 2,
-    payment: "accepted",
-    surrender: "rejected",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 1,
-    payment: "rejected",
-    surrender: "accepted",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-  {
-    id: 2,
-    payment: "accepted",
-    surrender: "rejected",
-    document: "pending",
-    jobId: "DOJF1234567890",
-    shipmentType: "IMPORT",
-    shippingLine: "MSC",
-    dateSubmitted: "03/01/2025 13:56:44",
-    noOfBl: 1,
-  },
-];
 
 export function DOActive() {
   return (
@@ -191,7 +12,13 @@ export function DOActive() {
         <h1 className="Title">DO Claims</h1>
         <div>
           <ProfileDropdown />
-          <DataTable title="Active List" data={ACTIVE_DATA} />;
+          <DOTable
+            title="Active List"
+            apiUrl={
+              "https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/job/ckJobDoClaim/list?sEcho=3&iDisplayStart=0&iDisplayLength=1000&iSortCol_0=0&sSortDir_0=asc&iSortingCols=1&mDataProp_0=jobStateDocVerfiy&mDataProp_1=history&sSearch_1=default&iColumns=2"
+            }
+          />
+          ;
         </div>
       </main>
       <div></div>

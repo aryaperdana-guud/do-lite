@@ -1,37 +1,69 @@
-import React, { useState, useMemo } from "react";
-import {
-  Eye,
-  Edit,
-  Download,
-  ChevronLeft,
-  ChevronRight,
-  ArrowUp,
-  ArrowDown,
-} from "lucide-react";
+import React, { useMemo, useEffect, useState } from "react";
+import { Eye, Edit, Download, ArrowUp, ArrowDown } from "lucide-react";
 import "./DOTable.css";
 import { StatusIcon } from "../StatusRender.jsx";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../Utility/formatDate.jsx";
 
-export const DataTable = ({
-  title,
-  data,
-  loading = false,
-  onDownload,
-  onViewItem,
-}) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
   });
   const navigate = useNavigate();
 
+  const [tableData, setTableData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const token = localStorage.getItem("jwtToken");
+
+  useEffect(() => {
+    async function fetchTableData() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const responseData = await response.json();
+        const formattedData =
+          responseData.aaData?.map((item) => ({
+            payment: item.tckJob.tckMstJobState.jbstId || "N/A",
+            document: item.jobStateDocVerfiy || "N/A",
+            surrender: item.attId, // not founed yet
+            jobId: item.jobId || "N/A",
+            shipmentType: item.tckJob.tckMstShipmentType.shtId || "N/A",
+            shippingLine: item.tckJob.tcoreAccnByJobSlAccn.accnId || "N/A",
+            dateSubmitted:
+              formatDate(item.tckJob.tckRecordDate.rcdDtSubmit) || "N/A",
+            noOfBl: item.jobNoDo || "0",
+          })) || [];
+
+        setTableData(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setTableData([]);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    if (token) {
+      fetchTableData();
+    }
+  }, [token]);
+
+  const displayData = tableData;
+
   // Sorting function
   const sortedData = useMemo(() => {
-    if (!data || !sortConfig.key) return data || [];
+    if (!displayData || !sortConfig.key) return displayData || [];
 
-    return [...data].sort((a, b) => {
+    return [...displayData].sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
         return sortConfig.direction === "ascending" ? -1 : 1;
       }
@@ -40,10 +72,7 @@ export const DataTable = ({
       }
       return 0;
     });
-  }, [data, sortConfig]);
-
-  // Pagination calculations
-  const totalPages = Math.ceil((sortedData?.length || 0) / itemsPerPage);
+  }, [displayData, sortConfig]);
 
   const handleSort = (key) => {
     setSortConfig((prevConfig) => ({
@@ -53,23 +82,7 @@ export const DataTable = ({
           ? "descending"
           : "ascending",
     }));
-    setCurrentPage(1);
   };
-
-  const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const handleNextPage = () =>
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  const handleItemsPerPageChange = (e) => {
-    setItemsPerPage(Number(e.target.value));
-    setCurrentPage(1);
-  };
-
-  // Paginate sorted data
-  const paginatedData =
-    sortedData?.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
-    ) || [];
 
   // Sorting icon component
   const SortIcon = ({ sortKey }) => {
@@ -104,7 +117,7 @@ export const DataTable = ({
       </div>
 
       <div className="active-lists__content">
-        {loading ? (
+        {loadingData ? (
           <div className="active-lists__loading">Loading...</div>
         ) : (
           <table className="active-lists__table">
@@ -138,7 +151,7 @@ export const DataTable = ({
               </tr>
             </thead>
             <tbody>
-              {paginatedData.length === 0 ? (
+              {sortedData.length === 0 ? (
                 <tr>
                   <td
                     colSpan="9"
@@ -152,9 +165,9 @@ export const DataTable = ({
                   </td>
                 </tr>
               ) : (
-                paginatedData.map((row, index) => (
+                sortedData.map((row, index) => (
                   <tr
-                    key={row.id}
+                    key={row.id || index}
                     className={index % 2 === 0 ? "even-row" : "odd-row"}
                   >
                     <td>
@@ -164,7 +177,11 @@ export const DataTable = ({
                       <StatusIcon type="document" status={row.document} />
                     </td>
                     <td>
-                      <StatusIcon type="surrender" status={row.surrender} />
+                      {row.document ? (
+                        <StatusIcon type="document" status="SURRENDERED" />
+                      ) : (
+                        <StatusIcon type="document" status="PENDING_RETURN" />
+                      )}
                     </td>
                     <td>{row.jobId}</td>
                     <td>{row.shipmentType}</td>
@@ -195,42 +212,8 @@ export const DataTable = ({
           </table>
         )}
       </div>
-
-      <div className="active-lists__footer">
-        <div className="active-lists__controls">
-          <div className="active-lists__pagination">
-            <button
-              className="pagination-button"
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span>{`Page ${currentPage} of ${totalPages}`}</span>
-            <button
-              className="pagination-button"
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-          <div className="active-lists__items-per-page">
-            <label htmlFor="itemsPerPage">Show:</label>
-            <select
-              id="itemsPerPage"
-              value={itemsPerPage}
-              onChange={handleItemsPerPageChange}
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-            </select>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
 
-export default DataTable;
+export default DOTable;

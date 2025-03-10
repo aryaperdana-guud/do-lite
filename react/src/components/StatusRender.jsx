@@ -1,7 +1,19 @@
-import React from "react";
-import { Check, X, Plus, Hourglass, RotateCcw } from "lucide-react";
+import {
+  AlertTriangle,
+  Check,
+  CheckCircle,
+  EllipsisIcon,
+  Hourglass,
+  Plus,
+  RotateCcw,
+  X,
+} from "lucide-react";
 
 export const StatusIcon = ({ status }) => {
+  const normalizeStatus = (status) => {
+    return status?.trim().toUpperCase().replace(/\s+/g, "_");
+  };
+
   const statusMap = {
     NEW: {
       title: "New",
@@ -20,7 +32,7 @@ export const StatusIcon = ({ status }) => {
       icon: <X />,
       color: "#721c24",
       backgroundColor: "#f8d7da",
-    }, //red
+    }, // Red
     PAID: {
       title: "Paid",
       icon: <Check />,
@@ -34,31 +46,73 @@ export const StatusIcon = ({ status }) => {
       backgroundColor: "#ffe8cc",
     }, // Orange
 
-    //"ASSIGNED","CANCELLED","INVALID"(try Again)
+    // Special statuses
     CANCELLED: {
       title: "Cancelled",
       icon: <X />,
       color: "#721c24",
       backgroundColor: "#f8d7da",
-    }, // red
+    }, // Red
     ASSIGNED: {
       title: "Assigned",
       icon: <Check />,
       color: "#0d6efd",
       backgroundColor: "#e3f2fd",
-    }, // blue
+    }, // Blue
     INVALID: {
       title: "Try Again",
       icon: <RotateCcw />,
       color: "#b35f00",
       backgroundColor: "#ffe8cc",
     }, // Orange
+
+    // Payment statuses
+    PYG: {
+      title: "Unpaid",
+      icon: <AlertTriangle />,
+      color: "#b68900",
+      backgroundColor: "#fff4d4",
+    }, // Yellow
+    CON: {
+      title: "Confirmed",
+      icon: <CheckCircle />,
+      color: "#0F8A5F",
+      backgroundColor: "#D6F5E3",
+    }, // Teal-Green
+
+    // Document statuses
+    VERIFIED: {
+      title: "Verified",
+      icon: <Check />,
+      color: "#198754",
+      backgroundColor: "#d1e7dd",
+    }, // Green
+    REJECTED: {
+      title: "Rejected",
+      icon: <X />,
+      color: "#721c24",
+      backgroundColor: "#f8d7da",
+    }, // Red
+    PENDING_RETURN: {
+      title: "Not Surrendered",
+      icon: <EllipsisIcon />,
+      color: "#D48806",
+      backgroundColor: "#FFF7E6",
+    }, // Yellow-Orange
+    SURRENDERED: {
+      title: "Surrendered",
+      icon: <Check />,
+      color: "#198754",
+      backgroundColor: "#d1e7dd",
+    },
   };
 
-  const statusData = statusMap[status] || {
+  const normalizedStatus = normalizeStatus(status);
+  const statusData = statusMap[normalizedStatus] || {
     title: "Unknown",
     icon: <div />,
     color: "#EAEAEA",
+    backgroundColor: "#F8F9FA",
   }; // Default Gray
 
   const iconStyle = {
@@ -70,7 +124,7 @@ export const StatusIcon = ({ status }) => {
     borderRadius: "25%",
     fontSize: "16px",
     color: statusData.color,
-    backgroundColor: statusData.backgroundColor, // Dynamically set background color
+    backgroundColor: statusData.backgroundColor,
   };
 
   return (
