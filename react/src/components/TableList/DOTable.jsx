@@ -34,7 +34,7 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
           responseData.aaData?.map((item) => ({
             payment: item.tckJob.tckMstJobState.jbstId || "N/A",
             document: item.jobStateDocVerfiy || "N/A",
-            surrender: item.attId, // not founed yet
+            surrender: item.jobStateDocVerfiy,
             jobId: item.jobId || "N/A",
             shipmentType: item.tckJob.tckMstShipmentType.shtId || "N/A",
             shippingLine: item.tckJob.tcoreAccnByJobSlAccn.accnId || "N/A",
@@ -177,11 +177,14 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
                       <StatusIcon type="document" status={row.document} />
                     </td>
                     <td>
-                      {row.document ? (
-                        <StatusIcon type="document" status="SURRENDERED" />
-                      ) : (
-                        <StatusIcon type="document" status="PENDING_RETURN" />
-                      )}
+                      <StatusIcon
+                        type="surrender"
+                        status={
+                          row.document === "Pending Return"
+                            ? "PENDING_RETURN"
+                            : "SURRENDERED"
+                        }
+                      />
                     </td>
                     <td>{row.jobId}</td>
                     <td>{row.shipmentType}</td>

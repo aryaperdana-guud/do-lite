@@ -4,99 +4,6 @@ import React from "react";
 import PaymentTable from "../components/TableList/PaymentTable.jsx";
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
-const ACTIVE_DATA = [
-  {
-    id: 1,
-    status: "accepted",
-    jobId: "DOJF1234567890",
-    jobType: "CLAIM",
-    shipmentType: "IMPORT",
-    submittedDate: "11/02/2025 10:35:01",
-    amount: "Rp 2,345,098",
-  },
-  {
-    id: 2,
-    status: "accepted",
-    jobId: "DOJF1234567890",
-    jobType: "CLAIM",
-    shipmentType: "IMPORT",
-    submittedDate: "11/02/2025 10:35:01",
-    amount: "Rp 2,345,098",
-  },
-  {
-    id: 3,
-    status: "accepted",
-    jobId: "DOJF1234567890",
-    jobType: "CLAIM",
-    shipmentType: "IMPORT",
-    submittedDate: "11/02/2025 10:35:01",
-    amount: "Rp 2,345,098",
-  },
-  {
-    id: 4,
-    status: "accepted",
-    jobId: "DOJF1234567890",
-    jobType: "CLAIM",
-    shipmentType: "IMPORT",
-    submittedDate: "11/02/2025 10:35:01",
-    amount: "Rp 2,345,098",
-  },
-  {
-    id: 5,
-    status: "accepted",
-    jobId: "DOJF1234567890",
-    jobType: "CLAIM",
-    shipmentType: "IMPORT",
-    submittedDate: "11/02/2025 10:35:01",
-    amount: "Rp 2,345,098",
-  },
-  {
-    id: 6,
-    status: "accepted",
-    jobId: "DOJF1234567890",
-    jobType: "CLAIM",
-    shipmentType: "IMPORT",
-    submittedDate: "11/02/2025 10:35:01",
-    amount: "Rp 2,345,098",
-  },
-  {
-    id: 7,
-    status: "accepted",
-    jobId: "DOJF1234567890",
-    jobType: "CLAIM",
-    shipmentType: "IMPORT",
-    submittedDate: "11/02/2025 10:35:01",
-    amount: "Rp 2,345,098",
-  },
-  {
-    id: 8,
-    status: "accepted",
-    jobId: "DOJF1234567890",
-    jobType: "CLAIM",
-    shipmentType: "IMPORT",
-    submittedDate: "11/02/2025 10:35:01",
-    amount: "Rp 2,345,098",
-  },
-  {
-    id: 9,
-    status: "accepted",
-    jobId: "DOJF1234567890",
-    jobType: "CLAIM",
-    shipmentType: "IMPORT",
-    submittedDate: "11/02/2025 10:35:01",
-    amount: "Rp 2,345,098",
-  },
-  {
-    id: 10,
-    status: "accepted",
-    jobId: "DOJF1234567890",
-    jobType: "CLAIM",
-    shipmentType: "IMPORT",
-    submittedDate: "11/02/2025 10:35:01",
-    amount: "Rp 2,345,098",
-  },
-];
-
 export function DoPayment() {
   return (
     <div className="dashboard">
@@ -109,7 +16,11 @@ export function DoPayment() {
         </div>
         <div>
           <ProfileDropdown />
-          <PaymentTable title="Payment" data={ACTIVE_DATA} />;
+          <PaymentTable
+            title="Payment"
+            apiUrl="https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/job/ckConfirmedJobs/list?sEcho=3&iDisplayStart=0&iDisplayLength=1000&iSortCol_0=0&sSortDir_0=desc&iSortingCols=1&mDataProp_0=submittedDate&iColumns=1"
+          />
+          ;
         </div>
       </main>
       <div></div>

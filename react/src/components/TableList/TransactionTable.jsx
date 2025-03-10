@@ -1,21 +1,126 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Visibility, FilterList, Download } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import "./DOTable.css"; // Reusing the same CSS file
 import { StatusIcon } from "../StatusRender.jsx";
+import { ArrowUpward, ArrowDownward } from "@mui/icons-material";
+import { formatDate } from "../Utility/formatDate.jsx";
+import { formatCurrency } from "../Utility/formatCurrency.jsx";
 
-export const TransactionTable = ({ data = [], loading = false }) => {
+export const TransactionTable = ({ apiUrl, loading = false }) => {
   const [selectedRows, setSelectedRows] = useState([]);
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
 
-  const handleSelectRow = (id) => {
-    setSelectedRows((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+  const [tableData, setTableData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const token = localStorage.getItem("jwtToken");
+
+  useEffect(() => {
+    async function fetchTableData() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const responseData = await response.json();
+        const formattedData =
+          responseData.aaData?.map((item) => ({
+            status: item.ptxPaymentState || "N/A",
+            paymentId: item.ptxId || "Unknown",
+            billingDate: formatDate(item.ptxDtCreate),
+            amount: formatCurrency(item.ptxAmount),
+            currency: item.tmstCurrency.ccyCode,
+            paymentDate: formatDate(item.ptxDtCreate),
+            paidDate: formatDate(item.ptxDtPaid),
+          })) || [];
+
+        setTableData(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setTableData([]);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    if (token) {
+      fetchTableData();
+    }
+  }, [token]);
+
+  const displayData = tableData;
+
+  // Sorting function
+  const sortedData = useMemo(() => {
+    if (!displayData || !sortConfig.key) return displayData;
+
+    return [...data].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [displayData, sortConfig]);
+
+  const handleSort = (key) => {
+    setSortConfig((prevConfig) => ({
+      key,
+      direction:
+        prevConfig.key === key && prevConfig.direction === "ascending"
+          ? "descending"
+          : "ascending",
+    }));
   };
 
-  const isSelected = (id) => selectedRows.includes(id);
+  // Sorting icon component
+  const SortIcon = ({ sortKey }) => {
+    const isActive = sortConfig.key === sortKey;
+    const isAscending = isActive && sortConfig.direction === "ascending";
+
+    return (
+      <span
+        className="sort-icon-container"
+        style={{
+          display: "inline-flex",
+          marginLeft: "5px",
+          alignItems: "center",
+        }}
+      >
+        {isActive ? (
+          isAscending ? (
+            <ArrowUpward style={{ fontSize: 14, color: "blue" }} />
+          ) : (
+            <ArrowDownward style={{ fontSize: 14, color: "blue" }} />
+          )
+        ) : (
+          <span
+            style={{
+              display: "inline-flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <ArrowUpward style={{ fontSize: 12, color: "gray" }} />
+            <ArrowDownward style={{ fontSize: 12, color: "gray" }} />
+          </span>
+        )}
+      </span>
+    );
+  };
 
   return (
     <div className="active-lists">
@@ -35,7 +140,7 @@ export const TransactionTable = ({ data = [], loading = false }) => {
         className="active-lists__content"
         style={{ maxHeight: "calc(100vh - 180px)", overflowY: "auto" }}
       >
-        {loading ? (
+        {loadingData ? (
           <div className="active-lists__loading">Loading...</div>
         ) : (
           <table className="active-lists__table">
@@ -48,19 +153,54 @@ export const TransactionTable = ({ data = [], loading = false }) => {
               }}
             >
               <tr>
-                <th>Status</th>
-                <th>Payment ID</th>
-                <th>Billing Date</th>
-                <th>Amount</th>
-                <th>Currency</th>
-                <th>Payment Date</th>
-                <th>Paid Date</th>
+                <th
+                  onClick={() => handleSort("status")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Status <SortIcon sortKey="status" />
+                </th>
+                <th
+                  onClick={() => handleSort("paymentId")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Payment ID <SortIcon sortKey="paymentId" />
+                </th>
+                <th
+                  onClick={() => handleSort("billingDate")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Billing Date <SortIcon sortKey="billingDate" />
+                </th>
+                <th
+                  onClick={() => handleSort("amount")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Amount <SortIcon sortKey="amount" />
+                </th>
+                <th
+                  onClick={() => handleSort("currency")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Currency <SortIcon sortKey="currency" />
+                </th>
+                <th
+                  onClick={() => handleSort("paymentDate")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Payment Date <SortIcon sortKey="paymentDate" />
+                </th>
+                <th
+                  onClick={() => handleSort("paidDate")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Paid Date <SortIcon sortKey="paidDate" />
+                </th>
                 <th>Details</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {data.length === 0 ? (
+              {sortedData.length === 0 ? (
                 <tr>
                   <td
                     colSpan="9"
@@ -74,9 +214,9 @@ export const TransactionTable = ({ data = [], loading = false }) => {
                   </td>
                 </tr>
               ) : (
-                data.map((row, index) => (
+                sortedData.map((row, index) => (
                   <tr
-                    key={row.id}
+                    key={row.id || index}
                     className={index % 2 === 0 ? "even-row" : "odd-row"}
                   >
                     <td>

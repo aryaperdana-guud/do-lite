@@ -1,24 +1,104 @@
 "use client";
 
-import React, { useState } from "react";
-import { Search, FilterList } from "@mui/icons-material";
-import { Checkbox, IconButton } from "@mui/material";
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  Search,
+  FilterList,
+  ArrowUpward,
+  ArrowDownward,
+} from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 import "./DOTable.css";
 import { useNavigate } from "react-router-dom";
 import { StatusIcon } from "../StatusRender.jsx";
+import { formatDate } from "../Utility/formatDate.jsx";
+import { formatCurrency } from "../Utility/formatCurrency.jsx";
 
-export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
+export const PaymentTable = ({ apiUrl, onPaySelected }) => {
   const [selectedRows, setSelectedRows] = useState([]);
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
+
+  const navigate = useNavigate();
+
+  const [tableData, setTableData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const token = localStorage.getItem("jwtToken");
+
+  useEffect(() => {
+    async function fetchTableData() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const responseData = await response.json();
+        const formattedData =
+          responseData.aaData?.map((item) => ({
+            status: item.jobState || "N/A",
+            jobId: item.jobId || "Unknown",
+            jobType: item.doJobType || "Unknown",
+            shipmentType: item.shipmentType || "N/A",
+            submittedDate: formatDate(item.submittedDate),
+            amount: formatCurrency(item.totalByJob),
+          })) || [];
+
+        setTableData(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setTableData([]);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    if (token) {
+      fetchTableData();
+    }
+  }, [token]);
+
+  const displayData = tableData;
+
+  // Sorting function
+  const sortedData = useMemo(() => {
+    if (!displayData || !sortConfig.key) return displayData;
+
+    return [...displayData].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [displayData, sortConfig]);
+
+  const handleSort = (key) => {
+    setSortConfig((prevConfig) => ({
+      key,
+      direction:
+        prevConfig.key === key && prevConfig.direction === "ascending"
+          ? "descending"
+          : "ascending",
+    }));
+  };
 
   const handleSelectAll = (event) => {
     if (event.target.checked) {
-      setSelectedRows(data.map((item) => item.id));
+      setSelectedRows(displayData.map((item) => item.id));
     } else {
       setSelectedRows([]);
     }
   };
-
-  const navigate = useNavigate();
 
   const handleSelectRow = (id) => {
     setSelectedRows((prev) =>
@@ -27,6 +107,42 @@ export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
   };
 
   const isSelected = (id) => selectedRows.includes(id);
+
+  // Sorting icon component
+  const SortIcon = ({ sortKey }) => {
+    const isActive = sortConfig.key === sortKey;
+    const isAscending = isActive && sortConfig.direction === "ascending";
+
+    return (
+      <span
+        className="sort-icon-container"
+        style={{
+          display: "inline-flex",
+          marginLeft: "5px",
+          alignItems: "center",
+        }}
+      >
+        {isActive ? (
+          isAscending ? (
+            <ArrowUpward style={{ fontSize: 14, color: "blue" }} />
+          ) : (
+            <ArrowDownward style={{ fontSize: 14, color: "blue" }} />
+          )
+        ) : (
+          <span
+            style={{
+              display: "inline-flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <ArrowUpward style={{ fontSize: 12, color: "gray" }} />
+            <ArrowDownward style={{ fontSize: 12, color: "gray" }} />
+          </span>
+        )}
+      </span>
+    );
+  };
 
   return (
     <div className="active-lists">
@@ -54,7 +170,7 @@ export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
         className="active-lists__content"
         style={{ maxHeight: "calc(100vh - 180px)", overflowY: "auto" }}
       >
-        {loading ? (
+        {loadingData ? (
           <div className="active-lists__loading">Loading...</div>
         ) : (
           <table className="active-lists__table">
@@ -72,22 +188,53 @@ export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
                     type="checkbox"
                     onChange={handleSelectAll}
                     checked={
-                      data.length > 0 && selectedRows.length === data.length
+                      displayData.length > 0 &&
+                      selectedRows.length === displayData.length
                     }
                     className="checkbox-input"
                   />
                 </th>
-                <th>Status</th>
-                <th>Job ID</th>
-                <th>Job Type</th>
-                <th>Shipment Type</th>
-                <th>Submitted Date</th>
-                <th>Amount</th>
+                <th
+                  onClick={() => handleSort("status")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Status <SortIcon sortKey="status" />
+                </th>
+                <th
+                  onClick={() => handleSort("jobId")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Job ID <SortIcon sortKey="jobId" />
+                </th>
+                <th
+                  onClick={() => handleSort("jobType")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Job Type <SortIcon sortKey="jobType" />
+                </th>
+                <th
+                  onClick={() => handleSort("shipmentType")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Shipment Type <SortIcon sortKey="shipmentType" />
+                </th>
+                <th
+                  onClick={() => handleSort("submittedDate")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Submitted Date <SortIcon sortKey="submittedDate" />
+                </th>
+                <th
+                  onClick={() => handleSort("amount")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Amount <SortIcon sortKey="amount" />
+                </th>
                 <th>Details</th>
               </tr>
             </thead>
             <tbody>
-              {data.length === 0 ? (
+              {sortedData.length === 0 ? (
                 <tr>
                   <td
                     colSpan="8"
@@ -101,7 +248,7 @@ export const PaymentTable = ({ data = [], loading = false, onPaySelected }) => {
                   </td>
                 </tr>
               ) : (
-                data.map((row, index) => (
+                sortedData.map((row, index) => (
                   <tr
                     key={row.id}
                     className={index % 2 === 0 ? "even-row" : "odd-row"}
