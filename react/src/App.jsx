@@ -37,12 +37,14 @@ import { MyDODetails } from "./pages/MyDODetails.jsx";
 import { DoPayment } from "./pages/DoPayment-payment.jsx";
 import { DoTransaction } from "./pages/DoPayment-transaction.jsx";
 import { DoPaymentPay } from "./pages/DOPayment-Pay.jsx";
+import SessionChecker from "./SessionControl/SessionChecker.jsx";
+import AutoLogout from "./SessionControl/AutoLogout.jsx";
 
 function App() {
-  const { user, setUser } = useUserStore();
-
   return (
     <Router>
+      <AutoLogout />
+      <SessionChecker />
       <Routes>
         {/* Default route */}
         <Route path="/" element={<SignIn />} />
@@ -172,14 +174,46 @@ function App() {
           path="/edit-do-extension/GenDetails/:id"
           element={<DOExtGenDetails />}
         />
-        <Route path="/edit-do-extension/Audit/:id" element={<DOExtAudit />} />
-        <Route path="/edit-do-claim/:id" element={<EditDOClaim />} />
+        <Route
+          path="/edit-do-extension/Audit/:id"
+          element={
+            <AuthGuard>
+              <DOExtAudit />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/edit-do-claim/:id"
+          element={
+            <AuthGuard>
+              <EditDOClaim />
+            </AuthGuard>
+          }
+        />
         <Route
           path="/edit-do-claim-attachments/:id"
-          element={<EditDOClaimAttachments />}
+          element={
+            <AuthGuard>
+              <EditDOClaimAttachments />
+            </AuthGuard>
+          }
         />
-        <Route path="/edit-do-claim-query/:id" element={<EditDOClaimQuery />} />
-        <Route path="/edit-do-claim-audit/:id" element={<EditDOClaimAudit />} />
+        <Route
+          path="/edit-do-claim-query/:id"
+          element={
+            <AuthGuard>
+              <EditDOClaimQuery />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/edit-do-claim-audit/:id"
+          element={
+            <AuthGuard>
+              <EditDOClaimAudit />
+            </AuthGuard>
+          }
+        />
         <Route
           path="/do-payment/payment"
           element={

@@ -73,7 +73,7 @@ export function ViewBL() {
                 <div className="details-content">
                   <Typography variant="h6">Cargo Owner:</Typography>
                   <div className="read-only-field">
-                    <Typography>{data.cargoOwner || "-"}</Typography>
+                    <Typography>{data.cargoOwner}</Typography>
                   </div>
                 </div>
               </div>

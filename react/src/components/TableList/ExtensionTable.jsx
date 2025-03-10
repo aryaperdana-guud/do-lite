@@ -199,7 +199,7 @@ export const ExtensionTable = ({
                 </tr>
               ) : (
                 sortedData.map((row, index) => (
-                  <TableRow key={row.id || index}>
+                  <TableRow key={row.jobNo}>
                     <td>
                       <StatusIcon status={row.status} />
                     </td>

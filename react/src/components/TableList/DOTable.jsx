@@ -167,7 +167,7 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
               ) : (
                 sortedData.map((row, index) => (
                   <tr
-                    key={row.id || index}
+                    key={row.jobId}
                     className={index % 2 === 0 ? "even-row" : "odd-row"}
                   >
                     <td>

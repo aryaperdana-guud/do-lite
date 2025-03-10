@@ -183,7 +183,7 @@ export const MyDOTable = ({ apiUrl, title }) => {
                   </TableRow>
                 ) : (
                   sortedData.map((row, index) => (
-                    <TableRow key={row.id || index} className="table-row">
+                    <TableRow key={row.doNumber} className="table-row">
                       <TableCell>{row.doNumber}</TableCell>
                       <TableCell>{row.consignee}</TableCell>
                       <TableCell>{row.vesselName}</TableCell>

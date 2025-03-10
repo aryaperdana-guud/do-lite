@@ -1,3 +1,4 @@
+import { DeviceUnknown, QuestionMark } from "@mui/icons-material";
 import {
   AlertTriangle,
   Check,
@@ -110,9 +111,9 @@ export const StatusIcon = ({ status }) => {
   const normalizedStatus = normalizeStatus(status);
   const statusData = statusMap[normalizedStatus] || {
     title: "Unknown",
-    icon: <div />,
-    color: "#EAEAEA",
-    backgroundColor: "#F8F9FA",
+    icon: <QuestionMark />,
+    color: "#AAAAAA",
+    backgroundColor: "#EAEAEA",
   }; // Default Gray
 
   const iconStyle = {

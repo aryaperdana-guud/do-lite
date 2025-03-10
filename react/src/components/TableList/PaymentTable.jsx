@@ -43,6 +43,7 @@ export const PaymentTable = ({ apiUrl, onPaySelected }) => {
         const responseData = await response.json();
         const formattedData =
           responseData.aaData?.map((item) => ({
+            id: item.jobId,
             status: item.jobState || "N/A",
             jobId: item.jobId || "Unknown",
             jobType: item.doJobType || "Unknown",
@@ -94,7 +95,7 @@ export const PaymentTable = ({ apiUrl, onPaySelected }) => {
 
   const handleSelectAll = (event) => {
     if (event.target.checked) {
-      setSelectedRows(displayData.map((item) => item.id));
+      setSelectedRows(sortedData.map((item) => item.id));
     } else {
       setSelectedRows([]);
     }
@@ -188,8 +189,8 @@ export const PaymentTable = ({ apiUrl, onPaySelected }) => {
                     type="checkbox"
                     onChange={handleSelectAll}
                     checked={
-                      displayData.length > 0 &&
-                      selectedRows.length === displayData.length
+                      sortedData.length > 0 &&
+                      selectedRows.length === sortedData.length
                     }
                     className="checkbox-input"
                   />
@@ -250,7 +251,7 @@ export const PaymentTable = ({ apiUrl, onPaySelected }) => {
               ) : (
                 sortedData.map((row, index) => (
                   <tr
-                    key={row.id}
+                    key={row.jobId}
                     className={index % 2 === 0 ? "even-row" : "odd-row"}
                   >
                     <td>

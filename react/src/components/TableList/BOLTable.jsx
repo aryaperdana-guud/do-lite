@@ -52,6 +52,8 @@ export const BOLTable = ({
             }
             return {
               status,
+              cargoOwner: item.tcoreAccnByBlCoAccn.accnNameOth || "Unknown",
+              id: item.blBlNo,
               blNo: item.blBlNo || "N/A",
               containerNo: item.blCntNo || "N/A",
               shippingLine: item.tcoreAccnByBlSlAccn.accnId || "N/A",
@@ -269,7 +271,7 @@ export const BOLTable = ({
                 ) : (
                   sortedData.map((row, index) => (
                     <TableRow
-                      key={row.id || index}
+                      key={row.id}
                       className={index % 2 === 0 ? "even-row" : "odd-row"}
                     >
                       <td className="checkbox-column">
