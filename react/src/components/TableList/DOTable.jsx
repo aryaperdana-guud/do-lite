@@ -202,7 +202,7 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
 
                         <button
                           className="action-button_DO"
-                          onClick={() => onViewItem?.(row)}
+                          onClick={() => navigate(`/do-claim-view/${row.id}`)}
                         >
                           <Eye size={16} />
                         </button>
