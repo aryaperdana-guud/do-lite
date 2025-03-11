@@ -9,6 +9,16 @@ const ViewExtGenDetails = ({ id }) => {
     }; //date hari ini
 
     const [containerData, setContainerData] = useState([]);
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+
+
+    const handleConfirmClick = () => {
+        setShowConfirmPopup(true); //confirm pop-up
+    }
+
+    const handleCloseConfirmPopup = () => {
+        setShowConfirmPopup(false); //close confirm
+    }
 
     useEffect(() => {
         setContainerData([
@@ -113,6 +123,56 @@ const ViewExtGenDetails = ({ id }) => {
         gap: "5px",
     }
 
+    const tableButtons = { 
+        display: 'flex', 
+        gap: '10px', 
+        padding: '10px',
+    }
+
+    const button = {
+        backgroundColor: '#263754', 
+        color: 'white', 
+        borderRadius: '10px',
+    }
+
+    const popupOverlay = {
+        position: "fixed",
+        top: "0",
+        left: "0",
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.5)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    }
+
+    const popupContent = {
+        background: "#1E2A46",
+        color: "white",
+        padding: "20px",
+        width: "350px",
+        textAlign: "center",
+        borderRadius: "10px",
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
+    }
+
+    const popupButtons = {
+        marginTop: "20px",
+        display: "flex",
+        justifyContent: "center",
+        gap: "20px",
+    }
+
+    const buttons = {
+        background: "transparent",
+        width: "150px",
+        padding: "10px 20px",
+        borderRadius: "5px",
+        fontSize: "16px",
+        cursor: "pointer"
+    }
+
     return (
         <div>
             <div style={formContainer}>
@@ -188,6 +248,36 @@ const ViewExtGenDetails = ({ id }) => {
                     </div>
                 </div>
             </div>
+            <div style={{...tableButtons, justifyContent: 'right'}}>
+                <button style={{...button, height: 'fit-content'}}>SAVE</button>
+                <button style={{...button, height: 'fit-content'}}
+                    onClick={handleConfirmClick}>
+                        CONFIRM
+                </button>
+            </div>
+
+            {showConfirmPopup && (
+                <div style={popupOverlay}>
+                    <div style={popupContent}>
+                        <h2 style={{fontSize: "40px", margin: "0px", fontWeight: "bold" }}>CONFIRMATION</h2>
+                        <p>Are you sure want to ?</p>
+                        <p>Extensions Job cannot be delete or change after confirmed.</p>
+
+                        <div style={popupButtons}>
+                            <button style={{...buttons, color: "red", border: "2px solid red"}} 
+                                onClick={handleCloseConfirmPopup}>
+                                    NO
+                            </button>
+                            <button style={{...buttons, color: "green", border: "2px solid green"}} 
+                                onClick={() => { alert("Confirmed!");
+                                    handleCloseConfirmPopup();
+                                }}>
+                                    YES
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

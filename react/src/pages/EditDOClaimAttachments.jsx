@@ -1,8 +1,8 @@
 import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx"
-import { MousePointer, Pencil, Save, Trash2, LogOut, X } from "lucide-react";
+import { Pencil, Save, Trash2, LogOut, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./EditDOClaimAttachments.css"
-import SelectedBOL from "../components/TableList/SelectedBOL.jsx";
+import AttachmentTable from "../components/TableList/AttachmentTable";
 import React, {useState, useEffect} from "react"
 import { useParams } from "react-router-dom";
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
@@ -11,33 +11,38 @@ const EditDOClaimAttachments = () => {
     const { id } = useParams();
     console.log("EditDOClaimAttachments ID:", id);
     const navigate = useNavigate();
-    const [data] = useState([]);
 
     const [showAddPopup, setShowAddPopup] = useState(false); 
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
-    const [documentType, setDocumentType] = useState(""); // Tambahkan state ini
+    const [documentType, setDocumentType] = useState("");
     const [validityDate, setValidityDate] = useState("");
     const [blNo, setBlNo] = useState("");
     const [documentFile, setDocumentFile] = useState(null);
-    const [selectedbol, setSelectedbol] = useState([]);
+    const [attData, setAttdata] = useState([]);
 
     useEffect(() => {
         // Simulasi Fetch Data
-        setSelectedbol([
-            {blNo: "MEDUU12345",
-                containerNo: "MSDU1234567890",
-                shippingLine: "SHIPPING LINE 1",
-                authoriser: "CARGO OWNER 1",
-                blDateSubmitted: "10/02/2025 15:51:07"
-            },
-            {blNo: "MEDUU12345",
-                containerNo: "MSDU1234567890",
-                shippingLine: "SHIPPING LINE 1",
-                authoriser: "CARGO OWNER 1",
-                blDateSubmitted: "10/02/2025 15:51:07"
-            },
+        setAttdata([
+          {
+            documentID: "CKJA1234567890",
+            docType: "POWER OF AUTHORITY",
+            authoriser: "CARGO OWNER 1",
+            blNo: "MEDUU12345",
+            doNo: "DO1234567890",
+            createdAt: "10/02/2025 15:51:07",
+            validityDate: "10/02/2025 15:51:07",
+          },
+          {
+            documentID: "CKJA1234567890",
+            docType: "CONTAINER GUARANTEE",
+            authoriser: "CARGO OWNER 1",
+            blNo: "MEDUU12345",
+            doNo: "DO1234567890",
+            createdAt: "10/02/2025 15:51:07",
+            validityDate: "10/02/2025 15:51:07",
+          },
         ]);
-      }, []);
+    }, []);
   
     const handleAddClick = () => {
         setShowAddPopup(true); // Menampilkan pop-up saat tombol ADD diklik
@@ -115,7 +120,7 @@ const EditDOClaimAttachments = () => {
                     </div>
 
                     <div className="selected-bol">
-                        <SelectedBOL data={selectedbol} />
+                        <AttachmentTable data={attData} />
 
                         <div className="bottom-buttons">
                             <button className="add-button" onClick={handleAddClick}>
@@ -172,7 +177,7 @@ const EditDOClaimAttachments = () => {
                                 </div>
                             </div>
                             
-                            <button className="submit-button">SUBMIT</button>
+                            <button className="submitt">SUBMIT</button>
                         </div>
                     </div>
                 </form>

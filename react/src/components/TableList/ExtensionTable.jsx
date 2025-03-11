@@ -239,6 +239,11 @@ export const ExtensionTable = ({
                             <span></span>
                             <button
                               className="action-button-extension"
+                              onClick={() =>
+                                navigate(
+                                  `/view-do-extension/GenDetails/${row.id}`
+                                )
+                              }
                               title="View"
                             >
                               <Eye size={16} />

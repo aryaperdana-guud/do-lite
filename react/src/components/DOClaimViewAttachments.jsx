@@ -14,7 +14,7 @@ const button = {
 
 const DOClaimViewAttachments = () => {
 
-    const [attData, setAttdata] = useState([]);
+  const [attData, setAttdata] = useState([]);
 
     useEffect(() => {
         // Simulasi Fetch Data

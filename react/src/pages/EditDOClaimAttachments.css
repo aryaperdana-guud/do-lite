@@ -232,10 +232,10 @@
     margin-bottom: 20px;
 }
 
-.submit-button{
+.submitt{
     display: auto;
     margin: 10px auto;
-    background: #263754;
+    background: #263754 !important;
     color: white;
 }
 
