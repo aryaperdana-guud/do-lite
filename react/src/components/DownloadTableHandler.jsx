@@ -1,6 +1,6 @@
 const downloadExcel = async (apiUrl, fileName) => {
   try {
-    const XLSX = await import("xlsx"); // Dynamically import SheetJS
+    const XLSX = await import("xlsx");
 
     const token = localStorage.getItem("jwtToken");
     if (!token) throw new Error("No auth token found");

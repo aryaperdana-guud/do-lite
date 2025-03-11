@@ -44,6 +44,16 @@ export const MyDOTable = ({ apiUrl, title }) => {
         const responseData = await response.json();
         const formattedData =
           responseData.aaData?.map((item) => ({
+            //data for details
+            id: item.doId,
+            // do number
+            // bl number, type, document
+            //consignee, notify party
+            // vessel name, ETA
+            // voyage number
+            //
+
+            //
             doNumber: item.doNo || "N/A",
             consignee: item.tcoreAccnByDoCoAccn?.accnName || "Unknown",
             vesselName: item.doVesselName || "Unknown",

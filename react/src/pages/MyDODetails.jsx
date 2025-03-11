@@ -79,6 +79,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.doNumber}
                       readOnly
+                      disabled
                     />
                   </div>
                 </div>
@@ -105,6 +106,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.blNumber}
                       readOnly
+                      disabled
                     />
                   </div>
                   <div>
@@ -114,6 +116,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.blType}
                       readOnly
+                      disabled
                     />
                   </div>
                   <div>
@@ -155,6 +158,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.consignee}
                       readOnly
+                      disabled
                     />
                   </div>
                   <div>
@@ -164,6 +168,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.notifyParty}
                       readOnly
+                      disabled
                     />
                   </div>
                 </div>
@@ -188,6 +193,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.vesselName}
                       readOnly
+                      disabled
                     />
                   </div>
                   <div>
@@ -197,6 +203,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.vesselETA}
                       readOnly
+                      disabled
                     />
                   </div>
                   <div>
@@ -206,6 +213,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.voyageNumber}
                       readOnly
+                      disabled
                     />
                   </div>
                   <div>
@@ -215,6 +223,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.loadingPort}
                       readOnly
+                      disabled
                     />
                   </div>
                   <div>
@@ -224,6 +233,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.dischargePort}
                       readOnly
+                      disabled
                     />
                   </div>
                 </div>
@@ -246,6 +256,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.createdBy}
                       readOnly
+                      disabled
                     />
                   </div>
                   <div>
@@ -255,6 +266,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.createdDate}
                       readOnly
+                      disabled
                     />
                   </div>
                   <div>
@@ -264,6 +276,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.updatedBy}
                       readOnly
+                      disabled
                     />
                   </div>
                   <div>
@@ -273,6 +286,7 @@ export function MyDODetails() {
                       size="md"
                       value={doData.updatedDate}
                       readOnly
+                      disabled
                     />
                   </div>
                 </div>

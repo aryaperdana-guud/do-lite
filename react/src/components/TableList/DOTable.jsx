@@ -4,6 +4,7 @@ import "./DOTable.css";
 import { StatusIcon } from "../StatusRender.jsx";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../Utility/formatDate.jsx";
+import TableDownloader from "../DownloadTableHandler.jsx";
 
 export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
   const [sortConfig, setSortConfig] = useState({
@@ -84,6 +85,15 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
     }));
   };
 
+  const downloadTable = () => {
+    const apiUrl =
+      title === "Active List"
+        ? "https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/job/ckJobDoClaim/report/generate?history=default"
+        : "https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/job/ckJobDoClaim/report/generate?history=history";
+
+    TableDownloader(apiUrl, "DOClaims");
+  };
+
   // Sorting icon component
   const SortIcon = ({ sortKey }) => {
     const isActive = sortConfig.key === sortKey;
@@ -110,7 +120,7 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
       <div className="active-lists__header">
         <div className="active-lists__title-section">
           <h2 className="active-lists__title">{title}</h2>
-          <button className="active-lists__download" onClick={onDownload}>
+          <button className="active-lists__download" onClick={downloadTable}>
             <Download size={20} />
           </button>
         </div>
