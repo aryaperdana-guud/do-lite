@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AutoLogout = () => {
-  const navigate = useNavigate(); // ✅ Now inside Router
+  const navigate = useNavigate();
 
   useEffect(() => {
     let timeout;
@@ -12,7 +12,7 @@ const AutoLogout = () => {
       timeout = setTimeout(
         () => {
           alert("Session expired due to inactivity.");
-          navigate("/login"); // ✅ Redirects properly
+          navigate("/"); //
         },
         15 * 60 * 1000
       ); // 15 minutes

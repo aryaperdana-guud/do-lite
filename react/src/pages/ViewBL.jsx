@@ -4,11 +4,16 @@ import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx";
 import Box from "@mui/joy/Box";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./NewBL.css";
+import useDownloadFile from "../components/DownloadFileHandler.jsx";
+import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
 export function ViewBL() {
   const location = useLocation();
   const navigate = useNavigate();
   const data = location.state || {}; // Get row data or default to an empty object
+  const FileDownloader = useDownloadFile(
+    "https://cdo-dev-id2.clickargo.com/be/clicdo/api/ck/doi/getBlFileData"
+  );
 
   // Handle missing data
   if (!data || Object.keys(data).length === 0) {
@@ -35,6 +40,7 @@ export function ViewBL() {
 
   return (
     <div className="dashboard">
+      <ProfileDropdown />
       <NavigationBar />
       <main className="main-content">
         <h1 className="Title">Bill of Ladings</h1>
@@ -100,7 +106,16 @@ export function ViewBL() {
                   <Typography variant="h6">BL File:</Typography>
 
                   {data.blFile ? (
-                    <Typography>{data.blFileName}</Typography>
+                    <Typography
+                      sx={{
+                        cursor: "pointer",
+                        color: "#0070c0",
+                        "&:hover": { color: "darkblue" },
+                      }}
+                      onClick={() => FileDownloader(data.blId)}
+                    >
+                      {data.blFileName}
+                    </Typography>
                   ) : (
                     <Typography>-</Typography>
                   )}

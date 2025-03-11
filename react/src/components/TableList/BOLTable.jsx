@@ -8,14 +8,9 @@ import { Badge, TableRow } from "@mui/material";
 import { Snackbar, Alert } from "@mui/material";
 import { formatDate } from "../Utility/formatDate.jsx";
 import useDownloadFile from "../DownloadFileHandler.jsx";
+import TableDownloader from "../DownloadTableHandler.jsx";
 
-export const BOLTable = ({
-  title,
-  onDownload,
-  onDownloadItem,
-  apiUrl,
-  onDeleteItem,
-}) => {
+export const BOLTable = ({ title, apiUrl, onDeleteItem }) => {
   const [selectedItems, setSelectedItems] = useState([]);
 
   // Sorting state
@@ -172,6 +167,15 @@ export const BOLTable = ({
     </th>
   );
 
+  const downloadTable = () => {
+    const apiUrl =
+      title === "Active List"
+        ? "https://cdo-dev-id2.clickargo.com/be/clicdo/api/ck/doi/report/generate?history=default"
+        : "https://cdo-dev-id2.clickargo.com/be/clicdo/api/ck/doi/report/generate?history=history";
+
+    TableDownloader(apiUrl, "BillOfLading");
+  };
+
   const downloadFile = useDownloadFile(
     "https://cdo-dev-id2.clickargo.com/be/clicdo/api/ck/doi/getBlFileData"
   );
@@ -212,7 +216,7 @@ export const BOLTable = ({
 
             <button
               className="active-lists__download"
-              onClick={onDownload}
+              onClick={downloadTable}
               title="Download Lists"
             >
               <Download size={25} />
