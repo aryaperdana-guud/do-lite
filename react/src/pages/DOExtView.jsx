@@ -2,10 +2,10 @@ import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx";
 import { Search} from "lucide-react";
 import React from "react";
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
-import DOClaimHeader from "../components/DOClaimHeader.jsx";
-import DOClaimViewClaimDetails from "../components/DOClaimViewClaimDetails.jsx";
+import ViewExtHeader from "../components/ViewExtHeader.jsx";
+import ViewExtGenDetails from "../components/ViewExtGenDetails.jsx";
 
-const DOClaimView = () => {
+const DOExtView = () => {
   
   return (
     <div className="dashboard_claim">
@@ -13,15 +13,15 @@ const DOClaimView = () => {
       <main className="main-content">
         <ProfileDropdown />
         <h1 className="title">
-          <Search size={40} /> View DO
+          <Search size={40} /> View DO Extension
         </h1>
         <div className="edit-do-container">
-            <DOClaimHeader/>
-            <DOClaimViewClaimDetails/>
+            <ViewExtHeader/>
+            <ViewExtGenDetails/>
         </div>  
       </main>
     </div>
   );
 };
 
-export default DOClaimView;
+export default DOExtView;

@@ -1,5 +1,5 @@
 import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx";
-import { Pencil} from "lucide-react";
+import { Search} from "lucide-react";
 import React from "react";
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 import DOClaimHeader from "../components/DOClaimHeader.jsx";
@@ -13,7 +13,7 @@ const DOClaimViewAdt = () => {
       <main className="main-content">
         <ProfileDropdown />
         <h1 className="title">
-          <Pencil size={40} /> Edit DO
+          <Search size={40} /> View DO
         </h1>
         <div className="edit-do-container">
             <DOClaimHeader/>

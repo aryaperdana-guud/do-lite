@@ -4,11 +4,9 @@ import { useNavigate } from "react-router-dom";
 import "./DOExtGenDetails.css"
 import ContainerTable from "../components/TableList/ContainerTable.jsx";
 import React , {useState, useEffect} from "react"
-import { useParams } from "react-router-dom";
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
-const DOExtGenDetails = () => {
-    const { id } = useParams();
+const DOExtGenDetails = ({ id }) => {
     console.log("Current ID:", id);
     const navigate = useNavigate();
 

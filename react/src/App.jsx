@@ -25,6 +25,9 @@ import { ExtensionHistory } from "./pages/DOExtensionHistory.jsx";
 import DOExtGenDetails from "./pages/DOExtGenDetails.jsx";
 import DOExtAudit from "./pages/DOExtAudit.jsx";
 
+import DOExtView from "./pages/DOExtView.jsx";
+import DOExtViewAudit from "./pages/DOExtViewAudit.jsx";
+
 import EditDOClaim from "./pages/EditDOClaim.jsx";
 import EditDOClaimAttachments from "./pages/EditDOClaimAttachments.jsx";
 import EditDOClaimAudit from "./pages/EditDOClaimAudit.jsx";
@@ -119,6 +122,17 @@ function App() {
             </AuthGuard>
           }
         />
+
+        <Route
+          path="/view-do-extension/GenDetails/:id"
+          element={<DOExtView/>}
+        />
+
+<Route
+          path="/view-do-extension/Audit/:id"
+          element={<DOExtViewAudit/>}
+        />
+
         <Route
           path="/do-extension/history"
           element={
