@@ -40,7 +40,7 @@ export function ViewBL() {
         <h1 className="Title">Bill of Ladings</h1>
         <div className="form">
           <div className="form-title">
-            View BL <Typography>ID : {data.id || "-"}</Typography>
+            View BL <Typography>ID : {data.blId || "-"}</Typography>
           </div>
 
           <div className="cards-container">
@@ -100,13 +100,7 @@ export function ViewBL() {
                   <Typography variant="h6">BL File:</Typography>
 
                   {data.blFile ? (
-                    <a
-                      href={data.blFile}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      View File
-                    </a>
+                    <Typography>{data.blFileName}</Typography>
                   ) : (
                     <Typography>-</Typography>
                   )}

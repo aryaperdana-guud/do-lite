@@ -7,6 +7,7 @@ import { StatusIcon } from "../StatusRender.jsx";
 import { Badge, TableRow } from "@mui/material";
 import { Snackbar, Alert } from "@mui/material";
 import { formatDate } from "../Utility/formatDate.jsx";
+import useDownloadFile from "../DownloadFileHandler.jsx";
 
 export const BOLTable = ({
   title,
@@ -53,6 +54,10 @@ export const BOLTable = ({
             return {
               status,
               cargoOwner: item.tcoreAccnByBlCoAccn.accnNameOth || "Unknown",
+              blFile: item.blDoc,
+              blFileName: item.blFileName,
+              blId: item.blId,
+              //
               id: item.blBlNo,
               blNo: item.blBlNo || "N/A",
               containerNo: item.blCntNo || "N/A",
@@ -126,15 +131,17 @@ export const BOLTable = ({
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      setSelectedItems(sortedData.map((item) => item.id));
+      setSelectedItems(sortedData.map((item) => item.blId));
     } else {
       setSelectedItems([]);
     }
   };
 
-  const handleSelectItem = (id) => {
+  const handleSelectItem = (blId) => {
     setSelectedItems((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+      prev.includes(blId)
+        ? prev.filter((item) => item !== blId)
+        : [...prev, blId]
     );
   };
 
@@ -163,6 +170,10 @@ export const BOLTable = ({
         </span>
       )}
     </th>
+  );
+
+  const downloadFile = useDownloadFile(
+    "https://cdo-dev-id2.clickargo.com/be/clicdo/api/ck/doi/getBlFileData"
   );
 
   return (
@@ -271,15 +282,15 @@ export const BOLTable = ({
                 ) : (
                   sortedData.map((row, index) => (
                     <TableRow
-                      key={row.id}
+                      key={row.blId}
                       className={index % 2 === 0 ? "even-row" : "odd-row"}
                     >
                       <td className="checkbox-column">
                         <div className="checkbox-wrapper">
                           <input
                             type="checkbox"
-                            checked={selectedItems.includes(row.id)}
-                            onChange={() => handleSelectItem(row.id)}
+                            checked={selectedItems.includes(row.blId)}
+                            onChange={() => handleSelectItem(row.blId)}
                             className="checkbox-input"
                           />
                         </div>
@@ -299,7 +310,7 @@ export const BOLTable = ({
                           <button
                             className="action-button_BOL"
                             onClick={() =>
-                              navigate(`/bol/active/view/${row.id}`, {
+                              navigate(`/bol/active/view/${row.blId}`, {
                                 state: row,
                               })
                             }
@@ -310,7 +321,7 @@ export const BOLTable = ({
 
                           <button
                             className="action-button_BOL"
-                            onClick={() => onDownloadItem?.(row)}
+                            onClick={() => downloadFile(row.blId)}
                             title="Download"
                           >
                             <Download size={16} />
