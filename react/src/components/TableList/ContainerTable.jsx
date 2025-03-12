@@ -1,60 +1,158 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  Checkbox,
+  Box,
+  Card,
+  CardHeader,
+  CardContent,
+  Typography,
+} from "@mui/material";
+import { Container } from "lucide-react";
 
-const ContainerTable = ({ data }) => {
+const ContainerTable = ({
+  containerData = [],
+  onSelectionChange = () => {},
+  onDangerousGoodToggle = () => {},
+}) => {
+  const [selectedContainers, setSelectedContainers] = useState({});
+  const [allSelected, setAllSelected] = useState(false);
 
-    const [selectedRows, setSelectedRows] = useState([]);
+  // Handle selection of individual container
+  const handleContainerSelect = (index) => {
+    const updatedSelection = { ...selectedContainers };
+    updatedSelection[index] = !updatedSelection[index];
+    setSelectedContainers(updatedSelection);
 
-    const handleRowSelect = (index) => {
-        setSelectedRows((prevSelected) =>
-          prevSelected.includes(index)
-            ? prevSelected.filter((id) => id !== index)
-            : [...prevSelected, index]
-        );
-    };
+    // Check if all containers are selected
+    const allChecked =
+      Object.keys(updatedSelection).length === containerData.length &&
+      Object.values(updatedSelection).every((value) => value === true);
+    setAllSelected(allChecked);
 
-    return (
-        <div style={{background: '#eaeaea', padding: '10px', borderRadius: '10px', textAlign: 'center', paddingBottom: '20px'}}>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <table style={{ borderCollapse: 'separate', borderSpacing: '0 10px', width: '100%' }}>
-                    <thead className="c-head">
-                        <tr>
-                            <th>Marks and Number</th>
-                            <th>Container Category</th>
-                            <th>Dangerous Good</th>
-                            <th>Valid Till Date</th>
-                            <th>Next Valid Till Date</th>
-                            <th>Extension Days</th>
-                        </tr>
-                    </thead>
-                    <tbody style={{ backgroundColor: 'white', borderCollapse: 'collapse', fontSize: '16px', height: '200px', overflow: 'auto'}}>
-                        {data.map((row, index) => (
-                        <tr key={index}>
-                        <td style={{borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px'}}>{row.marksAndNumber}</td>
-                        <td>{row.containerCat}</td>
-                        <td>
-                            {row.dangerousGood && row.dangerousGood !== "-" ? (
-                                <label className="checkbox-label">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedRows.includes(index)}
-                                        onChange={() => handleRowSelect(index)}
-                                    />
-                                    <span> YES</span>
-                                </label>
-                                ) : (
-                                "-"
-                            )}
-                        </td>
-                        <td>{row.vtd}</td>
-                        <td>{row.nextvtd}</td>
-                        <td style={{borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>{row.extDays}</td>
-                        </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    );
+    // Send selection data to parent
+    onSelectionChange(updatedSelection);
+  };
+
+  // Handle selection of all containers
+  const handleSelectAll = () => {
+    const newAllSelected = !allSelected;
+    const newSelectedContainers = {};
+
+    containerData.forEach((_, index) => {
+      newSelectedContainers[index] = newAllSelected;
+    });
+
+    setAllSelected(newAllSelected);
+    setSelectedContainers(newSelectedContainers);
+
+    // Send selection data to parent
+    onSelectionChange(newSelectedContainers);
+  };
+
+  // Handle dangerous good toggle
+  const handleDangerousGoodToggle = (index) => {
+    onDangerousGoodToggle(index);
+  };
+
+  // Initialize selected containers when data changes
+  useEffect(() => {
+    if (containerData.length > 0) {
+      const initialSelectedState = {};
+      containerData.forEach((_, index) => {
+        initialSelectedState[index] = false;
+      });
+      setSelectedContainers(initialSelectedState);
+      setAllSelected(false);
+    }
+  }, [containerData]);
+
+  return (
+    <Card
+      sx={{
+        mb: 3,
+        bgcolor: "#f5f5f5",
+        borderRadius: "10px",
+        padding: "10px",
+        boxShadow: "none",
+      }}
+    >
+      <CardHeader
+        sx={{
+          bgcolor: "#f5f5f5",
+          borderBottom: "1px solid #e0e0e0",
+          p: 2,
+        }}
+        title={
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Container size={18} />
+            <Typography variant="h6" sx={{ ml: 1 }}>
+              Containers for Extension
+            </Typography>
+          </Box>
+        }
+      />
+      <CardContent sx={{ p: 0 }}>
+        <TableContainer component={Paper} sx={{ boxShadow: "none" }}>
+          <Table size="small">
+            <TableHead sx={{ bgcolor: "#f5f5f5" }}>
+              <TableRow>
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    checked={allSelected}
+                    onChange={handleSelectAll}
+                    color="primary"
+                  />
+                </TableCell>
+                <TableCell>Marks And Number</TableCell>
+                <TableCell>Container Cat</TableCell>
+                <TableCell>Dangerous Good</TableCell>
+                <TableCell>VTD</TableCell>
+                <TableCell>Next VTD</TableCell>
+                <TableCell>Ext Days</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {containerData.map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={selectedContainers[index] || false}
+                      onChange={() => handleContainerSelect(index)}
+                      color="primary"
+                    />
+                  </TableCell>
+                  <TableCell>{row.marksAndNumber}</TableCell>
+                  <TableCell>{row.containerCat}</TableCell>
+                  <TableCell>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      {row.dangerousGood}
+                      <Checkbox
+                        checked={row.dangerousGood === "YES"}
+                        onChange={() => handleDangerousGoodToggle(index)}
+                        size="small"
+                        color="primary"
+                        sx={{ ml: 1 }}
+                      />
+                    </Box>
+                  </TableCell>
+                  <TableCell>{row.vtd}</TableCell>
+                  <TableCell>{row.nextvtd}</TableCell>
+                  <TableCell>{row.extDays}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </CardContent>
+    </Card>
+  );
 };
 
 export default ContainerTable;

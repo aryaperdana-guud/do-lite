@@ -13,28 +13,17 @@ import {
   DialogContent,
   DialogActions,
   Divider,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
 } from "@mui/material";
-import {
-  Ship,
-  CalendarPlus2,
-  Container,
-  ReceiptText,
-  LogOut,
-} from "lucide-react";
+import { Ship, CalendarPlus2, ReceiptText, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ContainerTable from "../components/TableList/ContainerTable";
 
 const DOExtGenDetails = ({ id }) => {
   const navigate = useNavigate();
   const [containerData, setContainerData] = useState([]);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
+  const [selectedContainers, setSelectedContainers] = useState({});
 
   // Format date to Indonesian format
   const formatDate = (dateString) => {
@@ -47,6 +36,22 @@ const DOExtGenDetails = ({ id }) => {
 
   const handleCloseConfirmPopup = () => {
     setShowConfirmPopup(false);
+  };
+
+  // Handle container selection from child component
+  const handleContainerSelectionChange = (selectionData) => {
+    setSelectedContainers(selectionData);
+    // You can perform additional actions based on selection here
+  };
+
+  // Handle dangerous good toggle from child component
+  const handleDangerousGoodToggle = (index) => {
+    const updatedData = [...containerData];
+    updatedData[index] = {
+      ...updatedData[index],
+      dangerousGood: updatedData[index].dangerousGood === "YES" ? "NO" : "YES",
+    };
+    setContainerData(updatedData);
   };
 
   useEffect(() => {
@@ -209,59 +214,12 @@ const DOExtGenDetails = ({ id }) => {
               </CardContent>
             </Card>
 
-            <Card
-              sx={{
-                mb: 3,
-                bgcolor: "#f5f5f5",
-                borderRadius: "10px",
-                padding: "10px",
-                boxShadow: "none",
-              }}
-            >
-              <CardHeader
-                sx={{
-                  bgcolor: "#f5f5f5",
-                  borderBottom: "1px solid #e0e0e0",
-                  p: 2,
-                }}
-                title={
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Container size={18} />
-                    <Typography variant="h6" sx={{ ml: 1 }}>
-                      Containers for Extension
-                    </Typography>
-                  </Box>
-                }
-              />
-              <CardContent sx={{ p: 0 }}>
-                <TableContainer component={Paper} sx={{ boxShadow: "none" }}>
-                  <Table size="small">
-                    <TableHead sx={{ bgcolor: "#f5f5f5" }}>
-                      <TableRow>
-                        <TableCell>Marks And Number</TableCell>
-                        <TableCell>Container Cat</TableCell>
-                        <TableCell>Dangerous Good</TableCell>
-                        <TableCell>VTD</TableCell>
-                        <TableCell>Next VTD</TableCell>
-                        <TableCell>Ext Days</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {containerData.map((row, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{row.marksAndNumber}</TableCell>
-                          <TableCell>{row.containerCat}</TableCell>
-                          <TableCell>{row.dangerousGood}</TableCell>
-                          <TableCell>{row.vtd}</TableCell>
-                          <TableCell>{row.nextvtd}</TableCell>
-                          <TableCell>{row.extDays}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardContent>
-            </Card>
+            {/* Using the new ContainerTable component */}
+            <ContainerTable
+              containerData={containerData}
+              onSelectionChange={handleContainerSelectionChange}
+              onDangerousGoodToggle={handleDangerousGoodToggle}
+            />
           </Grid>
         </Grid>
 
