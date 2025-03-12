@@ -18,7 +18,7 @@ import { Ship, CalendarPlus2, ReceiptText, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ContainerTable from "../components/TableList/ContainerTable";
 
-const DOExtGenDetails = ({ id }) => {
+const DOExtGenDetails = ({ id, title }) => {
   const navigate = useNavigate();
   const [containerData, setContainerData] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
@@ -125,6 +125,7 @@ const DOExtGenDetails = ({ id }) => {
                       }}
                       variant="outlined"
                       size="small"
+                      disabled
                       sx={{ bgcolor: "#ffffff", mb: 2 }}
                     />
                   </Grid>
@@ -138,6 +139,7 @@ const DOExtGenDetails = ({ id }) => {
                       }}
                       variant="outlined"
                       size="small"
+                      disabled
                       sx={{ bgcolor: "#ffffff", mb: 2 }}
                     />
                   </Grid>
@@ -151,6 +153,7 @@ const DOExtGenDetails = ({ id }) => {
                       }}
                       variant="outlined"
                       size="small"
+                      disabled
                       sx={{ bgcolor: "#ffffff", mb: 2 }}
                     />
                   </Grid>
@@ -164,6 +167,7 @@ const DOExtGenDetails = ({ id }) => {
                       }}
                       variant="outlined"
                       size="small"
+                      disabled
                       sx={{ bgcolor: "#ffffff" }}
                     />
                   </Grid>
@@ -200,6 +204,7 @@ const DOExtGenDetails = ({ id }) => {
                   }}
                   variant="outlined"
                   size="small"
+                  disabled
                   sx={{ bgcolor: "#ffffff", mb: 2 }}
                 />
               </CardContent>
@@ -213,7 +218,6 @@ const DOExtGenDetails = ({ id }) => {
             />
           </Grid>
         </Grid>
-
         {/* Extension Charge Section */}
         <Card sx={{ mb: 3, borderRadius: "10px", boxShadow: "none" }}>
           <CardHeader
@@ -232,7 +236,7 @@ const DOExtGenDetails = ({ id }) => {
             }
           />
           <CardContent sx={{ bgcolor: "#f9f9f9" }}>
-            <Box sx={{ mb: 3 }}>
+            <Box sx={{ mb: 3, justifyContent: "center" }}>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                 <Typography variant="subtitle1" sx={{ mr: 1 }}>
                   New Valid Till Date <span style={{ color: "red" }}>*</span>
@@ -307,8 +311,6 @@ const DOExtGenDetails = ({ id }) => {
           </CardContent>
         </Card>
       </Box>
-
-      
     </Box>
   );
 };

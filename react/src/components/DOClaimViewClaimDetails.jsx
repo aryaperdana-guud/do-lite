@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import {
   Typography,
   Input,
@@ -14,6 +14,7 @@ import {
   ReceiptOutlined as ReceiptOutlinedIcon,
 } from "@mui/icons-material";
 import SelectedBOL from "./TableList/SelectedBOL";
+import { useParams } from "react-router-dom";
 
 // Dummy data structure
 const dummyClaimData = {
@@ -71,7 +72,7 @@ const cardStyles = {
   },
 };
 
-const DOClaimViewClaimDetails = () => {
+const DOClaimViewClaimDetails = ({ jobId }) => {
   const [claimData, setClaimData] = useState({
     generalDetails: {},
     jobDateDetails: {},
@@ -112,7 +113,7 @@ const DOClaimViewClaimDetails = () => {
                 <Typography variant="h6">Job ID</Typography>
                 <Input
                   fullWidth
-                  value={claimData.generalDetails.jobId || ""}
+                  value={jobId || ""}
                   readOnly
                   disabled
                   sx={cardStyles.inputField}

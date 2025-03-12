@@ -42,6 +42,9 @@ export const ExtensionTable = ({
   const [tableData, setTableData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const token = localStorage.getItem("jwtToken");
+
+  const isHistoryPage = title === "History List";
+
   useEffect(() => {
     async function fetchTableData() {
       setLoadingData(true);
@@ -234,7 +237,7 @@ export const ExtensionTable = ({
                               className="action-button-extension"
                               onClick={() =>
                                 navigate(
-                                  `/view-do-extension/GenDetails/${row.id}`
+                                  `/view-do-extension/GenDetails/${row.id}/${title}`
                                 )
                               }
                               title="View"
@@ -249,7 +252,7 @@ export const ExtensionTable = ({
                               className="action-button-extension"
                               onClick={() =>
                                 navigate(
-                                  `/view-do-extension/GenDetails/${row.id}`
+                                  `/view-do-extension/GenDetails/${row.id}/${title}`
                                 )
                               }
                               title="View"

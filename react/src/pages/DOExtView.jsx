@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { 
+import {
   Typography,
   Dialog,
   DialogTitle,
@@ -30,8 +30,7 @@ import ViewExtAudit from "./DOExtViewAudit.jsx";
 export function DOExtView() {
   const [activeTab, setActiveTab] = useState("general-details");
   const navigate = useNavigate();
-  const { mode } = useParams(); // Get mode from URL params
-  const isEditMode = mode === "edit";
+  const { title } = useParams();
 
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
@@ -64,9 +63,9 @@ export function DOExtView() {
   const renderTabContent = () => {
     switch (activeTab) {
       case "general-details":
-        return <DOExtGenDetails isEditMode={isEditMode} />;
+        return <DOExtGenDetails title={title} />;
       case "audit":
-        return <ViewExtAudit />;
+        return <ViewExtAudit title={title} />;
       default:
         return <div>Tab content not available</div>;
     }
@@ -89,7 +88,7 @@ export function DOExtView() {
       >
         <ProfileDropdown />
 
-        <h1 className="Title">DO Claims</h1>
+        <h1 className="Title">DO Extension</h1>
 
         <div
           className="form"
@@ -100,9 +99,7 @@ export function DOExtView() {
             overflow: "hidden",
           }}
         >
-          <div className="form-title">
-            {isEditMode ? "Edit Extend DO Details" : "Extend DO Details"}
-          </div>
+          <div className="form-title">Edit Extend DO Details</div>
 
           {/* Navigation Tabs */}
           <div style={{ marginBottom: "20px" }}>
@@ -202,37 +199,38 @@ export function DOExtView() {
             >
               Back
             </Button>
-
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <Button
-                onClick={handleSave}
-                sx={{
-                  backgroundColor: "white",
-                  color: "#0070c0",
-                  border: "2px solid #0070c0",
-                  "&:hover": {
-                    backgroundColor: "##263754",
+            {title !== "History List" && (
+              <Box sx={{ display: "flex", gap: 2, focusfisible: "none" }}>
+                <Button
+                  onClick={handleSave}
+                  sx={{
+                    backgroundColor: "white",
+                    color: "#0070c0",
+                    border: "2px solid #0070c0",
+                    "&:hover": {
+                      backgroundColor: "##263754",
+                      color: "white",
+                      border: "none",
+                    },
+                  }}
+                >
+                  Save
+                </Button>
+                <Button
+                  onClick={handleConfirmClick}
+                  sx={{
+                    backgroundColor: "#0070c0",
                     color: "white",
-                    border: "none",
-                  },
-                }}
-              >
-                Save
-              </Button>
-              <Button
-                onClick={handleConfirmClick}
-                sx={{
-                  backgroundColor: "#0070c0",
-                  color: "white",
-                  width: "160px",
-                  "&:hover": {
-                    backgroundColor: "#263754",
-                  },
-                }}
-              >
-                Confirm
-              </Button>
-            </Box>
+                    width: "160px",
+                    "&:hover": {
+                      backgroundColor: "#263754",
+                    },
+                  }}
+                >
+                  Confirm
+                </Button>
+              </Box>
+            )}
 
             {/* Confirmation Dialog */}
             <Dialog
@@ -253,11 +251,14 @@ export function DOExtView() {
                 </Typography>
                 <Divider sx={{ my: 2 }} />
                 <Box sx={{ bgcolor: "#f8f8f8", p: 2, borderRadius: 1 }}>
-                  <Typography variant="body2" sx={{ color: "red", textAlign: "center" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "red", textAlign: "center" }}
+                  >
                     DO submissions will be processed for the DO request on{" "}
-                    <strong>8:30 AM until 4:30 PM</strong>. Late submissions will be
-                    handled the next working day. Please ensure your documents are
-                    complete and meet the requirements.
+                    <strong>8:30 AM until 4:30 PM</strong>. Late submissions
+                    will be handled the next working day. Please ensure your
+                    documents are complete and meet the requirements.
                   </Typography>
                 </Box>
               </DialogContent>
@@ -271,12 +272,11 @@ export function DOExtView() {
                 </Button>
                 <Button
                   variant="contained"
-                  color="primary"
                   onClick={() => {
                     alert("Confirmed!");
                     handleCloseConfirmPopup();
                   }}
-                  sx={{ px: 4 }}
+                  sx={{ px: 4, color: "#263754" }}
                 >
                   YES
                 </Button>

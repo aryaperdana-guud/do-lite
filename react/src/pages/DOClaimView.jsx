@@ -24,6 +24,9 @@ export function DOClaimView() {
   const { mode } = useParams(); // Get mode from URL params
   const isEditMode = mode === "edit";
 
+  const { id } = useParams();
+  console.log("THIS IS ID", id);
+
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
@@ -45,13 +48,13 @@ export function DOClaimView() {
   const renderTabContent = () => {
     switch (activeTab) {
       case "claim-details":
-        return <DOClaimViewClaimDetails isEditMode={isEditMode} />;
+        return <DOClaimViewClaimDetails jobId={id} />;
       case "attachments":
-        return <DOClaimViewAttachments isEditMode={isEditMode} />;
+        return <DOClaimViewAttachments jobId={id} isEditMode={isEditMode} />;
       case "audit":
-        return <DOClaimViewAudit />;
+        return <DOClaimViewAudit jobId={id} />;
       case "query":
-        return <DOClaimViewQuery />;
+        return <DOClaimViewQuery jobId={id} />;
       default:
         return <div>Tab content not available</div>;
     }

@@ -116,7 +116,7 @@ function App() {
         />
 
         <Route
-          path="/view-do-extension/GenDetails/:id"
+          path="/view-do-extension/GenDetails/:id/:title"
           element={<DOExtView />}
         />
 
