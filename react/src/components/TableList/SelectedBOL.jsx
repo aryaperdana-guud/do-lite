@@ -12,7 +12,14 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
+
+import {
+  FileDownloadOutlined as FileDownloadIcon,
+} from "@mui/icons-material"; 
+
 import { ListChecks } from "lucide-react";
 
 // Custom styles to match myDO details
@@ -67,6 +74,7 @@ const SelectedBOL = ({ data = [] }) => {
                 <TableCell sx={{ fontWeight: "bold" }}>
                   BL Date Submitted
                 </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -78,11 +86,18 @@ const SelectedBOL = ({ data = [] }) => {
                     <TableCell>{row.shippingLine}</TableCell>
                     <TableCell>{row.authoriser}</TableCell>
                     <TableCell>{row.blDateSubmitted}</TableCell>
+                    <TableCell>
+                      <Tooltip title="Download">
+                        <IconButton size="small" color="primary">
+                          <FileDownloadIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={5} align="center">
+                  <TableCell colSpan={6} align="center">
                     No BOLs selected
                   </TableCell>
                 </TableRow>

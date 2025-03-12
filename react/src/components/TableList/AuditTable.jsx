@@ -47,7 +47,6 @@ const AuditTable = ({ data = [] }) => {
             <TableCell sx={tableStyles.headerCell}>Remarks</TableCell>
             <TableCell sx={tableStyles.headerCell}>User ID</TableCell>
             <TableCell sx={tableStyles.headerCell}>Username</TableCell>
-            <TableCell sx={tableStyles.headerCell}>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -59,15 +58,6 @@ const AuditTable = ({ data = [] }) => {
                 <TableCell>{row.remarks}</TableCell>
                 <TableCell>{row.userID}</TableCell>
                 <TableCell>{row.username}</TableCell>
-                <TableCell>
-                  <div style={{ display: "flex", gap: "8px" }}>
-                    <Tooltip title="Details">
-                      <IconButton size="small" color="primary">
-                        <InfoIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                </TableCell>
               </TableRow>
             ))
           ) : (

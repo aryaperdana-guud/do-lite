@@ -69,11 +69,6 @@ const AttachmentTable = ({ data = [] }) => {
                 <TableCell>{row.validityDate}</TableCell>
                 <TableCell>
                   <div style={{ display: "flex", gap: "8px" }}>
-                    <Tooltip title="View">
-                      <IconButton size="small" color="primary">
-                        <VisibilityIcon />
-                      </IconButton>
-                    </Tooltip>
                     <Tooltip title="Download">
                       <IconButton size="small" color="primary">
                         <FileDownloadIcon />
