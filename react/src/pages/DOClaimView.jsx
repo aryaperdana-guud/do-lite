@@ -11,8 +11,6 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import AttachmentOutlinedIcon from "@mui/icons-material/AttachmentOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate, useParams } from "react-router-dom";
 //tabs
 import DOClaimViewAttachments from "../components/DOClaimViewAttachments.jsx";
@@ -200,7 +198,7 @@ export function DOClaimView() {
             style={{
               flex: 1,
               overflow: "auto",
-              padding: "10px",
+              padding: "0px",
               marginBottom: "20px",
             }}
           >
@@ -233,27 +231,28 @@ export function DOClaimView() {
             {isEditMode && (
               <Box sx={{ display: "flex", gap: 2 }}>
                 <Button
-                  startIcon={<DeleteOutlineIcon />}
                   onClick={handleDelete}
                   sx={{
-                    backgroundColor: "#dc3545",
-                    color: "white",
+                    backgroundColor: "white",
+                    color: "#dc3545",
+                    border: "2px solid #dc3545",
                     "&:hover": {
                       backgroundColor: "#c82333",
+                      color: "white",
+                      border: "none",
                     },
                   }}
                 >
                   Delete
                 </Button>
                 <Button
-                  startIcon={<SaveIcon />}
                   onClick={handleSave}
                   sx={{
-                    backgroundColor: "#28a745",
+                    backgroundColor: "#0070c0",
                     color: "white",
-                    width: "140px",
+                    width: "160px",
                     "&:hover": {
-                      backgroundColor: "#218838",
+                      backgroundColor: "#263754",
                     },
                   }}
                 >

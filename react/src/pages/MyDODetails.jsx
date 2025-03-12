@@ -425,12 +425,7 @@ export function MyDODetails() {
             >
               Back
             </Button>
-            <Button
-              className="action-button download-do"
-              startIcon={<FileDownloadOutlinedIcon />}
-            >
-              Download DO
-            </Button>
+            <Button className="action-button download-do">Download DO</Button>
             <Button className="action-button extend-do">Extend DO</Button>
           </Box>
         </div>

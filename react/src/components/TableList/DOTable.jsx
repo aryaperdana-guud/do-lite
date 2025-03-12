@@ -218,7 +218,7 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
                             navigate(`/do-claim/detail/${row.jobId}`)
                           }
                         >
-                          <Eye size={16} />
+                          <Eye size={16} color="#0070c0" />
                         </button>
                       </div>
                     </td>

@@ -18,11 +18,7 @@ import AuthGuard from "./components/AuthGuard.jsx";
 
 import { ExtensionActive } from "./pages/DOExtensionActive.jsx";
 import { ExtensionHistory } from "./pages/DOExtensionHistory.jsx";
-import DOExtGenDetails from "./pages/DOExtGenDetails.jsx";
-import DOExtAudit from "./pages/DOExtAudit.jsx";
-
 import DOExtView from "./pages/DOExtView.jsx";
-import DOExtViewAudit from "./pages/DOExtViewAudit.jsx";
 
 import EditDOClaim from "./pages/EditDOClaim.jsx";
 import EditDOClaimAttachments from "./pages/EditDOClaimAttachments.jsx";
@@ -125,11 +121,6 @@ function App() {
         />
 
         <Route
-          path="/view-do-extension/Audit/:id"
-          element={<DOExtViewAudit />}
-        />
-
-        <Route
           path="/do-extension/history"
           element={
             <AuthGuard>
@@ -171,18 +162,6 @@ function App() {
           }
         />
 
-        <Route
-          path="/edit-do-extension/GenDetails/:id"
-          element={<DOExtGenDetails />}
-        />
-        <Route
-          path="/edit-do-extension/Audit/:id"
-          element={
-            <AuthGuard>
-              <DOExtAudit />
-            </AuthGuard>
-          }
-        />
         <Route
           path="/edit-do-claim/:id"
           element={

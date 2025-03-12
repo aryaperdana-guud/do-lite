@@ -207,7 +207,7 @@ export const MyDOTable = ({ apiUrl, title }) => {
                             size="small"
                             color="primary"
                             onClick={() => navigate("/my-do/active/details")}
-                            sx={{ color: "#3b82f6" }}
+                            sx={{ color: "#0070c0" }}
                           >
                             <Eye size={16} />
                           </IconButton>

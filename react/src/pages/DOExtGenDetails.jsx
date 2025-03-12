@@ -1,184 +1,414 @@
-import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx"
-import { FileSearch, LogOut,Ship, CalendarPlus2, Container, ReceiptText} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  CardHeader,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
+import {
+  Ship,
+  CalendarPlus2,
+  Container,
+  ReceiptText,
+  LogOut,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import "./DOExtGenDetails.css"
-import ContainerTable from "../components/TableList/ContainerTable.jsx";
-import React , {useState, useEffect} from "react"
-import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
 const DOExtGenDetails = ({ id }) => {
-    console.log("Current ID:", id);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [containerData, setContainerData] = useState([]);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
 
-    const DateComponent = ({ date }) => {
-        return <p>{new Date(date).toLocaleDateString("id-ID")}</p>;
-    }; //date hari ini
+  // Format date to Indonesian format
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("id-ID");
+  };
 
-    const [containerData, setContainerData] = useState([]);
-    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const handleConfirmClick = () => {
+    setShowConfirmPopup(true);
+  };
 
-    const handleConfirmClick = () => {
-        setShowConfirmPopup(true); //confirm pop-up
-    }
+  const handleCloseConfirmPopup = () => {
+    setShowConfirmPopup(false);
+  };
 
-    const handleCloseConfirmPopup = () => {
-        setShowConfirmPopup(false); //close confirm
-    }
+  useEffect(() => {
+    // Simulating API fetch for container data
+    const fetchData = async () => {
+      // In a real app, this would be an API call
+      const data = [
+        {
+          marksAndNumber: "MSDU760099 / 45DV",
+          containerCat: "STANDARD",
+          dangerousGood: "YES",
+          vtd: "20/02/2025",
+          nextvtd: "20/03/2025",
+          extDays: "30",
+        },
+        {
+          marksAndNumber: "MSDU760100 / 45DV",
+          containerCat: "STANDARD",
+          dangerousGood: "YES",
+          vtd: "20/02/2025",
+          nextvtd: "20/03/2025",
+          extDays: "30",
+        },
+        {
+          marksAndNumber: "MSDU760101 / 45DV",
+          containerCat: "STANDARD",
+          dangerousGood: "YES",
+          vtd: "20/02/2025",
+          nextvtd: "20/03/2025",
+          extDays: "30",
+        },
+        {
+          marksAndNumber: "MSDU760102 / 45DV",
+          containerCat: "STANDARD",
+          dangerousGood: "YES",
+          vtd: "20/02/2025",
+          nextvtd: "20/03/2025",
+          extDays: "30",
+        },
+      ];
+      setContainerData(data);
+    };
 
-    useEffect(() => {
-        setContainerData([
-            { marksAndNumber: "MSDU760099 / 45DV", 
-            containerCat: "STANDARD", 
-            dangerousGood: "YES", 
-            vtd: "20/02/2025",
-            nextvtd: "20/03/2025", 
-            extDays: "30" },
-            { marksAndNumber: "MSDU760099 / 45DV", 
-            containerCat: "STANDARD", 
-            dangerousGood: "YES", 
-            vtd: "20/02/2025", 
-            nextvtd: "20/03/2025", 
-            extDays: "30" }, 
-            { marksAndNumber: "MSDU760099 / 45DV", 
-            containerCat: "STANDARD", 
-            dangerousGood: "YES", 
-            vtd: "20/02/2025",
-            nextvtd: "20/03/2025", 
-            extDays: "30" },
-            { marksAndNumber: "MSDU760099 / 45DV", 
-            containerCat: "STANDARD", 
-            dangerousGood: "YES", 
-            vtd: "20/02/2025", 
-            nextvtd: "20/03/2025", 
-            extDays: "30" }, 
-            
-        ]);
-      }, []);
-  
-    return (
-      <div className="dashboard_ext_genDet">
-        <NavigationBar />
-        <main className="main-content">
-            <ProfileDropdown />
-            <h1 className="title"><FileSearch size={40}/> DO Extension Details</h1>
-            <div className="detail-container">
-                <div className="detail-header">
-                    <h2>Extend DO Details</h2>
-                    <button className="logout-button" onClick={() => navigate("/do-extension/active")}><LogOut /></button>
-                </div>
-                <div className="tabs">
-                    <button className="active-tab">GENERAL DETAILS</button>
-                    <button className="tab" onClick={() => navigate(`/edit-do-extension/Audit/${id}`)}>AUDIT</button>
-                </div>
-                <div className="ext-form">
-                    <div className="gen-details">
-                        <h4 style={{textAlign: 'center', fontSize: '20px'}}><Ship size={16}/> General Details</h4>
-                        <div>
-                            <label className="label">Ext Job Number</label>
-                            <div className="data">
-                                CKJOB241218183084	
-                            </div>
-                        </div>
-                        <div>
-                            <label className="label">DO Number</label>
-                            <div className="data">
-                                DO010122035TES
-                            </div>
-                        </div>
-                        <div>
-                            <label className="label">DO Ex Number</label>
-                            <div className="data">
-                                DO010122035TES
-                            </div>
-                        </div>
-                        <div>
-                            <label className="label">Valid Till Date</label>
-                            <div className="data">
-                                <DateComponent date="2025-03-03" />
-                            </div>
-                        </div>
-                    </div>
+    fetchData();
+  }, []);
 
-                    <div className="right-form">
-                        <div className="ext-det">
-                            <h4 style={{textAlign: 'center', fontSize: '20px'}}><CalendarPlus2 size={16}/> Extension Details</h4>
-                            <div>
-                                <label className="label">No of Container</label>
-                                <div className="data">2</div>
-                            </div>
-                        </div>
+  return (
+    <Box>
+      {/* Content */}
+      <Box sx={{ p: 2 }}>
+        <Grid container spacing={3}>
+          {/* Left Column */}
+          <Grid item xs={12} md={5}>
+            <Card sx={{ mb: 3, borderRadius: "10px", boxShadow: "none" }}>
+              <CardHeader
+                sx={{
+                  bgcolor: "#f5f5f5",
+                  borderBottom: "1px solid #e0e0e0",
+                  boxShadow: "none",
+                  p: 2,
+                }}
+                title={
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Ship size={18} />
+                    <Typography variant="h6" sx={{ ml: 1 }}>
+                      General Details
+                    </Typography>
+                  </Box>
+                }
+              />
+              <CardContent sx={{ bgcolor: "#f9f9f9", boxShadow: "none" }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1">Ext Job Number</Typography>
+                    <TextField
+                      fullWidth
+                      value="CKJOB241218183084"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      variant="outlined"
+                      size="small"
+                      sx={{ bgcolor: "#ffffff", mb: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1">DO Number</Typography>
+                    <TextField
+                      fullWidth
+                      value="DO010122035TES"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      variant="outlined"
+                      size="small"
+                      sx={{ bgcolor: "#ffffff", mb: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1">DO Ex Number</Typography>
+                    <TextField
+                      fullWidth
+                      value="DO010122035TES"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      variant="outlined"
+                      size="small"
+                      sx={{ bgcolor: "#ffffff", mb: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1">Valid Till Date</Typography>
+                    <TextField
+                      fullWidth
+                      value={formatDate("2025-03-03")}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      variant="outlined"
+                      size="small"
+                      sx={{ bgcolor: "#ffffff" }}
+                    />
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
 
-                        <div className="con4ext">
-                            <h4 style={{textAlign: 'center', fontSize: '20px'}}> <Container size={16}/> Containers for Extension</h4>
-                            <div>
-                                <ContainerTable data={containerData} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="charge-det">
-                    <h4 style={{textAlign: 'center', fontSize: '20px'}}><ReceiptText size={16} /> Extension Charge</h4>
-                    <div className="newVTD">
-                        <label>New Valid Till Date</label><span className="required">*</span>
-                        <div>
-                            <input type="date" />
-                            <button className="calc">CALCULATE</button>
-                        </div>
-                    </div>
-                    <div className="fees">
-                        <div className="leftside">
-                            <div>
-                                <label className="label">Admin Fee</label>
-                                <div className="data-chrg">Rp 20.000,-</div>
-                            </div>
-                            <div>
-                                <label className="label">Platform Fee</label>
-                                <div className="data-chrg">Rp 75.000,-</div>
-                            </div>
-                        </div>
-                        <div className="rightside">
-                            <div>
-                                <label className="label">Demurrage</label>
-                                <div className="data-chrg">Rp 1.254.720.000,-</div>
-                            </div>
-                            <div>
-                                <label className="label">Total Charges</label>
-                                <div className="data-chrg">Rp 1.254.815.000,-</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="buttons">
-                    <button className="s-btn">SAVE</button>
-                    <button className="c-btn" onClick={handleConfirmClick}>CONFIRM</button>
-                </div>
-            </div>
-        </main>  
+          {/* Right Column */}
+          <Grid item xs={12} md={7}>
+            <Card sx={{ mb: 3, borderRadius: "10px", boxShadow: "none" }}>
+              <CardHeader
+                sx={{
+                  bgcolor: "#f5f5f5",
+                  borderBottom: "1px solid #e0e0e0",
+                  p: 2,
+                }}
+                title={
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <CalendarPlus2 size={18} />
+                    <Typography variant="h6" sx={{ ml: 1 }}>
+                      Extension Details
+                    </Typography>
+                  </Box>
+                }
+              />
+              <CardContent sx={{ bgcolor: "#f9f9f9" }}>
+                <Typography variant="subtitle1">No of Container</Typography>
+                <TextField
+                  fullWidth
+                  value="4"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="outlined"
+                  size="small"
+                  sx={{ bgcolor: "#ffffff", mb: 2 }}
+                />
+              </CardContent>
+            </Card>
 
-        {showConfirmPopup && (
-                <div className="conf-popup-overlay">
-                    <div className="conf-popup-content">
-                        <h2 className="conf-popup-title">CONFIRMATION</h2>
-                        <p>Are you sure want to ?</p>
-                        <p>Extensions Job cannot be delete or change after confirmed</p>
+            <Card
+              sx={{
+                mb: 3,
+                bgcolor: "#f5f5f5",
+                borderRadius: "10px",
+                padding: "10px",
+                boxShadow: "none",
+              }}
+            >
+              <CardHeader
+                sx={{
+                  bgcolor: "#f5f5f5",
+                  borderBottom: "1px solid #e0e0e0",
+                  p: 2,
+                }}
+                title={
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Container size={18} />
+                    <Typography variant="h6" sx={{ ml: 1 }}>
+                      Containers for Extension
+                    </Typography>
+                  </Box>
+                }
+              />
+              <CardContent sx={{ p: 0 }}>
+                <TableContainer component={Paper} sx={{ boxShadow: "none" }}>
+                  <Table size="small">
+                    <TableHead sx={{ bgcolor: "#f5f5f5" }}>
+                      <TableRow>
+                        <TableCell>Marks And Number</TableCell>
+                        <TableCell>Container Cat</TableCell>
+                        <TableCell>Dangerous Good</TableCell>
+                        <TableCell>VTD</TableCell>
+                        <TableCell>Next VTD</TableCell>
+                        <TableCell>Ext Days</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {containerData.map((row, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{row.marksAndNumber}</TableCell>
+                          <TableCell>{row.containerCat}</TableCell>
+                          <TableCell>{row.dangerousGood}</TableCell>
+                          <TableCell>{row.vtd}</TableCell>
+                          <TableCell>{row.nextvtd}</TableCell>
+                          <TableCell>{row.extDays}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
 
-                        <div className="conf-popup-buttons">
-                            <button className="no-button" onClick={handleCloseConfirmPopup}>NO</button>
-                            <button className="yes-button" onClick={() => { alert("Confirmed!");
-                                handleCloseConfirmPopup(); 
-                                }}>YES
-                            </button>
-                        </div>
+        {/* Extension Charge Section */}
+        <Card sx={{ mb: 3, borderRadius: "10px", boxShadow: "none" }}>
+          <CardHeader
+            sx={{
+              bgcolor: "#f5f5f5",
+              borderBottom: "1px solid #e0e0e0",
+              p: 2,
+            }}
+            title={
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <ReceiptText size={18} />
+                <Typography variant="h6" sx={{ ml: 1 }}>
+                  Extension Charge
+                </Typography>
+              </Box>
+            }
+          />
+          <CardContent sx={{ bgcolor: "#f9f9f9" }}>
+            <Box sx={{ mb: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                <Typography variant="subtitle1" sx={{ mr: 1 }}>
+                  New Valid Till Date <span style={{ color: "red" }}>*</span>
+                </Typography>
+                <TextField
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  variant="outlined"
+                  size="small"
+                  sx={{ bgcolor: "#ffffff", width: "200px", mr: 2 }}
+                />
+                <Button variant="contained" color="primary">
+                  CALCULATE
+                </Button>
+              </Box>
+            </Box>
 
-                        <div className="conf-popup-warning">
-                            DO submissions will be processed for the DO request on <strong>8:30 AM until 4:30 PM</strong>. 
-                            Late submissions will be handled the next working day. Please ensure your documents are complete and meet the requirements.
-                        </div>
-                    </div>
-                </div>
-            )}
-      </div>
-    );
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Typography variant="subtitle1">Admin Fee</Typography>
+                <TextField
+                  fullWidth
+                  value="Rp 20.000,-"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="outlined"
+                  size="small"
+                  sx={{ bgcolor: "#ffffff", mb: 2 }}
+                />
+
+                <Typography variant="subtitle1">Platform Fee</Typography>
+                <TextField
+                  fullWidth
+                  value="Rp 75.000,-"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="outlined"
+                  size="small"
+                  sx={{ bgcolor: "#ffffff" }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Typography variant="subtitle1">Demurrage</Typography>
+                <TextField
+                  fullWidth
+                  value="Rp 1.254.720.000,-"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="outlined"
+                  size="small"
+                  sx={{ bgcolor: "#ffffff", mb: 2 }}
+                />
+
+                <Typography variant="subtitle1">Total Charges</Typography>
+                <TextField
+                  fullWidth
+                  value="Rp 1.254.815.000,-"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="outlined"
+                  size="small"
+                  sx={{ bgcolor: "#ffffff" }}
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Box>
+
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={showConfirmPopup}
+        onClose={handleCloseConfirmPopup}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={{ bgcolor: "#f5f5f5", textAlign: "center" }}>
+          <Typography variant="h5">CONFIRMATION</Typography>
+        </DialogTitle>
+        <DialogContent sx={{ pt: 2 }}>
+          <Typography variant="body1" sx={{ textAlign: "center", mb: 1 }}>
+            Are you sure want to confirm?
+          </Typography>
+          <Typography variant="body1" sx={{ textAlign: "center", mb: 2 }}>
+            Extensions Job cannot be deleted or changed after confirmed
+          </Typography>
+          <Divider sx={{ my: 2 }} />
+          <Box sx={{ bgcolor: "#f8f8f8", p: 2, borderRadius: 1 }}>
+            <Typography variant="body2" sx={{ color: "#555" }}>
+              DO submissions will be processed for the DO request on{" "}
+              <strong>8:30 AM until 4:30 PM</strong>. Late submissions will be
+              handled the next working day. Please ensure your documents are
+              complete and meet the requirements.
+            </Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ pb: 3, px: 3, justifyContent: "center" }}>
+          <Button
+            variant="outlined"
+            onClick={handleCloseConfirmPopup}
+            sx={{ px: 4 }}
+          >
+            NO
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              alert("Confirmed!");
+              handleCloseConfirmPopup();
+            }}
+            sx={{ px: 4 }}
+          >
+            YES
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
+  );
 };
-  
+
 export default DOExtGenDetails;

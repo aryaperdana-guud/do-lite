@@ -12,6 +12,7 @@ import {
   ChevronsUpDown,
   ArrowUp,
   ArrowDown,
+  Edit,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { StatusIcon } from "../StatusRender";
@@ -143,15 +144,7 @@ export const ExtensionTable = ({
       <div className="active-lists__header">
         <div className="active-lists__title-section">
           <h2 className="active-lists__title">{title}</h2>
-          <div className="active-lists__actions">
-            <button
-              className="active-lists__download"
-              onClick={onDownload}
-              title="Download Lists"
-            >
-              <Download size={30} />
-            </button>
-          </div>
+          <div className="active-lists__actions"></div>
         </div>
       </div>
 
@@ -246,7 +239,7 @@ export const ExtensionTable = ({
                               }
                               title="View"
                             >
-                              <Eye size={16} />
+                              <Eye size={16} color="#0070c0" />
                             </button>
                             <span></span>
                           </>
@@ -256,24 +249,12 @@ export const ExtensionTable = ({
                               className="action-button-extension"
                               onClick={() =>
                                 navigate(
-                                  `/edit-do-extension/GenDetails/${row.id}`
-                                )
-                              }
-                              title="Edit"
-                            >
-                              <Pencil size={16} />
-                            </button>
-
-                            <button
-                              className="action-button-extension"
-                              onClick={() =>
-                                navigate(
                                   `/view-do-extension/GenDetails/${row.id}`
                                 )
                               }
                               title="View"
                             >
-                              <Eye size={16} />
+                              <Edit size={16} color="#0070c0" />
                             </button>
 
                             <button
@@ -281,7 +262,7 @@ export const ExtensionTable = ({
                               onClick={() => onDelete?.(row)}
                               title="Delete"
                             >
-                              <Trash2 size={16} />
+                              <Trash2 size={16} color="red" />
                             </button>
                           </>
                         )}

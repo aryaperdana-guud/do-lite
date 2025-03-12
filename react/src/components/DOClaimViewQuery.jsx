@@ -52,7 +52,7 @@ const DOClaimViewQuery = () => {
       // In a real application, this would be an API call
       setTimeout(() => {
         setQueryData(dummyQueryData);
-      }, 500);
+      }, 100);
     };
 
     fetchData();

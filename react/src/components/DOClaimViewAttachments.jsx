@@ -231,7 +231,7 @@ const DOClaimViewAttachments = () => {
       // In a real application, this would be an API call
       setTimeout(() => {
         setAttData(dummyAttachmentData);
-      }, 500);
+      }, 100);
     };
 
     fetchData();

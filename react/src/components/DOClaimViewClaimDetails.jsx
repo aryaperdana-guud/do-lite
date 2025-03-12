@@ -85,7 +85,7 @@ const DOClaimViewClaimDetails = () => {
       // In a real application, this would be an API call
       setTimeout(() => {
         setClaimData(dummyClaimData);
-      }, 500);
+      }, 100);
     };
 
     fetchData();
