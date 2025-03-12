@@ -11,7 +11,6 @@ import DOClaimViewAtt from "./pages/DOClaimViewAtt.jsx";
 import DOClaimViewQry from "./pages/DOClaimViewQry.jsx";
 import DOClaimViewAdt from "./pages/DOClaimViewAdt.jsx";
 
-
 import { NewBL } from "./pages/NewBL.jsx";
 import { DOHistory } from "./pages/DOHistory.jsx";
 import { BOLActive } from "./pages/BOLActiveList.jsx";
@@ -125,12 +124,12 @@ function App() {
 
         <Route
           path="/view-do-extension/GenDetails/:id"
-          element={<DOExtView/>}
+          element={<DOExtView />}
         />
 
-<Route
+        <Route
           path="/view-do-extension/Audit/:id"
-          element={<DOExtViewAudit/>}
+          element={<DOExtViewAudit />}
         />
 
         <Route
@@ -166,23 +165,11 @@ function App() {
           }
         />
 
-        <Route
-          path="/do-claim-view/:id"
-          element={<DOClaimView/>}
-        />
-        <Route
-          path="/do-claim-view-att/:id"
-          element={<DOClaimViewAtt/>}
-        />
-        <Route
-          path="/do-claim-view-query/:id"
-          element={<DOClaimViewQry/>}
-        />
+        <Route path="/do-claim-view/:id" element={<DOClaimView />} />
+        <Route path="/do-claim-view-att/:id" element={<DOClaimViewAtt />} />
+        <Route path="/do-claim-view-query/:id" element={<DOClaimViewQry />} />
 
-        <Route
-          path="/do-claim-view-audit/:id"
-          element={<DOClaimViewAdt/>}
-        />
+        <Route path="/do-claim-view-audit/:id" element={<DOClaimViewAdt />} />
 
         <Route
           path="/edit-do-extension/GenDetails/:id"

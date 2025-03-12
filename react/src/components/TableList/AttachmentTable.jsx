@@ -1,56 +1,103 @@
 import React from "react";
-import { Paperclip, X, Download } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import {
+  FileDownloadOutlined as FileDownloadIcon,
+  Delete as DeleteIcon,
+  Visibility as VisibilityIcon,
+} from "@mui/icons-material";
 
-const table = {
-    borderBottom: '2px solid #ccc', 
-    padding: '10px',
-}
-const AttachmentTable = ({ data }) => {
+// Custom styles for the table
+const tableStyles = {
+  container: {
+    maxHeight: 400,
+    padding: 0,
+    boxShadow: "none",
+    borderRadius: "8px",
+    "& .MuiTableHead-root": {
+      bgcolor: "#f5f5f5",
+    },
+    "& .MuiTableRow-root:nth-of-type(even)": {
+      bgcolor: "#f9f9f9",
+    },
+  },
+  headerCell: {
+    fontWeight: "bold",
+    whiteSpace: "nowrap",
+  },
+  actionButtons: {
+    display: "flex",
+    gap: 1,
+  },
+};
+
+const AttachmentTable = ({ data = [] }) => {
   return (
-    <div>
-        <div style={{background: '#eaeaea', padding: '20px', borderRadius: '10px', textAlign: 'center', paddingBottom: '20px', height: '400px'}}>
-            <h4 style={{textAlign: 'center', fontSize: '20px'}}><Paperclip size={16}/> Attachments</h4>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <table style={{ borderCollapse: 'separate', borderSpacing: '0 10px', width: '100%' }}>
-                <thead className="table-head" style={{borderBottom: '1px solid #000000'}}>
-                    <tr>
-                    <th style={table}>Document ID</th>
-                    <th style={table}>Document Type</th>
-                    <th style={table}>Authoriser</th>
-                    <th style={table}>BL No.</th>
-                    <th style={table}>DO No.</th>
-                    <th style={table}>Created At</th>
-                    <th style={table}>Validity Date</th>
-                    <th style={table}>Action</th>
-                    </tr>
-                </thead>
-                <tbody style={{ backgroundColor: 'white', borderCollapse: 'collapse', fontSize: '18px', height: '100px', overflow: 'auto'}}>
-                {data.map((row, index) => (
-                    <tr key={index}>
-                    <td style={{borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px'}}>{row.documentID}</td>
-                    <td>{row.docType}</td>
-                    <td>{row.authoriser}</td>
-                    <td>{row.blNo}</td>
-                    <td>{row.doNo}</td>
-                    <td>{row.createdAt}</td>
-                    <td>{row.validityDate}</td>
-                    <td style={{borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>
-                        <div className="button-action">
-                        <button className="action-button_sbol" onClick={() => console.log("Delete clicked")}>
-                            <X size={16} />
-                        </button>
-                        <button className="action-button_sbol" onClick={() => console.log("Download clicked")}>
-                            <Download size={16} />
-                        </button>
-                        </div>
-                    </td>
-                    </tr>
-                    ))}
-                </tbody>
-            </table>
-            </div>
-        </div>
-    </div>
+    <TableContainer component={Paper} sx={tableStyles.container}>
+      <Table stickyHeader aria-label="attachments table">
+        <TableHead>
+          <TableRow>
+            <TableCell sx={tableStyles.headerCell}>Document ID</TableCell>
+            <TableCell sx={tableStyles.headerCell}>Document Type</TableCell>
+            <TableCell sx={tableStyles.headerCell}>Authoriser</TableCell>
+            <TableCell sx={tableStyles.headerCell}>BL No</TableCell>
+            <TableCell sx={tableStyles.headerCell}>DO No</TableCell>
+            <TableCell sx={tableStyles.headerCell}>Created At</TableCell>
+            <TableCell sx={tableStyles.headerCell}>Validity Date</TableCell>
+            <TableCell sx={tableStyles.headerCell}>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.length > 0 ? (
+            data.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell>{row.documentID}</TableCell>
+                <TableCell>{row.docType}</TableCell>
+                <TableCell>{row.authoriser}</TableCell>
+                <TableCell>{row.blNo}</TableCell>
+                <TableCell>{row.doNo}</TableCell>
+                <TableCell>{row.createdAt}</TableCell>
+                <TableCell>{row.validityDate}</TableCell>
+                <TableCell>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <Tooltip title="View">
+                      <IconButton size="small" color="primary">
+                        <VisibilityIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Download">
+                      <IconButton size="small" color="primary">
+                        <FileDownloadIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Delete">
+                      <IconButton size="small" color="error">
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={8} align="center">
+                No attachments found
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

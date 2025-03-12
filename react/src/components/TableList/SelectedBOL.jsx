@@ -1,52 +1,97 @@
 import React from "react";
-import { MousePointer, X, Download } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+} from "@mui/material";
+import { ListChecks } from "lucide-react";
 
-const table = {
-    borderBottom: '2px solid #ccc', 
-    padding: '10px',
-}
-const SelectedBOL = ({ data }) => {
+// Custom styles to match myDO details
+const cardStyles = {
+  root: {
+    boxShadow: "none",
+    borderRadius: "10px",
+  },
+  header: {
+    bgcolor: "#f5f5f5",
+    borderBottom: "1px solid #e0e0e0",
+    padding: "12px 16px",
+  },
+  content: {
+    bgcolor: "#eaeaea",
+    padding: "16px",
+  },
+  tableContainer: {
+    maxHeight: 400,
+    boxShadow: "none",
+    borderRadius: "8px",
+    "& .MuiTableHead-root": {
+      bgcolor: "#f5f5f5",
+    },
+    "& .MuiTableRow-root:nth-of-type(even)": {
+      bgcolor: "#f9f9f9",
+    },
+  },
+};
+
+const SelectedBOL = ({ data = [] }) => {
   return (
-    <div>
-        <div style={{background: '#eaeaea', padding: '20px', borderRadius: '10px', textAlign: 'center', paddingBottom: '20px'}}>
-            <h4 style={{textAlign: 'center', fontSize: '20px'}}><MousePointer size={16}/> Selected Bill of Ladings</h4>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <table style={{ borderCollapse: 'separate', borderSpacing: '0 10px', width: '100%' }}>
-                <thead className="table-head" style={{borderBottom: '1px solid #000000'}}>
-                    <tr>
-                    <th style={table}>BL No.</th>
-                    <th style={table}>Container No.</th>
-                    <th style={table}>Shipping Line</th>
-                    <th style={table}>Authoriser</th>
-                    <th style={table}>BL Date Submitted</th>
-                    <th style={table}>Action</th>
-                    </tr>
-                </thead>
-                <tbody style={{ backgroundColor: 'white', borderCollapse: 'collapse', fontSize: '18px', height: '100px', overflow: 'auto'}}>
-                {data.map((row, index) => (
-                    <tr key={index}>
-                    <td style={{borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px'}}>{row.blNo}</td>
-                    <td>{row.containerNo}</td>
-                    <td>{row.shippingLine || "-"}</td>
-                    <td>{row.authoriser}</td>
-                    <td>{row.blDateSubmitted}</td>
-                    <td style={{borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>
-                        <div className="button-action">
-                        <button className="action-button_sbol" onClick={() => console.log("Delete clicked")}>
-                            <X size={16} />
-                        </button>
-                        <button className="action-button_sbol" onClick={() => console.log("Download clicked")}>
-                            <Download size={16} />
-                        </button>
-                        </div>
-                    </td>
-                    </tr>
-                    ))}
-                </tbody>
-            </table>
-            </div>
-        </div>
-    </div>
+    <Card sx={cardStyles.root}>
+      <CardHeader
+        sx={cardStyles.header}
+        title={
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <ListChecks size={24} />
+            <Typography variant="h5">Selected BOL</Typography>
+          </Box>
+        }
+      />
+      <CardContent sx={cardStyles.content}>
+        <TableContainer component={Paper} sx={cardStyles.tableContainer}>
+          <Table stickyHeader aria-label="selected BOL table">
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: "bold" }}>BL No</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Container No</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Shipping Line</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Authoriser</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>
+                  BL Date Submitted
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.length > 0 ? (
+                data.map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{row.blNo}</TableCell>
+                    <TableCell>{row.containerNo}</TableCell>
+                    <TableCell>{row.shippingLine}</TableCell>
+                    <TableCell>{row.authoriser}</TableCell>
+                    <TableCell>{row.blDateSubmitted}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} align="center">
+                    No BOLs selected
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </CardContent>
+    </Card>
   );
 };
 

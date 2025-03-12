@@ -1,42 +1,85 @@
 import React from "react";
-import { Clock } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import { InfoOutlined as InfoIcon } from "@mui/icons-material";
 
-const table = {
-    borderBottom: '2px solid #ccc', 
-    padding: '10px',
-}
+// Custom styles for the table
+const tableStyles = {
+  container: {
+    maxHeight: 400,
+    padding: 0,
+    boxShadow: "none",
+    borderRadius: "8px",
+    "& .MuiTableHead-root": {
+      bgcolor: "#f5f5f5",
+    },
+    "& .MuiTableRow-root:nth-of-type(even)": {
+      bgcolor: "#f9f9f9",
+    },
+  },
+  headerCell: {
+    fontWeight: "bold",
+    whiteSpace: "nowrap",
+  },
+  actionButtons: {
+    display: "flex",
+    gap: 1,
+  },
+};
 
-const AuditTable = ({ data }) => {
+const AuditTable = ({ data = [] }) => {
   return (
-    <div>
-        <div style={{background: '#eaeaea', padding: '20px', borderRadius: '10px', textAlign: 'center', paddingBottom: '20px'}}>
-            <h4 style={{textAlign: 'center', fontSize: '20px'}}><Clock size={16}/> Audit</h4>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <table style={{ borderCollapse: 'separate', borderSpacing: '0 10px', width: '100%' }}>
-                <thead className="table-head" style={{borderBottom: '1px solid #000000'}}>
-                    <tr>
-                    <th style={table}>Event</th>
-                    <th style={table}>Timestamp</th>
-                    <th style={table}>Remarks</th>
-                    <th style={table}>User ID</th>
-                    <th style={table}>Username</th>
-                    </tr>
-                </thead>
-                <tbody style={{ backgroundColor: 'white', borderCollapse: 'collapse', fontSize: '18px', height: '100px', overflow: 'auto'}}>
-                {data.map((row, index) => (
-                    <tr key={index}>
-                    <td style={{borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px'}}>{row.event}</td>
-                    <td>{row.timestamp}</td>
-                    <td>{row.remarks}</td>
-                    <td>{row.userID}</td>
-                    <td style={{borderTopRightRadius: '10px', borderBottomRightRadius: '10px'}}>{row.username}</td>
-                    </tr>
-                    ))}
-                </tbody>
-            </table>
-            </div>
-        </div>
-    </div>
+    <TableContainer component={Paper} sx={tableStyles.container}>
+      <Table stickyHeader aria-label="audit log table">
+        <TableHead>
+          <TableRow>
+            <TableCell sx={tableStyles.headerCell}>Event</TableCell>
+            <TableCell sx={tableStyles.headerCell}>Timestamp</TableCell>
+            <TableCell sx={tableStyles.headerCell}>Remarks</TableCell>
+            <TableCell sx={tableStyles.headerCell}>User ID</TableCell>
+            <TableCell sx={tableStyles.headerCell}>Username</TableCell>
+            <TableCell sx={tableStyles.headerCell}>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.length > 0 ? (
+            data.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell>{row.event}</TableCell>
+                <TableCell>{row.timestamp}</TableCell>
+                <TableCell>{row.remarks}</TableCell>
+                <TableCell>{row.userID}</TableCell>
+                <TableCell>{row.username}</TableCell>
+                <TableCell>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <Tooltip title="Details">
+                      <IconButton size="small" color="primary">
+                        <InfoIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6} align="center">
+                No audit logs found
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

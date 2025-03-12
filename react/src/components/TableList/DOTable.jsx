@@ -121,7 +121,7 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
         <div className="active-lists__title-section">
           <h2 className="active-lists__title">{title}</h2>
           <button className="active-lists__download" onClick={downloadTable}>
-            <Download size={20} />
+            <Download size={25} />
           </button>
         </div>
       </div>
