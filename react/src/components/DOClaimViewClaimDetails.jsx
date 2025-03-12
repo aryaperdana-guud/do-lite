@@ -46,30 +46,11 @@ const dummyClaimData = {
   },
 };
 
-<<<<<<< Updated upstream
 // Custom styles to match myDO details
 const cardStyles = {
   root: {
     mb: 3,
     boxShadow: "none",
-=======
-const data = {
-    background: "#ffffff",
-    display: "block",
-    width: "90%",
-    padding: "10px",
-    margin: "10px",
-    fontSize: "16px",
-    borderRadius: "8px",
-    border: "none",
-    textAlign: "left",
-}
-
-const chargeDet = {
-    background: "#eaeaea",
-    padding: "20px",
-    paddingBottom: "20px",
->>>>>>> Stashed changes
     borderRadius: "10px",
   },
   header: {
@@ -185,7 +166,6 @@ const DOClaimViewClaimDetails = () => {
           </Card> */}
         </Grid>
 
-<<<<<<< Updated upstream
         {/* Right Column */}
         <Grid item xs={12} md={6}>
           {/* Job Date Details Card */}
@@ -255,18 +235,6 @@ const DOClaimViewClaimDetails = () => {
         </CardContent>
       </Card>
     </Box>
-=======
-        <div style={chargeDet}>
-            <h4 style={{ textAlign: "center", fontSize: "20px" }}>
-            <ReceiptText size={16} /> Charge Details
-            </h4>
-            <div style={{display: "flex", alignItems: "center", gap: "1px"}}>
-                <label style={labelStyle}>Job Charge</label>
-                <div style={data}>Rp 3.000.000</div>
-            </div>
-        </div>
-    </div>
->>>>>>> Stashed changes
   );
 };
 

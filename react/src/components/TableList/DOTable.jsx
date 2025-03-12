@@ -205,14 +205,18 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
                       <div className="action-buttons">
                         <button
                           className="action-button_DO"
-                          onClick={() => navigate(`/edit-do-claim/${row.id}`)}
+                          onClick={() =>
+                            navigate(`/do-claim/detail/${row.jobIdd}/edit`)
+                          }
                         >
                           <Edit size={16} />
                         </button>
 
                         <button
                           className="action-button_DO"
-                          onClick={() => navigate(`/do-claim-view/${row.id}`)}
+                          onClick={() =>
+                            navigate(`/do-claim/detail/${row.jobId}`)
+                          }
                         >
                           <Eye size={16} />
                         </button>

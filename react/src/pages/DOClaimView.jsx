@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx";
 import Box from "@mui/joy/Box";
@@ -8,34 +8,48 @@ import Tabs from "@mui/joy/Tabs";
 import Button from "@mui/joy/Button";
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import AttachmentOutlinedIcon from "@mui/icons-material/AttachmentOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import { useNavigate } from "react-router-dom";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import SaveIcon from "@mui/icons-material/Save";
+import { useNavigate, useParams } from "react-router-dom";
 //tabs
 import DOClaimViewAttachments from "../components/DOClaimViewAttachments.jsx";
 import DOClaimViewAudit from "../components/DOClaimViewAudit.jsx";
 import DOClaimViewQuery from "../components/DOClaimViewQuery.jsx";
 import DOClaimViewClaimDetails from "../components/DOClaimViewClaimDetails.jsx";
 
-// Import your tab components
-
 export function DOClaimView() {
   const [activeTab, setActiveTab] = useState("claim-details");
   const navigate = useNavigate();
+  const { mode } = useParams(); // Get mode from URL params
+  const isEditMode = mode === "edit";
+
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
+  };
+
+  const handleSave = () => {
+    // Add your save logic here
+    console.log("Saving claim...");
+    // Navigate back after saving
+    navigate(-1);
+  };
+
+  const handleDelete = () => {
+    // Add your delete logic here
+    console.log("Deleting claim...");
+    // Navigate back after deleting
+    navigate(-1);
   };
 
   const renderTabContent = () => {
     switch (activeTab) {
       case "claim-details":
-        return <DOClaimViewClaimDetails />;
+        return <DOClaimViewClaimDetails isEditMode={isEditMode} />;
       case "attachments":
-        return <DOClaimViewAttachments />;
+        return <DOClaimViewAttachments isEditMode={isEditMode} />;
       case "audit":
         return <DOClaimViewAudit />;
       case "query":
@@ -69,11 +83,13 @@ export function DOClaimView() {
           style={{
             display: "flex",
             flexDirection: "column",
-            height: "calc(100% - 60px)" /* Adjust based on your title height */,
+            height: "calc(100% - 60px)",
             overflow: "hidden",
           }}
         >
-          <div className="form-title">DO Claim Details</div>
+          <div className="form-title">
+            {isEditMode ? "Edit DO Claim Details" : "DO Claim Details"}
+          </div>
 
           {/* Navigation Tabs */}
           <div style={{ marginBottom: "20px" }}>
@@ -213,6 +229,38 @@ export function DOClaimView() {
             >
               Back
             </Button>
+
+            {isEditMode && (
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Button
+                  startIcon={<DeleteOutlineIcon />}
+                  onClick={handleDelete}
+                  sx={{
+                    backgroundColor: "#dc3545",
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: "#c82333",
+                    },
+                  }}
+                >
+                  Delete
+                </Button>
+                <Button
+                  startIcon={<SaveIcon />}
+                  onClick={handleSave}
+                  sx={{
+                    backgroundColor: "#28a745",
+                    color: "white",
+                    width: "140px",
+                    "&:hover": {
+                      backgroundColor: "#218838",
+                    },
+                  }}
+                >
+                  Save
+                </Button>
+              </Box>
+            )}
           </Box>
         </div>
       </main>

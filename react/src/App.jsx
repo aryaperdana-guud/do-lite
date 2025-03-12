@@ -7,9 +7,6 @@ import ForgotPassword from "./pages/ForgotPassword";
 import SignUp from "./pages/SignUp";
 import { DOActive } from "./pages/DOActiveList.jsx";
 import DOClaimView from "./pages/DOClaimView.jsx";
-import DOClaimViewAtt from "./pages/DOClaimViewAtt.jsx";
-import DOClaimViewQry from "./pages/DOClaimViewQry.jsx";
-import DOClaimViewAdt from "./pages/DOClaimViewAdt.jsx";
 
 import { NewBL } from "./pages/NewBL.jsx";
 import { DOHistory } from "./pages/DOHistory.jsx";
@@ -165,11 +162,14 @@ function App() {
           }
         />
 
-        <Route path="/do-claim-view/:id" element={<DOClaimView />} />
-        <Route path="/do-claim-view-att/:id" element={<DOClaimViewAtt />} />
-        <Route path="/do-claim-view-query/:id" element={<DOClaimViewQry />} />
-
-        <Route path="/do-claim-view-audit/:id" element={<DOClaimViewAdt />} />
+        <Route
+          path="/do-claim/detail/:id/:mode?"
+          element={
+            <AuthGuard>
+              <DOClaimView />
+            </AuthGuard>
+          }
+        />
 
         <Route
           path="/edit-do-extension/GenDetails/:id"
