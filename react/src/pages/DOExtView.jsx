@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Typography } from "@mui/material";
+import { 
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Divider,
+} from "@mui/material";
 import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx";
 import Box from "@mui/joy/Box";
 import Tab from "@mui/joy/Tab";
@@ -25,6 +32,16 @@ export function DOExtView() {
   const navigate = useNavigate();
   const { mode } = useParams(); // Get mode from URL params
   const isEditMode = mode === "edit";
+
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+
+  const handleConfirmClick = () => {
+    setShowConfirmPopup(true);
+  };
+
+  const handleCloseConfirmPopup = () => {
+    setShowConfirmPopup(false);
+  };
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -203,7 +220,7 @@ export function DOExtView() {
                 Save
               </Button>
               <Button
-                onClick={handleConfirm}
+                onClick={handleConfirmClick}
                 sx={{
                   backgroundColor: "#0070c0",
                   color: "white",
@@ -216,6 +233,55 @@ export function DOExtView() {
                 Confirm
               </Button>
             </Box>
+
+            {/* Confirmation Dialog */}
+            <Dialog
+              open={showConfirmPopup}
+              onClose={handleCloseConfirmPopup}
+              maxWidth="sm"
+              fullWidth
+            >
+              <DialogTitle sx={{ bgcolor: "#f5f5f5", textAlign: "center" }}>
+                <Typography variant="h5">CONFIRMATION</Typography>
+              </DialogTitle>
+              <DialogContent sx={{ pt: 2 }}>
+                <Typography variant="body1" sx={{ textAlign: "center", mb: 1 }}>
+                  Are you sure want to confirm?
+                </Typography>
+                <Typography variant="body1" sx={{ textAlign: "center", mb: 2 }}>
+                  Extensions Job cannot be deleted or changed after confirmed
+                </Typography>
+                <Divider sx={{ my: 2 }} />
+                <Box sx={{ bgcolor: "#f8f8f8", p: 2, borderRadius: 1 }}>
+                  <Typography variant="body2" sx={{ color: "red", textAlign: "center" }}>
+                    DO submissions will be processed for the DO request on{" "}
+                    <strong>8:30 AM until 4:30 PM</strong>. Late submissions will be
+                    handled the next working day. Please ensure your documents are
+                    complete and meet the requirements.
+                  </Typography>
+                </Box>
+              </DialogContent>
+              <DialogActions sx={{ pb: 3, px: 3, justifyContent: "center" }}>
+                <Button
+                  variant="outlined"
+                  onClick={handleCloseConfirmPopup}
+                  sx={{ px: 4 }}
+                >
+                  NO
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    alert("Confirmed!");
+                    handleCloseConfirmPopup();
+                  }}
+                  sx={{ px: 4 }}
+                >
+                  YES
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Box>
         </div>
       </main>

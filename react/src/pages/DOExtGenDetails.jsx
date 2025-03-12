@@ -21,21 +21,12 @@ import ContainerTable from "../components/TableList/ContainerTable";
 const DOExtGenDetails = ({ id }) => {
   const navigate = useNavigate();
   const [containerData, setContainerData] = useState([]);
-  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedContainers, setSelectedContainers] = useState({});
 
   // Format date to Indonesian format
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("id-ID");
-  };
-
-  const handleConfirmClick = () => {
-    setShowConfirmPopup(true);
-  };
-
-  const handleCloseConfirmPopup = () => {
-    setShowConfirmPopup(false);
   };
 
   // Handle container selection from child component
@@ -317,54 +308,7 @@ const DOExtGenDetails = ({ id }) => {
         </Card>
       </Box>
 
-      {/* Confirmation Dialog */}
-      <Dialog
-        open={showConfirmPopup}
-        onClose={handleCloseConfirmPopup}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle sx={{ bgcolor: "#f5f5f5", textAlign: "center" }}>
-          <Typography variant="h5">CONFIRMATION</Typography>
-        </DialogTitle>
-        <DialogContent sx={{ pt: 2 }}>
-          <Typography variant="body1" sx={{ textAlign: "center", mb: 1 }}>
-            Are you sure want to confirm?
-          </Typography>
-          <Typography variant="body1" sx={{ textAlign: "center", mb: 2 }}>
-            Extensions Job cannot be deleted or changed after confirmed
-          </Typography>
-          <Divider sx={{ my: 2 }} />
-          <Box sx={{ bgcolor: "#f8f8f8", p: 2, borderRadius: 1 }}>
-            <Typography variant="body2" sx={{ color: "#555" }}>
-              DO submissions will be processed for the DO request on{" "}
-              <strong>8:30 AM until 4:30 PM</strong>. Late submissions will be
-              handled the next working day. Please ensure your documents are
-              complete and meet the requirements.
-            </Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions sx={{ pb: 3, px: 3, justifyContent: "center" }}>
-          <Button
-            variant="outlined"
-            onClick={handleCloseConfirmPopup}
-            sx={{ px: 4 }}
-          >
-            NO
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              alert("Confirmed!");
-              handleCloseConfirmPopup();
-            }}
-            sx={{ px: 4 }}
-          >
-            YES
-          </Button>
-        </DialogActions>
-      </Dialog>
+      
     </Box>
   );
 };
