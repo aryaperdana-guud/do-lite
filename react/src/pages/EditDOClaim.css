@@ -9,34 +9,9 @@
 .title {
   margin: 20px;
   margin-bottom: 40px;
-}
-
-.action-button-save {
-  color: green;
-  background: none;
-  border: none;
-  outline: none;
-}
-
-.action-button-delete {
-  color: red;
-  background: none;
-  border: none;
-  outline: none;
-}
-
-.action-button-exit {
-  color: orange;
-  background: none;
-  border: none;
-  outline: none;
-}
-
-.action-button-delete:focus,
-.action-button-exit:focus,
-.action-button-save:focus {
-  border: none;
-  outline: none;
+  color: #263754;
+  height: 50px;
+  text-align: left;
 }
 .main-content {
   margin-left: 280px;
@@ -45,165 +20,10 @@
   overflow: hidden;
 }
 
-.edit-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-}
-
-.edit-actions {
-  display: flex;
-  gap: 5px;
-}
-
-.action-button_sbol {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  padding: 8px 12px;
-  border: none;
-  background: none;
-  border: none;
-}
-
-.action-button_sbol:hover {
-  color: #2563eb;
-}
-
-.action-button_sbol:focus {
-  border: none;
-  outline: none;
-}
-
-.edit-title {
-  margin-top: 5px;
-}
-
 .edit-do-container {
   background: #ffffff;
   border-radius: 20px;
   padding: 20px;
   height: 100%;
   overflow-y: auto;
-}
-
-.title {
-  color: #263754;
-  height: 50px;
-  text-align: left;
-}
-
-.tab-menu {
-  display: flex;
-  gap: 60px;
-  padding-bottom: 20px;
-}
-
-.tab-active {
-  color: #ffffff;
-  background-color: #0070c0;
-  width: 180px;
-}
-
-.tab {
-  color: #ffffff;
-  background-color: #a0aec0;
-  width: 180px;
-}
-
-.tab:hover {
-  border: none;
-  outline: none;
-}
-
-.tab:focus {
-  border: none;
-  outline: none;
-}
-
-.edit-do-form {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding-bottom: 20px;
-  flex-wrap: nowrap;
-}
-
-.form-group-1,
-.form-group-2 {
-  background: #eaeaea;
-  padding: 5px;
-  border-radius: 10px;
-  max-width: 100%;
-  min-width: 300px;
-  gap: 10px;
-  flex: 1;
-  align-items: center;
-  box-sizing: border-box;
-}
-
-.form-title {
-  text-align: center;
-  margin: 10px;
-}
-
-.form-group-1 label,
-.form-group-2 label {
-  font-size: 18px;
-  width: 150px;
-  padding-left: 10px;
-  margin-bottom: 5px;
-  display: block;
-}
-
-.form-group-1 input,
-.form-group-2 input {
-  width: 90%;
-  padding: 10px;
-  margin: 10px;
-  font-size: 12px;
-  border-radius: 8px;
-  border: none;
-}
-
-.charge-details {
-  background: #eaeaea;
-  padding: 20px;
-  padding-bottom: 20px;
-  border-radius: 10px;
-  gap: 10px;
-  align-items: center;
-  text-align: center;
-  margin-top: 20px;
-}
-
-.form-title {
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.charge-details label {
-  font-size: 18px;
-  display: block;
-  margin-bottom: 5px;
-  width: 200px;
-}
-
-.charge-row {
-  display: flex;
-  align-items: center;
-  gap: 1px;
-}
-
-.charge-amount {
-  background: white;
-  padding: 10px 15px;
-  border-radius: 10px;
-  display: inline-block;
-  font-size: 18px;
-  color: #6f6f6f;
-  text-align: left;
-  min-width: 150px;
-  width: 90%;
 }

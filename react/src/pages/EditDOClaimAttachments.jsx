@@ -1,94 +1,14 @@
 import { NavigationBar } from "../components/NavigationBar/NavigationBar.jsx"
-import { Pencil, Save, Trash2, LogOut, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Pencil } from "lucide-react";
 import "./EditDOClaimAttachments.css"
-import AttachmentTable from "../components/TableList/AttachmentTable";
-import React, {useState, useEffect} from "react"
-import { useParams } from "react-router-dom";
+import EditDOClaimAtt from "../components/EditDOClaimAtt.jsx";
+import EditDOClaimHeader from "../components/EditDOClaimHeader.jsx";
+import React from "react"
 import ProfileDropdown from "../components/ProfileBar/Profile.jsx";
 
-const EditDOClaimAttachments = () => {
-    const { id } = useParams();
+const EditDOClaimAttachments = ({id}) => {
     console.log("EditDOClaimAttachments ID:", id);
-    const navigate = useNavigate();
-
-    const [showAddPopup, setShowAddPopup] = useState(false); 
-    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
-    const [documentType, setDocumentType] = useState("");
-    const [validityDate, setValidityDate] = useState("");
-    const [blNo, setBlNo] = useState("");
-    const [documentFile, setDocumentFile] = useState(null);
-    const [attData, setAttdata] = useState([]);
-
-    useEffect(() => {
-        // Simulasi Fetch Data
-        setAttdata([
-          {
-            documentID: "CKJA1234567890",
-            docType: "POWER OF AUTHORITY",
-            authoriser: "CARGO OWNER 1",
-            blNo: "MEDUU12345",
-            doNo: "DO1234567890",
-            createdAt: "10/02/2025 15:51:07",
-            validityDate: "10/02/2025 15:51:07",
-          },
-          {
-            documentID: "CKJA1234567890",
-            docType: "CONTAINER GUARANTEE",
-            authoriser: "CARGO OWNER 1",
-            blNo: "MEDUU12345",
-            doNo: "DO1234567890",
-            createdAt: "10/02/2025 15:51:07",
-            validityDate: "10/02/2025 15:51:07",
-          },
-        ]);
-    }, []);
-  
-    const handleAddClick = () => {
-        setShowAddPopup(true); // Menampilkan pop-up saat tombol ADD diklik
-    };
-
-    const handleCloseAddPopup = () => {
-        setShowAddPopup(false); // Menutup pop-up
-    };
-
-    const handleConfirmClick = () => {
-        setShowConfirmPopup(true); //confirm pop-up
-    }
-
-    const handleCloseConfirmPopup = () => {
-        setShowConfirmPopup(false); //close confirm
-    }
-
-    const handleFileChange = (event) => {
-        setDocumentFile(event.target.files[0]);
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if (!documentType || !validityDate || !blNo || !documentFile) {
-            alert("Please fill in all fields.");
-            return;
-        }
-
-        console.log("Submitting Data:", {
-            documentType,
-            validityDate,
-            blNo,
-            documentFile,
-        });
-
-        alert("File uploaded successfully!");
-
-        //reset form
-        setDocumentType("");
-        setValidityDate("");
-        setBlNo("");
-        setDocumentFile(null);
-
-        setShowAddPopup(false); // Close pop-up after submit
-    };
-  
+   
     return (
         <div className="dashboard_att">
             <NavigationBar />
@@ -96,119 +16,12 @@ const EditDOClaimAttachments = () => {
                 <ProfileDropdown />
                 <h1 className="title"><Pencil size={40}/>  Edit DO</h1>
                 <div className="edit-do-container">
-                    <div className="edit-header">
-                        <h2 className="edit-title">EDIT ClicDO CLAIM</h2>
-                        <div className="edit-actions">
-                            <button className="action-button-save" onClick={() => console.log("Save clicked")}>
-                                <Save size={16} /> 
-                            </button>
-
-                            <button className="action-button-delete" onClick={() => console.log("Delete clicked")}>
-                                <Trash2 size={16} /> 
-                            </button>
-
-                            <button className="action-button-exit" onClick={() => navigate("/do-claims/active")}>
-                                <LogOut size={16} /> 
-                            </button>
-                        </div>
-                    </div>
-                    <div className="tab-menu">
-                        <button className="tab" onClick={() => navigate(`/edit-do-claim/${id}`)}>CLAIM DETAILS</button>
-                        <button className="tab-active">ATTACHMENTS</button>
-                        <button className="tab" onClick={() => navigate(`/edit-do-claim-query/${id}`)}>QUERY</button>
-                        <button className="tab" onClick={() => navigate(`/edit-do-claim-audit/${id}`)}>AUDIT</button>
-                    </div>
-
-                    <div className="selected-bol">
-                        <AttachmentTable data={attData} />
-
-                        <div className="bottom-buttons">
-                            <button className="add-button" onClick={handleAddClick}>
-                                ADD
-                            </button>
-                            <button className="confirm-button" onClick={handleConfirmClick}>
-                                CONFIRM
-                            </button>
-                        </div>
-                    </div>
+                    
+                    <EditDOClaimHeader/>
+                    <EditDOClaimAtt/>
                 </div>
-            </main>  
-
-            {showAddPopup && (
-                <form onSubmit={handleSubmit}>
-                    <div className="popup-overlay">
-                        <div className="popup-content">
-                            <button className="close-popup" onClick={handleCloseAddPopup}><X size={16}/></button>
-                            <h2 className="popup-title">ATTACHMENTS</h2>
-                            <div className="form-layout">
-                                <div className="form-1">
-                                    <div>
-                                        <label className="popup-label">Document Type</label>
-                                        <div>
-                                            <select placeholder="Select document type" value={documentType} onChange={(e) => setDocumentType(e.target.value)}>
-                                                <option value="">Select document type</option>
-                                                <option value="Invoice">Bill of Lading</option>
-                                                <option value="Packing List">Container Guarantee</option>
-                                                <option value="Bill of Lading">Power of Authority</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="popup-label">Validity Date</label>
-                                        <div>
-                                            <input type="date" value={validityDate} onChange={(e) => setValidityDate(e.target.value)} />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="form-2">
-                                    <div>
-                                        <label className="popup-label">BL No.</label>
-                                        <div>
-                                            <input type="text" placeholder="Enter BL No." value={blNo} onChange={(e) => setBlNo(e.target.value)}/>
-                                        </div>  
-                                    </div>
-                                    <div>
-                                        <label className="popup-label">Document File</label>
-                                        <div>
-                                            <input type="file" onChange={handleFileChange}/>
-                                        </div> 
-                                    </div>                    
-                                </div>
-                            </div>
-                            
-                            <button className="submitt">SUBMIT</button>
-                        </div>
-                    </div>
-                </form>
-            )}
-
-            {showConfirmPopup && (
-                <div className="conf-popup-overlay">
-                    <div className="conf-popup-content">
-                        <h2 className="conf-popup-title">CONFIRMATION</h2>
-                        <p>Are you sure want to confirm 
-                            <div>
-                                <strong>DO1234567890</strong> ?
-                            </div>
-                        </p>
-
-                        <div className="conf-popup-buttons">
-                            <button className="no-button" onClick={handleCloseConfirmPopup}>NO</button>
-                            <button className="yes-button" onClick={() => { alert("Confirmed!");
-                                handleCloseConfirmPopup();
-                                }}>YES
-                            </button>
-                        </div>
-
-                        <div className="conf-popup-warning">
-                            DO submissions will be processed for the DO request on <strong>8:30 AM until 4:30 PM</strong>. 
-                            Late submissions will be handled the next working day. Please ensure your documents are complete and meet the requirements.
-                        </div>
-                    </div>
-                </div>
-            )}
-
+            </main>
+                       
         </div>
     );
 };
