@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Input,
@@ -15,39 +15,9 @@ import {
 } from "@mui/icons-material";
 import SelectedBOL from "./TableList/SelectedBOL";
 import { useParams } from "react-router-dom";
+import { formatDate, formatDateTime } from "./Utility/formatDate";
+import { formatCurrency } from "./Utility/formatCurrency";
 
-// Dummy data structure
-const dummyClaimData = {
-  generalDetails: {
-    jobId: "DOJF6576152415172006",
-    shipmentType: "IMPORT",
-  },
-  jobDateDetails: {
-    startDate: "2025-02-15",
-    expiryDate: "2025-03-15",
-  },
-  selectedBOLs: [
-    {
-      blNo: "MEDUU12345",
-      containerNo: "MSDU1234567890",
-      shippingLine: "SHIPPING LINE 1",
-      authoriser: "CARGO OWNER 1",
-      blDateSubmitted: "10/02/2025 15:51:07",
-    },
-    {
-      blNo: "MEDUU12346",
-      containerNo: "MSDU1234567891",
-      shippingLine: "SHIPPING LINE 2",
-      authoriser: "CARGO OWNER 2",
-      blDateSubmitted: "11/02/2025 09:23:45",
-    },
-  ],
-  chargeDetails: {
-    jobCharge: "Rp 3.000.000",
-  },
-};
-
-// Custom styles to match myDO details
 const cardStyles = {
   root: {
     mb: 3,
@@ -72,25 +42,115 @@ const cardStyles = {
   },
 };
 
-const DOClaimViewClaimDetails = ({ jobId }) => {
+const DOClaimViewClaimDetails = () => {
+  const { id } = useParams();
+  const jobId = id;
+
   const [claimData, setClaimData] = useState({
-    generalDetails: {},
-    jobDateDetails: {},
+    generalDetails: {
+      jobId: jobId || "",
+      shipmentType: "",
+    },
+    jobDateDetails: {
+      startDate: "",
+      expiryDate: "",
+    },
     selectedBOLs: [],
-    chargeDetails: {},
+    chargeDetails: {
+      jobCharge: "",
+    },
   });
+  const [loadingData, setLoadingData] = useState(true);
+
+  const token = localStorage.getItem("jwtToken");
+  const BaseApiUrl =
+    "https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/job/ckJobDoClaim";
+  const apiUrl = `${BaseApiUrl}/${jobId}`;
+
+  // State to manage the editable dates
+  const [startDate, setStartDate] = useState(
+    claimData.jobDateDetails.startDate || ""
+  );
+  const [expiryDate, setExpiryDate] = useState(
+    claimData.jobDateDetails.expiryDate || ""
+  );
+
+  // Handle changes for the start date
+  const handleStartDateChange = (event) => {
+    setStartDate(event.target.value);
+  };
+
+  // Handle changes for the expiry date
+  const handleExpiryDateChange = (event) => {
+    setExpiryDate(event.target.value);
+  };
 
   useEffect(() => {
-    // Simulating API call to fetch data
-    const fetchData = () => {
-      // In a real application, this would be an API call
-      setTimeout(() => {
-        setClaimData(dummyClaimData);
-      }, 100);
-    };
+    if (!jobId || !token) return;
 
-    fetchData();
-  }, []);
+    async function fetchClaimData() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+
+        // Based on the actual API response structure
+        const formattedData = {
+          generalDetails: {
+            jobId: jobId || "",
+            shipmentType:
+              responseData.tckJob?.tckMstShipmentType?.shtName || "",
+          },
+          jobDateDetails: {
+            startDate:
+              formatDate(responseData.tckJob?.tckRecordDate?.rcdDtStart) || "",
+            expiryDate:
+              formatDate(responseData.tckJob?.tckRecordDate?.rcdDtExpiry) || "",
+          },
+          selectedBOLs:
+            Array.isArray(responseData.selectedBls) &&
+            responseData.selectedBls.length > 0
+              ? responseData.selectedBls.map((bl) => ({
+                  blNo: bl.doiBlNo || "",
+                  containerNo: bl.containerNo || "",
+                  shippingLine:
+                    bl.shtId ||
+                    responseData.tckJob?.tcoreAccnByJobSlAccn?.accnName ||
+                    "",
+                  authoriser:
+                    bl.accnName ||
+                    responseData.tckJob?.tcoreAccnByJobOwnerAccn?.accnName ||
+                    "",
+                  blDateSubmitted: formatDateTime(bl.rcdDtSubmit) || "",
+                }))
+              : [],
+          chargeDetails: {
+            jobCharge: formatCurrency(responseData.totalChargesIdr),
+          },
+        };
+
+        setClaimData(formattedData);
+      } catch (error) {
+        console.error("Error fetching claim data:", error);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    fetchClaimData();
+  }, [jobId, token, apiUrl]);
 
   return (
     <Box sx={{ padding: 2 }}>
@@ -131,40 +191,6 @@ const DOClaimViewClaimDetails = ({ jobId }) => {
               </Box>
             </CardContent>
           </Card>
-
-          {/* Bill of Loading Sample */}
-          {/* <Card sx={cardStyles.root}>
-            <CardHeader
-              sx={cardStyles.header}
-              title={
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <DescriptionOutlinedIcon />
-                  <Typography variant="h5">Bill of Loading</Typography>
-                </Box>
-              }
-            />
-            <CardContent sx={cardStyles.content}>
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="h6">BL Document</Typography>
-                <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    sx={{ bgcolor: "#ffffff" }}
-                  >
-                    BROWSE
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    sx={{ bgcolor: "#ffffff" }}
-                  >
-                    <FileDownloadOutlinedIcon />
-                  </Button>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card> */}
         </Grid>
 
         {/* Right Column */}
@@ -185,18 +211,20 @@ const DOClaimViewClaimDetails = ({ jobId }) => {
                 <Typography variant="h6">Start Date</Typography>
                 <Input
                   fullWidth
-                  type="date"
-                  value={claimData.jobDateDetails.startDate || ""}
+                  defaultValue={claimData.jobDateDetails.startDate || ""}
+                  onChange={handleStartDateChange}
                   sx={cardStyles.inputField}
+                  type="date"
                 />
               </Box>
               <Box>
                 <Typography variant="h6">Expiry Date</Typography>
                 <Input
                   fullWidth
-                  type="date"
-                  value={claimData.jobDateDetails.expiryDate || ""}
+                  defaultValue={claimData.jobDateDetails.expiryDate || ""}
+                  onChange={handleExpiryDateChange}
                   sx={cardStyles.inputField}
+                  type="date"
                 />
               </Box>
             </CardContent>
@@ -206,7 +234,7 @@ const DOClaimViewClaimDetails = ({ jobId }) => {
 
       {/* Selected BOL Table */}
       <Box sx={{ mt: 0 }}>
-        <SelectedBOL data={claimData.selectedBOLs} />
+        <SelectedBOL data={claimData.selectedBOLs || []} />
       </Box>
 
       {/* Charge Details Card */}

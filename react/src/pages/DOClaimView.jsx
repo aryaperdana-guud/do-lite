@@ -48,7 +48,7 @@ export function DOClaimView() {
   const renderTabContent = () => {
     switch (activeTab) {
       case "claim-details":
-        return <DOClaimViewClaimDetails jobId={id} />;
+        return <DOClaimViewClaimDetails />;
       case "attachments":
         return <DOClaimViewAttachments jobId={id} isEditMode={isEditMode} />;
       case "audit":
