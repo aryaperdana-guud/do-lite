@@ -60,7 +60,6 @@ const DOClaimViewClaimDetails = () => {
       jobCharge: "",
     },
   });
-  const [loadingData, setLoadingData] = useState(true);
 
   const token = localStorage.getItem("jwtToken");
   const BaseApiUrl =
@@ -89,8 +88,6 @@ const DOClaimViewClaimDetails = () => {
     if (!jobId || !token) return;
 
     async function fetchClaimData() {
-      setLoadingData(true);
-
       try {
         const response = await fetch(apiUrl, {
           method: "GET",
@@ -109,31 +106,26 @@ const DOClaimViewClaimDetails = () => {
         // Based on the actual API response structure
         const formattedData = {
           generalDetails: {
-            jobId: jobId || "",
+            jobId: jobId || "-",
             shipmentType:
-              responseData.tckJob?.tckMstShipmentType?.shtName || "",
+              responseData.tckJob?.tckMstShipmentType?.shtName || "-",
           },
           jobDateDetails: {
             startDate:
-              formatDate(responseData.tckJob?.tckRecordDate?.rcdDtStart) || "",
+              formatDate(responseData.tckJob?.tckRecordDate?.rcdDtStart) || "-",
             expiryDate:
-              formatDate(responseData.tckJob?.tckRecordDate?.rcdDtExpiry) || "",
+              formatDate(responseData.tckJob?.tckRecordDate?.rcdDtExpiry) ||
+              "-",
           },
           selectedBOLs:
             Array.isArray(responseData.selectedBls) &&
             responseData.selectedBls.length > 0
               ? responseData.selectedBls.map((bl) => ({
-                  blNo: bl.doiBlNo || "",
-                  containerNo: bl.containerNo || "",
-                  shippingLine:
-                    bl.shtId ||
-                    responseData.tckJob?.tcoreAccnByJobSlAccn?.accnName ||
-                    "",
-                  authoriser:
-                    bl.accnName ||
-                    responseData.tckJob?.tcoreAccnByJobOwnerAccn?.accnName ||
-                    "",
-                  blDateSubmitted: formatDateTime(bl.rcdDtSubmit) || "",
+                  blNo: bl.doiBlNo || "-",
+                  shippingType: bl.shtId || "-",
+                  shippingLine: bl.slAccnId || "-",
+                  authoriser: bl.accnName || "-",
+                  blDateSubmitted: formatDateTime(bl.rcdDtSubmit) || "-",
                 }))
               : [],
           chargeDetails: {
@@ -144,8 +136,6 @@ const DOClaimViewClaimDetails = () => {
         setClaimData(formattedData);
       } catch (error) {
         console.error("Error fetching claim data:", error);
-      } finally {
-        setLoadingData(false);
       }
     }
 

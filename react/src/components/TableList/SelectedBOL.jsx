@@ -16,9 +16,7 @@ import {
   IconButton,
 } from "@mui/material";
 
-import {
-  FileDownloadOutlined as FileDownloadIcon,
-} from "@mui/icons-material"; 
+import { FileDownloadOutlined as FileDownloadIcon } from "@mui/icons-material";
 
 import { ListChecks } from "lucide-react";
 
@@ -68,7 +66,9 @@ const SelectedBOL = ({ data = [] }) => {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontWeight: "bold" }}>BL No</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Container No</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>
+                  Shippment Type
+                </TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Shipping Line</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Authoriser</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>
@@ -80,9 +80,9 @@ const SelectedBOL = ({ data = [] }) => {
             <TableBody>
               {data.length > 0 ? (
                 data.map((row, index) => (
-                  <TableRow key={index}>
+                  <TableRow key={row.blNo}>
                     <TableCell>{row.blNo}</TableCell>
-                    <TableCell>{row.containerNo}</TableCell>
+                    <TableCell>{row.shippingType}</TableCell>
                     <TableCell>{row.shippingLine}</TableCell>
                     <TableCell>{row.authoriser}</TableCell>
                     <TableCell>{row.blDateSubmitted}</TableCell>
