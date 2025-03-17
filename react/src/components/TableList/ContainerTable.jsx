@@ -99,23 +99,23 @@ const ContainerTable = ({
         }
       />
       <CardContent sx={{ p: 0 }}>
-        <TableContainer component={Paper} sx={{ boxShadow: "none" }}>
-          <Table size="small">
-            <TableHead sx={{ bgcolor: "#f5f5f5" }}>
+        <TableContainer component={Paper} sx={{ boxShadow: "none", maxHeight: "157px", overflowY: "auto" }}>
+          <Table size="small" sx={{ "& td, & th": { padding: "4px", fontSize: "14px" } }} stickyHeader>
+            <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
+                <TableCell padding="checkbox" sx={{ bgcolor: "#f5f5f5" }}>
                   <Checkbox
                     checked={allSelected}
                     onChange={handleSelectAll}
                     color="primary"
                   />
                 </TableCell>
-                <TableCell>Marks And Number</TableCell>
-                <TableCell>Container Cat</TableCell>
-                <TableCell>Dangerous Good</TableCell>
-                <TableCell>VTD</TableCell>
-                <TableCell>Next VTD</TableCell>
-                <TableCell>Ext Days</TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Marks and Number</TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Container Category</TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Dangerous Good</TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Valid Till Date</TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Next Valid Till Date</TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Extension Days</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

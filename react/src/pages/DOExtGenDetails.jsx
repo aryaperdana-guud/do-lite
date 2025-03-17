@@ -75,7 +75,7 @@ const DOExtGenDetails = ({ id, title }) => {
           extDays: "30",
         },
         {
-          marksAndNumber: "MSDU760102 / 45DV",
+          marksAndNumber: "MSDU760101 / 45DV",
           containerCat: "STANDARD",
           dangerousGood: "YES",
           vtd: "20/02/2025",
@@ -211,6 +211,7 @@ const DOExtGenDetails = ({ id, title }) => {
             </Card>
 
             {/* Using the new ContainerTable component */}
+            
             <ContainerTable
               containerData={containerData}
               onSelectionChange={handleContainerSelectionChange}
