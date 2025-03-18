@@ -15,14 +15,21 @@ import {
   Typography,
 } from "@mui/material";
 import { Container } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { formatDate } from "../Utility/formatDate";
 
 const ContainerTable = ({
-  containerData = [],
   onSelectionChange = () => {},
   onDangerousGoodToggle = () => {},
 }) => {
   const [selectedContainers, setSelectedContainers] = useState({});
   const [allSelected, setAllSelected] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+
+  const token = localStorage.getItem("jwtToken");
+  const { id } = useParams();
+  const apiUrl = `https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/extension/doExtCnt/${id}/list?sEcho=3&iDisplayStart=0&iDisplayLength=1000&iSortCol_0=0&sSortDir_0=desc&iSortingCols=1&mDataProp_0=doxcId&iColumns=1`;
 
   // Handle selection of individual container
   const handleContainerSelect = (index) => {
@@ -32,7 +39,7 @@ const ContainerTable = ({
 
     // Check if all containers are selected
     const allChecked =
-      Object.keys(updatedSelection).length === containerData.length &&
+      Object.keys(updatedSelection).length === tableData.length &&
       Object.values(updatedSelection).every((value) => value === true);
     setAllSelected(allChecked);
 
@@ -45,7 +52,7 @@ const ContainerTable = ({
     const newAllSelected = !allSelected;
     const newSelectedContainers = {};
 
-    containerData.forEach((_, index) => {
+    tableData.forEach((_, index) => {
       newSelectedContainers[index] = newAllSelected;
     });
 
@@ -61,17 +68,43 @@ const ContainerTable = ({
     onDangerousGoodToggle(index);
   };
 
-  // Initialize selected containers when data changes
   useEffect(() => {
-    if (containerData.length > 0) {
-      const initialSelectedState = {};
-      containerData.forEach((_, index) => {
-        initialSelectedState[index] = false;
-      });
-      setSelectedContainers(initialSelectedState);
-      setAllSelected(false);
+    async function fetchTableData() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const responseData = await response.json();
+        const formattedData =
+          responseData.aaData?.map((item) => ({
+            marksAndNumber: `${item.tckCnt.cntNo || "N/A"}-${item.tckCnt.cntSize || "N/A"}`,
+            containerCat: item.tckDoExtMstCntCategory.ccName || "N/A",
+            dangerousGood: item.tckCnt.cntDangerousGood || "N/A",
+            vtd: formatDate(item.tckCnt.cntValidDate) || "N/A",
+            nextvtd: formatDate(item.tckCnt.cntDoLastPaidThru) || "N/A",
+            extDays: item.tckDoExt.doxNoDays || "N/A",
+          })) || [];
+
+        setTableData(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setTableData([]);
+      } finally {
+        setLoadingData(false);
+      }
     }
-  }, [containerData]);
+
+    if (token) {
+      fetchTableData();
+    }
+  }, [token, apiUrl]);
 
   return (
     <Card
@@ -99,8 +132,15 @@ const ContainerTable = ({
         }
       />
       <CardContent sx={{ p: 0 }}>
-        <TableContainer component={Paper} sx={{ boxShadow: "none", maxHeight: "157px", overflowY: "auto" }}>
-          <Table size="small" sx={{ "& td, & th": { padding: "4px", fontSize: "14px" } }} stickyHeader>
+        <TableContainer
+          component={Paper}
+          sx={{ boxShadow: "none", maxHeight: "157px", overflowY: "auto" }}
+        >
+          <Table
+            size="small"
+            sx={{ "& td, & th": { padding: "4px", fontSize: "14px" } }}
+            stickyHeader
+          >
             <TableHead>
               <TableRow>
                 <TableCell padding="checkbox" sx={{ bgcolor: "#f5f5f5" }}>
@@ -110,43 +150,69 @@ const ContainerTable = ({
                     color="primary"
                   />
                 </TableCell>
-                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Marks and Number</TableCell>
-                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Container Category</TableCell>
-                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Dangerous Good</TableCell>
-                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Valid Till Date</TableCell>
-                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Next Valid Till Date</TableCell>
-                <TableCell sx={{ bgcolor: "#f5f5f5" }}>Extension Days</TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>
+                  Marks and Number
+                </TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>
+                  Container Category
+                </TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>
+                  Dangerous Good
+                </TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>
+                  Valid Till Date
+                </TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>
+                  Next Valid Till Date
+                </TableCell>
+                <TableCell sx={{ bgcolor: "#f5f5f5" }}>
+                  Extension Days
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {containerData.map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedContainers[index] || false}
-                      onChange={() => handleContainerSelect(index)}
-                      color="primary"
-                    />
+              {loadingData ? (
+                <TableRow>
+                  <TableCell colSpan={7} align="center">
+                    Loading data...
                   </TableCell>
-                  <TableCell>{row.marksAndNumber}</TableCell>
-                  <TableCell>{row.containerCat}</TableCell>
-                  <TableCell>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      {row.dangerousGood}
-                      <Checkbox
-                        checked={row.dangerousGood === "YES"}
-                        onChange={() => handleDangerousGoodToggle(index)}
-                        size="small"
-                        color="primary"
-                        sx={{ ml: 1 }}
-                      />
-                    </Box>
-                  </TableCell>
-                  <TableCell>{row.vtd}</TableCell>
-                  <TableCell>{row.nextvtd}</TableCell>
-                  <TableCell>{row.extDays}</TableCell>
                 </TableRow>
-              ))}
+              ) : tableData.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} align="center">
+                    No container data available
+                  </TableCell>
+                </TableRow>
+              ) : (
+                tableData.map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={selectedContainers[index] || false}
+                        onChange={() => handleContainerSelect(index)}
+                        color="primary"
+                      />
+                    </TableCell>
+                    <TableCell>{row.marksAndNumber}</TableCell>
+                    <TableCell>{row.containerCat}</TableCell>
+                    <TableCell>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        {row.dangerousGood}
+                        <Checkbox
+                          checked={row.dangerousGood === "YES"}
+                          onChange={() => handleDangerousGoodToggle(index)}
+                          size="small"
+                          color="primary"
+                          sx={{ ml: 1 }}
+                        />
+                      </Box>
+                    </TableCell>
+                    <TableCell>{row.vtd}</TableCell>
+                    <TableCell>{row.nextvtd}</TableCell>
+                    <TableCell>{row.extDays}</TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
