@@ -245,7 +245,7 @@ const DOExtGenDetails = ({ id, title }) => {
                   size="small"
                   sx={{ bgcolor: "#ffffff", width: "200px", mr: 2 }}
                 />
-                <Button variant="contained" color="primary">
+                <Button variant="contained" sx={{ bgcolor: "#263754" }}>
                   CALCULATE
                 </Button>
               </Box>

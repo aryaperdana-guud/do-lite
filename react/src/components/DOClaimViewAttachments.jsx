@@ -9,6 +9,8 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  DialogActions,
+  Divider,
   IconButton,
   FormControl,
   InputLabel,
@@ -502,7 +504,7 @@ const DOClaimViewAttachments = ({}) => {
                       sx={{
                         bgcolor: "white",
                         borderRadius: 1.5,
-                        height: 56,
+                        height: 40,
                         "& .MuiOutlinedInput-notchedOutline": {
                           borderColor: "#e0e0e0",
                         },
@@ -541,7 +543,7 @@ const DOClaimViewAttachments = ({}) => {
                       sx={{
                         bgcolor: "white",
                         borderRadius: 1.5,
-                        height: 56,
+                        height: 40,
                         "& .MuiOutlinedInput-notchedOutline": {
                           borderColor: "#e0e0e0",
                         },
@@ -577,7 +579,7 @@ const DOClaimViewAttachments = ({}) => {
                       borderRadius: 1.5,
                       p: 0,
                       border: `1px solid #e0e0e0`,
-                      height: 56,
+                      height: 40,
                       display: "flex",
                       alignItems: "center",
                       transition: "all 0.2s",
@@ -663,74 +665,78 @@ const DOClaimViewAttachments = ({}) => {
         </Dialog>
       )}
 
-      {showConfirmPopup && (
-        <div style={popupOverlay}>
-          <div style={popupContent}>
-            <h2 style={{ fontSize: "40px", margin: "0px", fontWeight: "bold" }}>
-              CONFIRMATION
-            </h2>
-            <p>
-              Are you sure want to confirm
-              <div>
-                <strong>{doNo || "DO Number"}</strong> ?
-              </div>
-            </p>
-
-            <div style={popupButtons}>
-              <button
-                style={{
-                  ...confbuttons,
-                  color: "red",
-                  border: "2px solid red",
-                }}
-                onClick={handleCloseConfirmPopup}
-              >
-                No
-              </button>
-              <button
-                style={{
-                  ...confbuttons,
-                  color: "green",
-                  border: "2px solid green",
-                }}
-                onClick={async () => {
-                  try {
-                    // Here you would implement the API call to confirm
-                    // For example:
-                    // const response = await fetch(`${apiUrl}/confirm`, {
-                    //   method: "POST",
-                    //   headers: {
-                    //     Authorization: `Bearer ${token}`,
-                    //     "Content-Type": "application/json",
-                    //   },
-                    //   body: JSON.stringify({ doNo }),
-                    // });
-
-                    // if (!response.ok) {
-                    //   throw new Error(`HTTP error! Status: ${response.status}`);
-                    // }
-
+      {/* Confirmation Dialog */}
+      <Dialog
+              open={showConfirmPopup}
+              onClose={handleCloseConfirmPopup}
+              maxWidth="sm"
+              fullWidth
+            >
+              <DialogTitle 
+                sx={{ 
+                  bgcolor: "#263754", 
+                  textAlign: "center", 
+                  color: "white"
+                }}>
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      gap: 1.5,
+                      color: "white",
+                    }}>
+                    <Typography variant="h5"
+                      sx={{
+                        color: "white !important",
+                      }}>
+                      CONFIRMATION
+                    </Typography>
+                  </Box>
+              </DialogTitle>
+              <DialogContent sx={{ pt: 2 }}>
+                <Typography variant="body1" sx={{ textAlign: "center", mb: 1, mt: 2 }}>
+                  Are you sure want to confirm?
+                </Typography>
+                <Typography variant="body1" sx={{ textAlign: "center", mb: 2 }}>
+                  Extensions Job cannot be deleted or changed after confirmed
+                </Typography>
+                <Divider sx={{ my: 2 }} />
+                <Box sx={{ bgcolor: "#f8f8f8", p: 2, borderRadius: 1 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "red", textAlign: "center" }}
+                  >
+                    DO submissions will be processed for the DO request on{" "}
+                    <strong>8:30 AM until 4:30 PM</strong>. Late submissions
+                    will be handled the next working day. Please ensure your
+                    documents are complete and meet the requirements.
+                  </Typography>
+                </Box>
+              </DialogContent>
+              <DialogActions sx={{ pb: 3, px: 3, justifyContent: "center" }}>
+                <Button
+                  variant="outlined"
+                  onClick={handleCloseConfirmPopup}
+                  sx={{ px: 4, color: "red", borderColor: "red", "&:hover": { bgcolor: "red", color: "white", borderColor: "red" } }}
+                >
+                  NO
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => {
                     alert("Confirmed!");
                     handleCloseConfirmPopup();
-                  } catch (error) {
-                    console.error("Error confirming DO:", error);
-                    alert("Error confirming DO. Please try again.");
-                  }
-                }}
-              >
-                Yes
-              </button>
-            </div>
-
-            <div style={popupWarning}>
-              DO submissions will be processed for the DO request on{" "}
-              <strong>8:30 AM until 4:30 PM</strong>. Late submissions will be
-              handled the next working day. Please ensure your documents are
-              complete and meet the requirements.
-            </div>
-          </div>
-        </div>
-      )}
+                  }}
+                  sx={{ 
+                    px: 4, 
+                    bgcolor: "white",
+                    color: "green", 
+                    "&:hover": { bgcolor: "darkgreen", color: "white" } 
+                  }}
+                >
+                  YES
+                </Button>
+              </DialogActions>
+            </Dialog>
     </Box>
   );
 };

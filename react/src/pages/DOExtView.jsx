@@ -239,11 +239,28 @@ export function DOExtView() {
               maxWidth="sm"
               fullWidth
             >
-              <DialogTitle sx={{ bgcolor: "#f5f5f5", textAlign: "center" }}>
-                <Typography variant="h5">CONFIRMATION</Typography>
+              <DialogTitle 
+                sx={{ 
+                  bgcolor: "#263754", 
+                  textAlign: "center", 
+                  color: "white"
+                }}>
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      gap: 1.5,
+                      color: "white",
+                    }}>
+                    <Typography variant="h5"
+                      sx={{
+                        color: "white !important",
+                      }}>
+                      CONFIRMATION
+                    </Typography>
+                  </Box>
               </DialogTitle>
               <DialogContent sx={{ pt: 2 }}>
-                <Typography variant="body1" sx={{ textAlign: "center", mb: 1 }}>
+                <Typography variant="body1" sx={{ textAlign: "center", mb: 1, mt: 2 }}>
                   Are you sure want to confirm?
                 </Typography>
                 <Typography variant="body1" sx={{ textAlign: "center", mb: 2 }}>
@@ -266,7 +283,7 @@ export function DOExtView() {
                 <Button
                   variant="outlined"
                   onClick={handleCloseConfirmPopup}
-                  sx={{ px: 4 }}
+                  sx={{ px: 4, color: "red", borderColor: "red", "&:hover": { bgcolor: "red", color: "white", borderColor: "red" } }}
                 >
                   NO
                 </Button>
@@ -276,7 +293,7 @@ export function DOExtView() {
                     alert("Confirmed!");
                     handleCloseConfirmPopup();
                   }}
-                  sx={{ px: 4, color: "#263754" }}
+                  sx={{ px: 4, color: "green", "&:hover": { bgcolor: "darkgreen", color: "white" } }}
                 >
                   YES
                 </Button>
