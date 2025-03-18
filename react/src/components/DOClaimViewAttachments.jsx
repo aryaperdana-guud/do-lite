@@ -343,12 +343,12 @@ const DOClaimViewAttachments = ({}) => {
               variant="contained"
               startIcon={<CheckIcon />}
               sx={{
-                bgcolor: "#39E839",
+                bgcolor: "#0070c0",
                 color: "white",
                 borderRadius: "10px",
                 textTransform: "none",
                 "&:hover": {
-                  bgcolor: "#2dc02d",
+                  bgcolor: "#263754",
                 },
               }}
               onClick={handleConfirmClick}
@@ -667,76 +667,88 @@ const DOClaimViewAttachments = ({}) => {
 
       {/* Confirmation Dialog */}
       <Dialog
-              open={showConfirmPopup}
-              onClose={handleCloseConfirmPopup}
-              maxWidth="sm"
-              fullWidth
+        open={showConfirmPopup}
+        onClose={handleCloseConfirmPopup}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle
+          sx={{
+            bgcolor: "#263754",
+            textAlign: "center",
+            color: "white",
+          }}
+        >
+          <Box
+            sx={{
+              alignItems: "center",
+              gap: 1.5,
+              color: "white",
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                color: "white !important",
+              }}
             >
-              <DialogTitle 
-                sx={{ 
-                  bgcolor: "#263754", 
-                  textAlign: "center", 
-                  color: "white"
-                }}>
-                  <Box
-                    sx={{
-                      alignItems: "center",
-                      gap: 1.5,
-                      color: "white",
-                    }}>
-                    <Typography variant="h5"
-                      sx={{
-                        color: "white !important",
-                      }}>
-                      CONFIRMATION
-                    </Typography>
-                  </Box>
-              </DialogTitle>
-              <DialogContent sx={{ pt: 2 }}>
-                <Typography variant="body1" sx={{ textAlign: "center", mb: 1, mt: 2 }}>
-                  Are you sure want to confirm?
-                </Typography>
-                <Typography variant="body1" sx={{ textAlign: "center", mb: 2 }}>
-                  Extensions Job cannot be deleted or changed after confirmed
-                </Typography>
-                <Divider sx={{ my: 2 }} />
-                <Box sx={{ bgcolor: "#f8f8f8", p: 2, borderRadius: 1 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: "red", textAlign: "center" }}
-                  >
-                    DO submissions will be processed for the DO request on{" "}
-                    <strong>8:30 AM until 4:30 PM</strong>. Late submissions
-                    will be handled the next working day. Please ensure your
-                    documents are complete and meet the requirements.
-                  </Typography>
-                </Box>
-              </DialogContent>
-              <DialogActions sx={{ pb: 3, px: 3, justifyContent: "center" }}>
-                <Button
-                  variant="outlined"
-                  onClick={handleCloseConfirmPopup}
-                  sx={{ px: 4, color: "red", borderColor: "red", "&:hover": { bgcolor: "red", color: "white", borderColor: "red" } }}
-                >
-                  NO
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    alert("Confirmed!");
-                    handleCloseConfirmPopup();
-                  }}
-                  sx={{ 
-                    px: 4, 
-                    bgcolor: "white",
-                    color: "green", 
-                    "&:hover": { bgcolor: "darkgreen", color: "white" } 
-                  }}
-                >
-                  YES
-                </Button>
-              </DialogActions>
-            </Dialog>
+              CONFIRMATION
+            </Typography>
+          </Box>
+        </DialogTitle>
+        <DialogContent sx={{ pt: 2 }}>
+          <Typography
+            variant="body1"
+            sx={{ textAlign: "center", mb: 1, mt: 2 }}
+          >
+            Are you sure want to confirm?
+          </Typography>
+          <Typography variant="body1" sx={{ textAlign: "center", mb: 2 }}>
+            Extensions Job cannot be deleted or changed after confirmed
+          </Typography>
+          <Divider sx={{ my: 2 }} />
+          <Box sx={{ bgcolor: "#f8f8f8", p: 2, borderRadius: 1 }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "red", textAlign: "center" }}
+            >
+              DO submissions will be processed for the DO request on{" "}
+              <strong>8:30 AM until 4:30 PM</strong>. Late submissions will be
+              handled the next working day. Please ensure your documents are
+              complete and meet the requirements.
+            </Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ pb: 3, px: 3, justifyContent: "center" }}>
+          <Button
+            variant="outlined"
+            onClick={handleCloseConfirmPopup}
+            sx={{
+              px: 4,
+              color: "red",
+              borderColor: "red",
+              "&:hover": { bgcolor: "red", color: "white", borderColor: "red" },
+            }}
+          >
+            NO
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              alert("Confirmed!");
+              handleCloseConfirmPopup();
+            }}
+            sx={{
+              px: 4,
+              bgcolor: "white",
+              color: "green",
+              "&:hover": { bgcolor: "darkgreen", color: "white" },
+            }}
+          >
+            YES
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

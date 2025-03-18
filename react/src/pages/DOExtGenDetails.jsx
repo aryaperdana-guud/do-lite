@@ -10,19 +10,18 @@ import {
   TextField,
 } from "@mui/material";
 import { Ship, CalendarPlus2, ReceiptText, LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ContainerTable from "../components/TableList/ContainerTable";
+import { formatCurrency } from "../components/Utility/formatCurrency";
+import { formatDate } from "../components/Utility/formatDate";
+import { ExitToApp } from "@mui/icons-material";
+import useSessionStore from "../SessionControl/SessionStore";
 
-const DOExtGenDetails = ({ id, title }) => {
+const DOExtGenDetails = ({ title }) => {
   const navigate = useNavigate();
   const [containerData, setContainerData] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedContainers, setSelectedContainers] = useState({});
-
-  // Format date to Indonesian format
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("id-ID");
-  };
 
   // Handle container selection from child component
   const handleContainerSelectionChange = (selectionData) => {
@@ -40,50 +39,102 @@ const DOExtGenDetails = ({ id, title }) => {
     setContainerData(updatedData);
   };
 
+  // useEffect(() => {
+  //   // Simulating API fetch for container data
+  //   const fetchData = async () => {
+  //     // In a real app, this would be an API call
+  //     const data = [
+  //       {
+  //         marksAndNumber: "MSDU760099 / 45DV",
+  //         containerCat: "STANDARD",
+  //         dangerousGood: "YES",
+  //         vtd: "20/02/2025",
+  //         nextvtd: "20/03/2025",
+  //         extDays: "30",
+  //       },
+  //       {
+  //         marksAndNumber: "MSDU760100 / 45DV",
+  //         containerCat: "STANDARD",
+  //         dangerousGood: "YES",
+  //         vtd: "20/02/2025",
+  //         nextvtd: "20/03/2025",
+  //         extDays: "30",
+  //       },
+  //       {
+  //         marksAndNumber: "MSDU760101 / 45DV",
+  //         containerCat: "STANDARD",
+  //         dangerousGood: "YES",
+  //         vtd: "20/02/2025",
+  //         nextvtd: "20/03/2025",
+  //         extDays: "30",
+  //       },
+  //       {
+  //         marksAndNumber: "MSDU760101 / 45DV",
+  //         containerCat: "STANDARD",
+  //         dangerousGood: "YES",
+  //         vtd: "20/02/2025",
+  //         nextvtd: "20/03/2025",
+  //         extDays: "30",
+  //       },
+  //     ];
+  //     setContainerData(data);
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  const token = localStorage.getItem("jwtToken");
+  const { id } = useParams();
+  const apiUrl = `https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/extension/doExt/${id}`;
+  const [ExtendDetailData, setExtendDetailData] = useState([]);
+
   useEffect(() => {
-    // Simulating API fetch for container data
-    const fetchData = async () => {
-      // In a real app, this would be an API call
-      const data = [
-        {
-          marksAndNumber: "MSDU760099 / 45DV",
-          containerCat: "STANDARD",
-          dangerousGood: "YES",
-          vtd: "20/02/2025",
-          nextvtd: "20/03/2025",
-          extDays: "30",
-        },
-        {
-          marksAndNumber: "MSDU760100 / 45DV",
-          containerCat: "STANDARD",
-          dangerousGood: "YES",
-          vtd: "20/02/2025",
-          nextvtd: "20/03/2025",
-          extDays: "30",
-        },
-        {
-          marksAndNumber: "MSDU760101 / 45DV",
-          containerCat: "STANDARD",
-          dangerousGood: "YES",
-          vtd: "20/02/2025",
-          nextvtd: "20/03/2025",
-          extDays: "30",
-        },
-        {
-          marksAndNumber: "MSDU760101 / 45DV",
-          containerCat: "STANDARD",
-          dangerousGood: "YES",
-          vtd: "20/02/2025",
-          nextvtd: "20/03/2025",
-          extDays: "30",
-        },
-      ];
-      setContainerData(data);
-    };
+    if (!token || !id) return;
 
-    fetchData();
-  }, []);
+    async function fetchExtendDetailData() {
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+
+        // Check if the response is an array or a single object
+        const dataItem = Array.isArray(responseData)
+          ? responseData[0]
+          : responseData;
+
+        // Create a single object instead of an array
+        const formattedData = {
+          ExtJobNumber: id,
+          DoNumber: dataItem?.tckDo?.doNo || "N/A",
+          DoExNumber: dataItem?.doxExtDoNo || "N/A",
+          ValidtillDate: dataItem?.doxValidDate
+            ? formatDate(dataItem.doxValidDate)
+            : "N/A",
+          NumberOfContainer: dataItem?.doxNoCnt || "N/A",
+          AdminFee: formatCurrency(dataItem?.doxChargesAdmin || 0),
+          PlatformFee: formatCurrency(dataItem?.doxChargesPlf || 0),
+          Demurrage: formatCurrency(dataItem?.doxChargesExt || 0),
+          TotalCharges: formatCurrency(dataItem?.doxChargesTotal || 0),
+        };
+
+        setExtendDetailData(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchExtendDetailData();
+  }, [token, id, apiUrl]);
   return (
     <Box>
       {/* Content */}
@@ -114,7 +165,7 @@ const DOExtGenDetails = ({ id, title }) => {
                     <Typography variant="subtitle1">Ext Job Number</Typography>
                     <TextField
                       fullWidth
-                      value="CKJOB241218183084"
+                      value={ExtendDetailData.ExtJobNumber}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -128,7 +179,7 @@ const DOExtGenDetails = ({ id, title }) => {
                     <Typography variant="subtitle1">DO Number</Typography>
                     <TextField
                       fullWidth
-                      value="DO010122035TES"
+                      value={ExtendDetailData.DoNumber}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -142,7 +193,7 @@ const DOExtGenDetails = ({ id, title }) => {
                     <Typography variant="subtitle1">DO Ex Number</Typography>
                     <TextField
                       fullWidth
-                      value="DO010122035TES"
+                      value={ExtendDetailData.DoExNumber}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -156,7 +207,7 @@ const DOExtGenDetails = ({ id, title }) => {
                     <Typography variant="subtitle1">Valid Till Date</Typography>
                     <TextField
                       fullWidth
-                      value={formatDate("2025-03-03")}
+                      value={ExtendDetailData.ValidtillDate}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -193,7 +244,7 @@ const DOExtGenDetails = ({ id, title }) => {
                 <Typography variant="subtitle1">No of Container</Typography>
                 <TextField
                   fullWidth
-                  value="4"
+                  value={ExtendDetailData.NumberOfContainer}
                   InputProps={{
                     readOnly: true,
                   }}
@@ -256,7 +307,7 @@ const DOExtGenDetails = ({ id, title }) => {
                 <Typography variant="subtitle1">Admin Fee</Typography>
                 <TextField
                   fullWidth
-                  value="Rp 20.000,-"
+                  value={ExtendDetailData.AdminFee}
                   InputProps={{
                     readOnly: true,
                   }}
@@ -268,7 +319,7 @@ const DOExtGenDetails = ({ id, title }) => {
                 <Typography variant="subtitle1">Platform Fee</Typography>
                 <TextField
                   fullWidth
-                  value="Rp 75.000,-"
+                  value={ExtendDetailData.PlatformFee}
                   InputProps={{
                     readOnly: true,
                   }}
@@ -282,7 +333,7 @@ const DOExtGenDetails = ({ id, title }) => {
                 <Typography variant="subtitle1">Demurrage</Typography>
                 <TextField
                   fullWidth
-                  value="Rp 1.254.720.000,-"
+                  value={ExtendDetailData.Demurrage}
                   InputProps={{
                     readOnly: true,
                   }}
@@ -294,7 +345,7 @@ const DOExtGenDetails = ({ id, title }) => {
                 <Typography variant="subtitle1">Total Charges</Typography>
                 <TextField
                   fullWidth
-                  value="Rp 1.254.815.000,-"
+                  value={ExtendDetailData.TotalCharges}
                   InputProps={{
                     readOnly: true,
                   }}

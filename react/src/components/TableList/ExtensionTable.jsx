@@ -62,6 +62,9 @@ export const ExtensionTable = ({
 
         const formattedData =
           responseData.aaData?.map((item) => ({
+            //id For extend
+            idExtend: item.doxId || "N/A",
+            //
             status: item.tckMstDoState.dostId || "N/A",
             jobNo: item.tckJobDoExt.tckJob.jobId || "N/A",
             blNo: item.tckDo.doBlNo || "Unknown",
@@ -86,7 +89,7 @@ export const ExtensionTable = ({
     if (token) {
       fetchTableData();
     }
-  }, [token]);
+  }, [token, apiUrl]);
 
   const displayData = tableData;
 
@@ -237,7 +240,7 @@ export const ExtensionTable = ({
                               className="action-button-extension"
                               onClick={() =>
                                 navigate(
-                                  `/view-do-extension/GenDetails/${row.id}/${title}`
+                                  `/view-do-extension/GenDetails/${row.idExtend}/${title}`
                                 )
                               }
                               title="View"
@@ -252,7 +255,7 @@ export const ExtensionTable = ({
                               className="action-button-extension"
                               onClick={() =>
                                 navigate(
-                                  `/view-do-extension/GenDetails/${row.id}/${title}`
+                                  `/view-do-extension/GenDetails/${row.idExtend}/${title}`
                                 )
                               }
                               title="View"
