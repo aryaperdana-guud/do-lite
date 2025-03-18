@@ -3,7 +3,7 @@ export const formatDate = (timestamp) => {
   if (!timestamp) return "";
   try {
     const date = new Date(timestamp);
-    return date.toISOString().split("T")[0]; // Returns YYYY-MM-DD format
+    return date.toISOString().split("T")[0];
   } catch (error) {
     console.error("Error formatting date:", error);
     return "";

@@ -40,7 +40,7 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
             shipmentType: item.tckJob.tckMstShipmentType.shtId || "N/A",
             shippingLine: item.tckJob.tcoreAccnByJobSlAccn.accnId || "N/A",
             dateSubmitted:
-              formatDate(item.tckJob.tckRecordDate.rcdDtSubmit) || "N/A",
+              formatDate(item.tckJob.tckRecordDate.rcdDtSubmit) || "-",
             noOfBl: item.jobNoDo || "0",
           })) || [];
 

@@ -8,11 +8,6 @@ import {
   CardContent,
   CardHeader,
   TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Divider,
 } from "@mui/material";
 import { Ship, CalendarPlus2, ReceiptText, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -211,7 +206,7 @@ const DOExtGenDetails = ({ id, title }) => {
             </Card>
 
             {/* Using the new ContainerTable component */}
-            
+
             <ContainerTable
               containerData={containerData}
               onSelectionChange={handleContainerSelectionChange}

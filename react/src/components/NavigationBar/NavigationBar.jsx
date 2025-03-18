@@ -72,51 +72,94 @@ const findParentMenu = (submenuHref) => {
   return null;
 };
 
-export function NavigationBar() {
-  // Default to the active list on initial load if no session data
-  const defaultActiveSubmenu = "/bol/active";
-  const defaultActiveMenu =
-    findParentMenu(defaultActiveSubmenu) || "/bill-of-ladings";
+// Find the submenu that matches a pathname
+const findMatchingSubmenu = (pathname) => {
+  // First try to find an exact match
+  for (const item of navigation) {
+    if (item.submenu) {
+      const exactMatch = item.submenu.find((sub) => sub.href === pathname);
+      if (exactMatch) return exactMatch.href;
+    }
+  }
 
-  const [activeMenu, setActiveMenu] = useState(defaultActiveMenu);
+  // If no exact match, try to find a partial match
+  for (const item of navigation) {
+    if (item.submenu) {
+      const partialMatch = item.submenu.find((sub) =>
+        pathname.startsWith(sub.href)
+      );
+      if (partialMatch) return partialMatch.href;
+    }
+  }
+};
+
+export function NavigationBar() {
+  const [activeMenu, setActiveMenu] = useState("");
   const [expandedMenu, setExpandedMenu] = useState(null);
-  const [activeSubmenu, setActiveSubmenu] = useState(defaultActiveSubmenu);
+  const [activeSubmenu, setActiveSubmenu] = useState("");
   const [isMinimized, setIsMinimized] = useState(false);
 
   useLayoutEffect(() => {
-    const storedExpandedMenu = sessionStorage.getItem("expandedMenu");
-    const storedActiveMenu = sessionStorage.getItem("activeMenu");
+    // Get current path from browser
+    const currentPath = window.location.pathname;
+
+    // Find matching submenu for current path
+    const matchingSubmenu = findMatchingSubmenu(currentPath);
+    const matchingParent = findParentMenu(matchingSubmenu);
+
+    // Use stored values if they match current URL, otherwise use detected values
     const storedActiveSubmenu = sessionStorage.getItem("activeSubmenu");
+    const storedActiveMenu = sessionStorage.getItem("activeMenu");
+    const storedExpandedMenu = sessionStorage.getItem("expandedMenu");
 
-    if (storedExpandedMenu) {
-      setExpandedMenu(storedExpandedMenu);
-    }
-    if (storedActiveMenu) {
-      setActiveMenu(storedActiveMenu);
-    }
-    if (storedActiveSubmenu) {
+    // If stored values match current URL structure, use them
+    if (
+      storedActiveSubmenu &&
+      (storedActiveSubmenu === currentPath ||
+        currentPath.startsWith(storedActiveSubmenu))
+    ) {
       setActiveSubmenu(storedActiveSubmenu);
+      setActiveMenu(storedActiveMenu || matchingParent);
+      setExpandedMenu(storedExpandedMenu || null);
     } else {
-      // If no active submenu is stored, default to "/bol/active"
-      setActiveSubmenu(defaultActiveSubmenu);
-      setActiveMenu(defaultActiveMenu);
+      // Otherwise set based on current URL
+      setActiveSubmenu(matchingSubmenu);
+      setActiveMenu(matchingParent);
 
-      // Store the defaults
-      sessionStorage.setItem("activeSubmenu", defaultActiveSubmenu);
-      sessionStorage.setItem("activeMenu", defaultActiveMenu);
+      // Also expand parent menu if child is active
+      if (matchingParent) {
+        setExpandedMenu(matchingParent);
+      }
+
+      // Update session storage with new values
+      sessionStorage.setItem("activeSubmenu", matchingSubmenu);
+      sessionStorage.setItem("activeMenu", matchingParent);
+      sessionStorage.setItem("expandedMenu", matchingParent || "");
+    }
+
+    const storedMinimized = localStorage.getItem("navMinimized");
+    if (storedMinimized) {
+      setIsMinimized(storedMinimized === "true");
     }
   }, []);
 
   const handleMenuClick = (href) => {
-    setExpandedMenu((prev) => (prev === href ? null : href));
-    setActiveMenu(href);
-    sessionStorage.setItem("expandedMenu", expandedMenu === href ? "" : href);
-    sessionStorage.setItem("activeMenu", href);
+    // If clicking the active menu, toggle expanded state
+    if (activeMenu === href) {
+      const newExpandedState = expandedMenu === href ? null : href;
+      setExpandedMenu(newExpandedState);
+      sessionStorage.setItem("expandedMenu", newExpandedState || "");
+    } else {
+      // If clicking a different menu, set it as active and expanded
+      setActiveMenu(href);
+      setExpandedMenu(href);
+      sessionStorage.setItem("activeMenu", href);
+      sessionStorage.setItem("expandedMenu", href);
+    }
   };
 
   const handleSubmenuClick = (href) => {
     setActiveSubmenu(href);
-    setExpandedMenu(null);
     sessionStorage.setItem("activeSubmenu", href);
 
     const parentMenu = findParentMenu(href);
@@ -128,19 +171,25 @@ export function NavigationBar() {
 
   const toggleMinimize = () => {
     setIsMinimized((prev) => {
-      if (!prev) {
+      const newState = !prev;
+
+      if (newState) {
+        // Store expanded menu before minimizing
         if (expandedMenu) {
           sessionStorage.setItem("lastExpandedMenu", expandedMenu);
         }
         setExpandedMenu(null);
-        sessionStorage.removeItem("expandedMenu");
       } else {
+        // Restore last expanded menu when maximizing
         const lastExpanded = sessionStorage.getItem("lastExpandedMenu");
         if (lastExpanded) {
           setExpandedMenu(lastExpanded);
         }
       }
-      return !prev;
+
+      // Save minimized state to localStorage for persistence across sessions
+      localStorage.setItem("navMinimized", newState.toString());
+      return newState;
     });
   };
 
@@ -188,7 +237,6 @@ export function NavigationBar() {
                     onClick={(e) => {
                       e.preventDefault();
                       handleSubmenuClick(subitem.href);
-
                       window.location.href = subitem.href;
                     }}
                   >

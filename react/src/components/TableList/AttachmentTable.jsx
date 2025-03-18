@@ -19,7 +19,7 @@ import {
 // Custom styles for the table
 const tableStyles = {
   container: {
-    maxHeight: 400,
+    maxHeight: 310,
     padding: 0,
     boxShadow: "none",
     borderRadius: "8px",
@@ -70,12 +70,12 @@ const AttachmentTable = ({ data = [] }) => {
                 <TableCell>
                   <div style={{ display: "flex", gap: "8px" }}>
                     <Tooltip title="Download">
-                      <IconButton size="small" color="primary">
-                        <FileDownloadIcon />
+                      <IconButton size="small">
+                        <FileDownloadIcon sx={{ color: "#0070c0" }} />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Delete">
-                      <IconButton size="small" color="error">
+                      <IconButton size="small" sx={{ color: "#E57373" }}>
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>

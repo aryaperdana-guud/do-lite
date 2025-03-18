@@ -105,7 +105,7 @@ const QueryTable = ({ data = [] }) => {
             ) : (
               <TableRow>
                 <TableCell colSpan={8} align="center">
-                  No queries found
+                  Sorry, no matching records found
                 </TableCell>
               </TableRow>
             )}

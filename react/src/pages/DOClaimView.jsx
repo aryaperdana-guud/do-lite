@@ -25,7 +25,6 @@ export function DOClaimView() {
   const isEditMode = mode === "edit";
 
   const { id } = useParams();
-  console.log("THIS IS ID", id);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -51,10 +50,11 @@ export function DOClaimView() {
         return <DOClaimViewClaimDetails />;
       case "attachments":
         return <DOClaimViewAttachments jobId={id} isEditMode={isEditMode} />;
-      case "audit":
-        return <DOClaimViewAudit jobId={id} />;
       case "query":
-        return <DOClaimViewQuery jobId={id} />;
+        return <DOClaimViewQuery />;
+      case "audit":
+        return <DOClaimViewAudit />;
+
       default:
         return <div>Tab content not available</div>;
     }
@@ -152,26 +152,7 @@ export function DOClaimView() {
                   <AttachmentOutlinedIcon fontSize="small" />
                   Attachments
                 </Tab>
-                <Tab
-                  value="audit"
-                  sx={{
-                    color: activeTab === "audit" ? "white" : "#455571",
-                    backgroundColor:
-                      activeTab === "audit" ? "#0070c0" : "transparent",
-                    borderRadius: "6px",
-                    padding: "8px 16px",
-                    fontSize: "0.85rem",
-                    fontWeight: 500,
-                    minWidth: "fit-content",
-                    whiteSpace: "nowrap",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "4px",
-                  }}
-                >
-                  <AssessmentOutlinedIcon fontSize="small" />
-                  Audit
-                </Tab>
+
                 <Tab
                   value="query"
                   sx={{
@@ -191,6 +172,26 @@ export function DOClaimView() {
                 >
                   <HelpOutlineOutlinedIcon fontSize="small" />
                   Query
+                </Tab>
+                <Tab
+                  value="audit"
+                  sx={{
+                    color: activeTab === "audit" ? "white" : "#455571",
+                    backgroundColor:
+                      activeTab === "audit" ? "#0070c0" : "transparent",
+                    borderRadius: "6px",
+                    padding: "8px 16px",
+                    fontSize: "0.85rem",
+                    fontWeight: 500,
+                    minWidth: "fit-content",
+                    whiteSpace: "nowrap",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                  }}
+                >
+                  <AssessmentOutlinedIcon fontSize="small" />
+                  Audit
                 </Tab>
               </TabList>
             </Tabs>

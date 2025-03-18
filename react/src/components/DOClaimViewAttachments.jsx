@@ -6,35 +6,31 @@ import {
   Card,
   CardHeader,
   CardContent,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  OutlinedInput,
+  Grid,
+  Paper,
 } from "@mui/material";
-import { PaperclipIcon, X } from "lucide-react";
-import { Add as AddIcon, Check as CheckIcon } from "@mui/icons-material";
+import {
+  Add as AddIcon,
+  AttachFile,
+  Check as CheckIcon,
+  Close as CloseIcon,
+  UploadFile as UploadFileIcon,
+} from "@mui/icons-material";
+import { PaperclipIcon, Rotate3D, X } from "lucide-react";
 import AttachmentTable from "./TableList/AttachmentTable";
-import zIndex from "@mui/material/styles/zIndex";
+import { formatDate } from "./Utility/formatDate";
+import { useParams } from "react-router-dom";
 
-// Dummy data structure
-const dummyAttachmentData = [
-  {
-    documentID: "CKJA1234567890",
-    docType: "POWER OF AUTHORITY",
-    authoriser: "CARGO OWNER 1",
-    blNo: "MEDUU12345",
-    doNo: "DO1234567890",
-    createdAt: "10/02/2025 15:51:07",
-    validityDate: "10/02/2025 15:51:07",
-  },
-  {
-    documentID: "CKJA1234567890",
-    docType: "CONTAINER GUARANTEE",
-    authoriser: "CARGO OWNER 1",
-    blNo: "MEDUU12345",
-    doNo: "DO1234567890",
-    createdAt: "10/02/2025 15:51:07",
-    validityDate: "10/02/2025 15:51:07",
-  },
-];
-
-// Custom styles to match myDO details
+// Card styles
 const cardStyles = {
   root: {
     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
@@ -52,6 +48,7 @@ const cardStyles = {
   },
 };
 
+// Popup styles
 const popupOverlay = {
   position: "fixed",
   top: "0",
@@ -171,7 +168,7 @@ const submitbutton = {
   color: "white",
 };
 
-const DOClaimViewAttachments = () => {
+const DOClaimViewAttachments = ({}) => {
   const [attData, setAttData] = useState([]);
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
@@ -179,34 +176,87 @@ const DOClaimViewAttachments = () => {
   const [validityDate, setValidityDate] = useState("");
   const [blNo, setBlNo] = useState("");
   const [documentFile, setDocumentFile] = useState(null);
+  const [doNo, setDoNo] = useState("");
+  const { id } = useParams();
+  const jobId = id;
+  const apiUrl = `https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/job/ckJobDoClaim/${jobId}`;
+  const token = localStorage.getItem("jwtToken");
+
+  useEffect(() => {
+    if (!jobId || !token) return;
+
+    async function fetchAttachmentData() {
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+
+        // Set DO number for confirmation dialog
+        if (responseData.jobAttchList && responseData.jobAttchList.length > 0) {
+          setDoNo(responseData.jobAttchList[0].doNo || "");
+        }
+
+        // Format the attachment data according to the mapping
+        const formattedAttachments = responseData.jobAttchList
+          ? responseData.jobAttchList.map((attachment) => ({
+              documentID: attachment.attId || "-",
+              docType: attachment.tmstAttType?.mattName || "-",
+              authoriser: attachment.authorizer || "-",
+              blNo: attachment.attRefNo || "-",
+              doNo: attachment.doNo || "-",
+              createdAt: formatDate(attachment.attDtCreate) || "-",
+              validityDate: formatDate(attachment.attDtValid) || "-",
+            }))
+          : [];
+
+        setAttData(formattedAttachments);
+      } catch (error) {
+        console.error("Error fetching attachment data:", error);
+      }
+    }
+
+    fetchAttachmentData();
+  }, [jobId, token, apiUrl]);
 
   const handleAddClick = () => {
-    setShowAddPopup(true); // Menampilkan pop-up saat tombol ADD diklik
+    setShowAddPopup(true);
   };
 
   const handleCloseAddPopup = () => {
-    setShowAddPopup(false); // Menutup pop-up
+    setShowAddPopup(false);
   };
 
   const handleConfirmClick = () => {
-    setShowConfirmPopup(true); //confirm pop-up
+    setShowConfirmPopup(true);
   };
 
   const handleCloseConfirmPopup = () => {
-    setShowConfirmPopup(false); //close confirm
+    setShowConfirmPopup(false);
   };
 
   const handleFileChange = (event) => {
     setDocumentFile(event.target.files[0]);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!documentType || !validityDate || !blNo || !documentFile) {
       alert("Please fill in all fields.");
       return;
     }
 
+    // Here you would implement the API call to upload the file
+    // For now, we'll just log the data
     console.log("Submitting Data:", {
       documentType,
       validityDate,
@@ -214,28 +264,44 @@ const DOClaimViewAttachments = () => {
       documentFile,
     });
 
-    alert("File uploaded successfully!");
+    try {
+      // This is a placeholder for your actual file upload API call
+      // const formData = new FormData();
+      // formData.append("file", documentFile);
+      // formData.append("documentType", documentType);
+      // formData.append("validityDate", validityDate);
+      // formData.append("blNo", blNo);
 
-    //reset form
-    setDocumentType("");
-    setValidityDate("");
-    setBlNo("");
-    setDocumentFile(null);
+      // const response = await fetch(uploadApiUrl, {
+      //   method: "POST",
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      //   body: formData,
+      // });
 
-    setShowAddPopup(false); // Close pop-up after submit
+      // if (!response.ok) {
+      //   throw new Error(`HTTP error! Status: ${response.status}`);
+      // }
+
+      alert("File uploaded successfully!");
+
+      // Reset form
+      setDocumentType("");
+      setValidityDate("");
+      setBlNo("");
+      setDocumentFile(null);
+
+      // Close popup
+      setShowAddPopup(false);
+
+      // Refetch data to update the table
+      // fetchAttachmentData();
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Error uploading file. Please try again.");
+    }
   };
-
-  useEffect(() => {
-    // Simulating API call to fetch data
-    const fetchData = () => {
-      // In a real application, this would be an API call
-      setTimeout(() => {
-        setAttData(dummyAttachmentData);
-      }, 100);
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <Box sx={{ padding: 2 }}>
@@ -262,13 +328,14 @@ const DOClaimViewAttachments = () => {
                 bgcolor: "#263754",
                 color: "white",
                 borderRadius: "10px",
+                textTransform: "none",
                 "&:hover": {
                   bgcolor: "#1d2a43",
                 },
               }}
               onClick={handleAddClick}
             >
-              ADD
+              Add
             </Button>
             <Button
               variant="contained"
@@ -277,100 +344,323 @@ const DOClaimViewAttachments = () => {
                 bgcolor: "#39E839",
                 color: "white",
                 borderRadius: "10px",
+                textTransform: "none",
                 "&:hover": {
                   bgcolor: "#2dc02d",
                 },
               }}
               onClick={handleConfirmClick}
             >
-              CONFIRM
+              Confirm
             </Button>
           </Box>
         </CardContent>
       </Card>
 
       {showAddPopup && (
-        <form onSubmit={handleSubmit}>
-          <div style={addPopupOverlay}>
-            <div style={addPopupContent}>
-              <button style={addclosePopup} onClick={handleCloseAddPopup}>
-                <X size={16} />
-              </button>
-              <h2
-                style={{
-                  textAlign: "center",
-                  fontSize: "32px",
-                  marginTop: "0px",
-                  marginBottom: "20px",
+        <Dialog
+          open={showAddPopup}
+          onClose={handleCloseAddPopup}
+          maxWidth="md"
+          fullWidth
+          PaperProps={{
+            style: {
+              borderRadius: 16,
+              overflow: "hidden",
+              boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+            },
+          }}
+        >
+          <DialogTitle
+            sx={{
+              bgcolor: "#263754",
+              color: "white",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: 4,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1.5,
+                color: "white",
+              }}
+            >
+              <AttachFile sx={{ fontSize: 24 }} />
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                  fontWeight: 700,
+                  fontSize: "1.1rem !important",
+                  letterSpacing: 0.5,
+                  color: "white !important",
                 }}
               >
-                ATTACHMENTS
-              </h2>
-              <div style={addFormLayout}>
-                <div style={addForm}>
-                  <div>
-                    <label style={labelStyle}>Document Type</label>
-                    <div>
-                      <select
-                        style={data}
-                        placeholder="Select document type"
-                        value={documentType}
-                        onChange={(e) => setDocumentType(e.target.value)}
-                      >
-                        <option value="">Select document type</option>
-                        <option value="Invoice">Bill of Lading</option>
-                        <option value="Packing List">
-                          Container Guarantee
-                        </option>
-                        <option value="Bill of Lading">
-                          Power of Authority
-                        </option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <label style={labelStyle}>Validity Date</label>
-                    <div>
+                Atatchment
+              </Typography>
+            </Box>
+            <IconButton
+              onClick={handleCloseAddPopup}
+              sx={{
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "rgba(255,255,255,0.1)",
+                },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+
+          <DialogContent
+            sx={{
+              background: "#ffffff",
+              padding: 4,
+              paddingTop: "32px !important",
+            }}
+          >
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      mb: 1,
+                      fontWeight: 600,
+                      color: "#333333",
+                      fontSize: "0.9rem",
+                      pl: 0.5,
+                    }}
+                  >
+                    Document Type
+                  </Typography>
+                  <FormControl fullWidth variant="outlined" sx={{ mb: 3 }}>
+                    <Select
+                      value={documentType}
+                      onChange={(e) => setDocumentType(e.target.value)}
+                      displayEmpty
+                      sx={{
+                        bgcolor: "white",
+                        borderRadius: 1.5,
+                        height: 56,
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#e0e0e0",
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#bdbdbd",
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#263754",
+                        },
+                      }}
+                      MenuProps={{
+                        PaperProps: {
+                          sx: {
+                            borderRadius: 1,
+                            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                          },
+                        },
+                      }}
+                    >
+                      <MenuItem value="" disabled>
+                        <Typography color="text.secondary">
+                          Select document type
+                        </Typography>
+                      </MenuItem>
+                      <MenuItem value="BILL OF LADING">Bill of Lading</MenuItem>
+                      <MenuItem value="CONTAINER GUARANTEE">
+                        Container Guarantee
+                      </MenuItem>
+                      <MenuItem value="POWER OF AUTHORITY">
+                        Power of Authority
+                      </MenuItem>
+                      <MenuItem value="OTHER">Other</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      mb: 1,
+                      fontWeight: 600,
+                      color: "#333333",
+                      fontSize: "0.9rem",
+                      pl: 0.5,
+                    }}
+                  >
+                    Validity Date
+                  </Typography>
+                  <FormControl fullWidth variant="outlined">
+                    <OutlinedInput
+                      type="date"
+                      value={validityDate}
+                      onChange={(e) => setValidityDate(e.target.value)}
+                      sx={{
+                        bgcolor: "white",
+                        borderRadius: 1.5,
+                        height: 56,
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#e0e0e0",
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#bdbdbd",
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#263754",
+                        },
+                      }}
+                      inputProps={{
+                        style: { color: "#333333", padding: "14px 16px" },
+                      }}
+                    />
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      mb: 1,
+                      fontWeight: 600,
+                      color: "#333333",
+                      fontSize: "0.9rem",
+                      pl: 0.5,
+                    }}
+                  >
+                    BL No.
+                  </Typography>
+                  <FormControl fullWidth variant="outlined" sx={{ mb: 3 }}>
+                    <OutlinedInput
+                      value={blNo}
+                      onChange={(e) => setBlNo(e.target.value)}
+                      placeholder="Enter BL No."
+                      sx={{
+                        bgcolor: "white",
+                        borderRadius: 1.5,
+                        height: 56,
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#e0e0e0",
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#bdbdbd",
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#263754",
+                        },
+                      }}
+                      inputProps={{
+                        style: { color: "#333333", padding: "14px 16px" },
+                      }}
+                    />
+                  </FormControl>
+
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      mb: 1,
+                      fontWeight: 600,
+                      color: "#333333",
+                      fontSize: "0.9rem",
+                      pl: 0.5,
+                    }}
+                  >
+                    Document File
+                  </Typography>
+                  <Paper
+                    variant="outlined"
+                    sx={{
+                      bgcolor: "white",
+                      borderRadius: 1.5,
+                      p: 0,
+                      border: `1px solid #e0e0e0`,
+                      height: 56,
+                      display: "flex",
+                      alignItems: "center",
+                      transition: "all 0.2s",
+                      "&:hover": {
+                        borderColor: "#bdbdbd",
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
                       <input
-                        style={data}
-                        type="date"
-                        value={validityDate}
-                        onChange={(e) => setValidityDate(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div style={addForm}>
-                  <div>
-                    <label style={labelStyle}>BL No.</label>
-                    <div>
-                      <input
-                        style={data}
-                        type="text"
-                        placeholder="Enter BL No."
-                        value={blNo}
-                        onChange={(e) => setBlNo(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label style={labelStyle}>Document File</label>
-                    <div>
-                      <input
-                        style={data}
+                        accept="image/*,application/pdf"
+                        style={{ display: "none" }}
+                        id="document-file"
                         type="file"
                         onChange={handleFileChange}
                       />
-                    </div>
-                  </div>
-                </div>
-              </div>
+                      <label
+                        htmlFor="document-file"
+                        style={{ width: "100%", height: "100%" }}
+                      >
+                        <Button
+                          variant="text"
+                          component="span"
+                          startIcon={
+                            <UploadFileIcon
+                              sx={{
+                                color: documentFile ? "#263754" : "#9e9e9e",
+                              }}
+                            />
+                          }
+                          sx={{
+                            color: documentFile ? "#333333" : "#9e9e9e",
+                            width: "100%",
+                            height: "100%",
+                            justifyContent: "flex-start",
+                            textTransform: "none",
+                            pl: 2,
+                            fontWeight: documentFile ? 500 : 400,
+                          }}
+                        >
+                          {documentFile ? documentFile.name : "Choose File"}
+                        </Button>
+                      </label>
+                    </Box>
+                  </Paper>
+                </Grid>
+              </Grid>
 
-              <button style={submitbutton}>SUBMIT</button>
-            </div>
-          </div>
-        </form>
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    bgcolor: "#263754",
+                    color: "white",
+                    fontSize: "0.9rem",
+                    px: 5,
+                    py: 1.5,
+                    borderRadius: 1.5,
+                    fontWeight: 600,
+                    textTransform: "none",
+                    boxShadow: "0 4px 10px rgba(38, 55, 84, 0.3)",
+                    transition: "all 0.2s",
+                    "&:hover": {
+                      bgcolor: "#1e2c45",
+                      boxShadow: "0 6px 12px rgba(38, 55, 84, 0.4)",
+                    },
+                  }}
+                >
+                  Submit
+                </Button>
+              </Box>
+            </form>
+          </DialogContent>
+        </Dialog>
       )}
 
       {showConfirmPopup && (
@@ -382,7 +672,7 @@ const DOClaimViewAttachments = () => {
             <p>
               Are you sure want to confirm
               <div>
-                <strong>DO1234567890</strong> ?
+                <strong>{doNo || "DO Number"}</strong> ?
               </div>
             </p>
 
@@ -395,7 +685,7 @@ const DOClaimViewAttachments = () => {
                 }}
                 onClick={handleCloseConfirmPopup}
               >
-                NO
+                No
               </button>
               <button
                 style={{
@@ -403,12 +693,32 @@ const DOClaimViewAttachments = () => {
                   color: "green",
                   border: "2px solid green",
                 }}
-                onClick={() => {
-                  alert("Confirmed!");
-                  handleCloseConfirmPopup();
+                onClick={async () => {
+                  try {
+                    // Here you would implement the API call to confirm
+                    // For example:
+                    // const response = await fetch(`${apiUrl}/confirm`, {
+                    //   method: "POST",
+                    //   headers: {
+                    //     Authorization: `Bearer ${token}`,
+                    //     "Content-Type": "application/json",
+                    //   },
+                    //   body: JSON.stringify({ doNo }),
+                    // });
+
+                    // if (!response.ok) {
+                    //   throw new Error(`HTTP error! Status: ${response.status}`);
+                    // }
+
+                    alert("Confirmed!");
+                    handleCloseConfirmPopup();
+                  } catch (error) {
+                    console.error("Error confirming DO:", error);
+                    alert("Error confirming DO. Please try again.");
+                  }
                 }}
               >
-                YES
+                Yes
               </button>
             </div>
 

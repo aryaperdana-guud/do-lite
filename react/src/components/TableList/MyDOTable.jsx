@@ -29,7 +29,6 @@ export const MyDOTable = ({ apiUrl, title }) => {
   const token = localStorage.getItem("jwtToken");
 
   useEffect(() => {
-    if (!jobId) return;
     async function fetchTableData() {
       setLoadingData(true);
 

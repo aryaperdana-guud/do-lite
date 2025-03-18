@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { Printer, Download } from "lucide-react";
 import AuditTable from "./TableList/AuditTable";
+import { useParams } from "react-router-dom";
 
 // Custom styles to match myDO details
 const cardStyles = {
@@ -48,19 +49,49 @@ const dummyAuditData = [
 
 const DOClaimViewAudit = () => {
   const [auditData, setAuditData] = useState([]);
+  const token = localStorage.getItem("jwtToken");
+  const { id } = useParams();
+  const urlid = id;
+  const apiUrl = `https://cdo-dev-id2.clickargo.com/be/clicdo/api/co/common/entity/auditLog/list?sEcho=3&iDisplayStart=0&iDisplayLength=1000&iSortCol_0=0&sSortDir_0=desc&iSortingCols=1&mDataProp_0=audtTimestamp&mDataProp_1=audtReckey&sSearch_1=${urlid}&mDataProp_2=audtReckey&sSearch_2=${urlid}&iColumns=3`;
 
   useEffect(() => {
-    // Simulating API call to fetch data
-    const fetchData = () => {
-      // In a real application, this would be an API call
-      setTimeout(() => {
-        setAuditData(dummyAuditData);
-      }, 100);
-    };
+    if (!token) return;
 
-    fetchData();
-  }, []);
+    async function fetchAuditData() {
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+
+        // Extract the audit data from the aaData array
+        const auditItems = responseData.aaData || [];
+
+        const formattedData = auditItems.map((audit) => ({
+          event: audit.audtEvent || "-",
+          timestamp: audit.audtTimestamp || "-",
+          remarks: audit.audtRemarks || "-",
+          userID: audit.audtUid || "-",
+          username: audit.audtUname || "-",
+        }));
+
+        setAuditData(formattedData);
+      } catch (error) {
+        console.error("Error fetching audit data:", error);
+      }
+    }
+
+    fetchAuditData();
+  }, [token]);
   return (
     <Box sx={{ padding: 2 }}>
       {/* Audit Card */}

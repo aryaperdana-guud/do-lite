@@ -17,6 +17,7 @@ import SelectedBOL from "./TableList/SelectedBOL";
 import { useParams } from "react-router-dom";
 import { formatDate, formatDateTime } from "./Utility/formatDate";
 import { formatCurrency } from "./Utility/formatCurrency";
+import useSessionStore from "../SessionControl/SessionStore";
 
 const cardStyles = {
   root: {
@@ -103,7 +104,6 @@ const DOClaimViewClaimDetails = () => {
 
         const responseData = await response.json();
 
-        // Based on the actual API response structure
         const formattedData = {
           generalDetails: {
             jobId: jobId || "-",
@@ -121,6 +121,8 @@ const DOClaimViewClaimDetails = () => {
             Array.isArray(responseData.selectedBls) &&
             responseData.selectedBls.length > 0
               ? responseData.selectedBls.map((bl) => ({
+                  idForQuery: responseData.tckJob.jobId || "-",
+                  //
                   blNo: bl.doiBlNo || "-",
                   shippingType: bl.shtId || "-",
                   shippingLine: bl.slAccnId || "-",
@@ -134,6 +136,13 @@ const DOClaimViewClaimDetails = () => {
         };
 
         setClaimData(formattedData);
+
+        // 🔥 Update Zustand store with the extracted ID
+        const firstId =
+          formattedData.selectedBOLs.length > 0
+            ? formattedData.selectedBOLs[0].idForQuery
+            : null;
+        useSessionStore.getState().setKeyForB(firstId);
       } catch (error) {
         console.error("Error fetching claim data:", error);
       }

@@ -2,30 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, Card, CardHeader, CardContent } from "@mui/material";
 import { HelpCircle } from "lucide-react";
 import QueryTable from "./TableList/QueryTable";
+import { formatDate } from "./Utility/formatDate";
+import useSessionStore from "../SessionControl/SessionStore";
 
-// Dummy data structure
-const dummyQueryData = [
-  {
-    queryID: "Q12345",
-    requester: "xxxxxxxxxxx",
-    query: "xxxxxxxx",
-    queryDate: "10/03/2025",
-    responder: "xxxxxxxxx",
-    response: "xxxxxxxx",
-    responseDate: "15/03/2025",
-  },
-  {
-    queryID: "Q12345",
-    requester: "xxxxxxxxxxx",
-    query: "xxxxxxxx",
-    queryDate: "10/03/2025",
-    responder: "xxxxxxxxx",
-    response: "xxxxxxxx",
-    responseDate: "15/03/2025",
-  },
-];
-
-// Custom styles to match myDO details
 const cardStyles = {
   root: {
     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
@@ -45,18 +24,52 @@ const cardStyles = {
 
 const DOClaimViewQuery = () => {
   const [queryData, setQueryData] = useState([]);
+  const token = localStorage.getItem("jwtToken");
+  const idQuery = useSessionStore((state) => state.idQuery);
+  const apiUrl = `https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/query/job/list/${idQuery}`;
 
   useEffect(() => {
-    // Simulating API call to fetch data
-    const fetchData = () => {
-      // In a real application, this would be an API call
-      setTimeout(() => {
-        setQueryData(dummyQueryData);
-      }, 100);
-    };
+    if (!token) return;
 
-    fetchData();
-  }, []);
+    async function fetchQueryData() {
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+
+        const formattedData = Array.isArray(responseData)
+          ? responseData.map((query) => ({
+              queryID: query.qryId || "-",
+              requester: query.tcoreUsrByQryRequester?.usrName || "Unknown",
+              query: query.qryQuery || "-",
+              queryDate: query.qryDtQuery ? formatDate(query.qryDtQuery) : "-",
+              //
+              responder: query.tcoreUsrByQryResponder?.usrName || "-",
+              response: query.qryResponse || "-",
+              responseDate: query.qryDtResponse
+                ? formatDate(query.qryDtResponse)
+                : "-",
+            }))
+          : [];
+
+        setQueryData(formattedData);
+      } catch (error) {
+        console.error("Error fetching query data:", error);
+      }
+    }
+
+    fetchQueryData();
+  }, [token]);
 
   return (
     <Box sx={{ padding: 2 }}>
