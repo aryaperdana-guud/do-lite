@@ -19,7 +19,20 @@ import { StatusIcon } from "../StatusRender";
 import "./BOLTable.css";
 import { formatDate } from "../Utility/formatDate";
 import { formatCurrency } from "../Utility/formatCurrency";
-import { TableRow } from "@mui/material";
+import { 
+  TableRow,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Box,
+  TableContainer,
+  Table,
+  TableCell,
+  TableBody,
+  TableHead,
+  Paper,
+  Typography,
+ } from "@mui/material";
 
 export const ExtensionTable = ({
   title,
@@ -42,6 +55,8 @@ export const ExtensionTable = ({
   const [tableData, setTableData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const token = localStorage.getItem("jwtToken");
+
+  const [isOpen, setIsOpen] = useState(false); //untuk open pop up container details
 
   const isHistoryPage = title === "History List";
 
@@ -209,7 +224,7 @@ export const ExtensionTable = ({
                         <span>{row.originalDoNo}</span>
                         <button
                           className="action-button inline-button"
-                          onClick={() => onViewDO?.(row)}
+                          onClick={() => navigate(`/do-claim/detail/${row.jobId}`)}
                           title="View DO Details"
                         >
                           <Search size={16} />
@@ -221,7 +236,7 @@ export const ExtensionTable = ({
                         <span>{row.noOfContainers}</span>
                         <button
                           className="action-button inline-button"
-                          onClick={() => onViewContainers?.(row)}
+                          onClick={() => setIsOpen(true)}
                           title="View Container Details"
                         >
                           <Search size={16} />
@@ -281,6 +296,41 @@ export const ExtensionTable = ({
           </table>
         )}
       </div>
+
+      <Dialog open={isOpen} onClose={() => setIsOpen(false)} fullWidth maxWidth="md">
+        <DialogTitle sx={{ bgcolor: "#263754", color: "white", textAlign: "center" }}>
+          <Typography variant="h5" sx={{ color: "white !important" }}>
+            View Container
+          </Typography>
+        </DialogTitle>
+        <DialogContent sx={{ margin: "20px", padding: "0"}}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ border: "1px solid #ccc", bgcolor: "#eaeaea", fontWeight: "bold" }}>Container No</TableCell>
+                    <TableCell sx={{ border: "1px solid #ccc", bgcolor: "#eaeaea", fontWeight: "bold" }}>Container Details</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                    <TableRow>
+                      <TableCell sx={{
+                          border: "1px solid #ccc",
+                          borderRadius: "8px", 
+                          padding: "8px", 
+                        }}>abc</TableCell>
+                      <TableCell sx={{
+                          border: "1px solid #ccc",
+                          borderRadius: "8px", 
+                          padding: "8px", 
+                      }}
+                      ></TableCell>
+                    </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+        </DialogContent>
+      </Dialog>
 
       <div className="active-lists__footer">
         <div className="active-lists__controls"></div>

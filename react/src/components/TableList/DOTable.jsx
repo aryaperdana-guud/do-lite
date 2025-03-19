@@ -1,12 +1,26 @@
 import React, { useMemo, useEffect, useState } from "react";
-import { Eye, Edit, Download, ArrowUp, ArrowDown } from "lucide-react";
+import { Eye, Edit, Download, ArrowUp, ArrowDown, Search } from "lucide-react";
 import "./DOTable.css";
+import { 
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Box,
+  TableContainer,
+  Table,
+  TableCell,
+  TableBody,
+  TableHead,
+  Paper,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { StatusIcon } from "../StatusRender.jsx";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../Utility/formatDate.jsx";
 import TableDownloader from "../DownloadTableHandler.jsx";
 
-export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
+export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl, claimData = { selectedBOLs: [] }  }) => {
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
@@ -16,6 +30,9 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
   const [tableData, setTableData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const token = localStorage.getItem("jwtToken");
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   useEffect(() => {
     async function fetchTableData() {
@@ -200,7 +217,25 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
                     <td>{row.shipmentType}</td>
                     <td>{row.shippingLine}</td>
                     <td>{row.dateSubmitted}</td>
-                    <td>{row.noOfBl}</td>
+                    <td>
+                    <div className="inline-content">
+                        <span>{row.noOfBl}</span>
+                        <button
+                          className="action-button inline-button"
+                          //show do details (pop-up)
+                          onClick={() => {
+                            console.log("Selected Row:", row);
+                            console.log("Claim Data:", claimData);
+                            setSelectedRow(row);
+                            setIsOpen(true)
+                          }}
+                          title="View DO Details"
+                        >
+                          <Search size={16} />
+                        </button>
+                      </div>
+                      
+                    </td>
                     <td>
                       <div className="action-buttons">
                         <button
@@ -227,8 +262,65 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl }) => {
               )}
             </tbody>
           </table>
-        )}
+        )} 
       </div>
+      <Dialog open={isOpen} onClose={() => setIsOpen(false)} fullWidth maxWidth="md">
+        <DialogTitle sx={{ bgcolor: "#263754", color: "white", textAlign: "center" }}>
+        <Box
+            sx={{
+              alignItems: "center",
+              gap: 1.5,
+              color: "white",
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                color: "white !important",
+              }}
+            >
+              Bill of Ladings
+            </Typography>
+          </Box>
+        </DialogTitle>
+        <DialogContent 
+          sx={{
+            padding: "0",
+            margin: "15px",
+          }}
+        >
+        {claimData.selectedBOLs.length > 0 ?  (
+          <Box>
+            <TableContainer component={Paper}>
+              <Table stickyHeader aria-label="selected BOL table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: "bold" }}>BL No</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Shippment Type</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Authoriser</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>BL Date Submitted</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {claimData.selectedBOLs.map((row, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{row.blNo}</TableCell>
+                      <TableCell>{row.shippingType}</TableCell>
+                      <TableCell>{row.authoriser}</TableCell>
+                      <TableCell>{row.dateSubmitted}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+
+          ) : (
+            <Typography sx={{ textAlign: "center"}}>No details available.</Typography>
+          )}
+        </DialogContent>
+      </Dialog>
+      
     </div>
   );
 };

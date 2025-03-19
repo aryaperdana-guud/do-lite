@@ -24,3 +24,13 @@ export const formatDateTime = (timestamp) => {
     return "";
   }
 };
+
+//format yyyy-mm-dd untuk input date
+export const formatDateForInputDate = (timestamp) => {
+  if (!timestamp) return ""; 
+
+  const date = new Date(timestamp);
+  if (isNaN(date)) return ""; // Handle Invalid Date
+
+  return date.toISOString().split("T")[0]; // Menghasilkan format yyyy-MM-dd
+};

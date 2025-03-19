@@ -15,7 +15,7 @@ import {
 } from "@mui/icons-material";
 import SelectedBOL from "./TableList/SelectedBOL";
 import { useParams } from "react-router-dom";
-import { formatDate, formatDateTime } from "./Utility/formatDate";
+import { formatDate, formatDateTime, formatDateForInputDate } from "./Utility/formatDate";
 import { formatCurrency } from "./Utility/formatCurrency";
 import useSessionStore from "../SessionControl/SessionStore";
 
@@ -56,7 +56,15 @@ const DOClaimViewClaimDetails = () => {
       startDate: "",
       expiryDate: "",
     },
-    selectedBOLs: [],
+    selectedBOLs: [
+      {
+        blNo: "BL123456",
+        shippingType: "IMPORT",
+        shippingLine: "MSC",
+        authoriser: "PT Alamboga",
+        blDateSubmitted: "2024-03-10 14:00",
+      }
+    ],
     chargeDetails: {
       jobCharge: "",
     },
@@ -111,11 +119,15 @@ const DOClaimViewClaimDetails = () => {
               responseData.tckJob?.tckMstShipmentType?.shtName || "-",
           },
           jobDateDetails: {
+            // startDate:
+            //   formatDate(responseData.tckJob?.tckRecordDate?.rcdDtStart) || "-",
+            // expiryDate:
+            //   formatDate(responseData.tckJob?.tckRecordDate?.rcdDtExpiry) ||
+            //   "-",
             startDate:
-              formatDate(responseData.tckJob?.tckRecordDate?.rcdDtStart) || "-",
+              formatDateForInputDate(responseData.tckJob?.tckRecordDate?.rcdDtStart) || "-",
             expiryDate:
-              formatDate(responseData.tckJob?.tckRecordDate?.rcdDtExpiry) ||
-              "-",
+              formatDateForInputDate(responseData.tckJob?.tckRecordDate?.rcdDtExpiry) || "",  
           },
           selectedBOLs:
             Array.isArray(responseData.selectedBls) &&
@@ -136,6 +148,7 @@ const DOClaimViewClaimDetails = () => {
         };
 
         setClaimData(formattedData);
+        console.log("Updated claimData:", formattedData); //debug data
 
         // 🔥 Update Zustand store with the extracted ID
         const firstId =
