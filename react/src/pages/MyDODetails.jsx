@@ -15,7 +15,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { TaxInvoiceTab } from "../components/TaxInvoiceTab.jsx";
 import "./MyDODetails.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { InvoiceTab } from "../components/InvoiceTab.jsx";
 import { ContainersTab } from "../components/ContainersTab.jsx";
 import { ExtensionsTab } from "../components/ExtensionTab.jsx";
@@ -46,6 +46,10 @@ export function MyDODetails() {
   };
 
   const navigate = useNavigate();
+
+  const { id } = useParams();
+  console.log("the id:", id);
+  // id will use for fetch data. id got from the My Do Table fetch.
 
   const renderTabContent = () => {
     switch (activeTab) {

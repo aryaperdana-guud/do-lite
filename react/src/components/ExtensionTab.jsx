@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -16,45 +16,64 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { StatusIcon } from "./StatusRender";
-
-// Generate a large sample dataset for extensions
-const generateExtensions = (count) => {
-  const containerTypes = ["20HC", "40HC", "45HC", "20FR", "40FR"];
-  const currencies = ["USD", "EUR", "GBP", "JPY", "AUD"];
-  const statuses = ["accepted", "pending", "rejected"];
-  const extensions = [];
-
-  for (let i = 1; i <= count; i++) {
-    const containerType =
-      containerTypes[Math.floor(Math.random() * containerTypes.length)];
-    const containerNumber = `MSGU${Math.floor(1000000 + Math.random() * 9000000)}`;
-    const currency = currencies[Math.floor(Math.random() * currencies.length)];
-    const amount = (50 + Math.random() * 500).toFixed(2);
-
-    extensions.push({
-      id: i,
-      validTillDate: `${(i % 28) + 1}/0${(i % 12) + 1}/2024`,
-      noContainers: `${containerNumber} / ${containerType}`,
-      currency: currency,
-      amount: parseFloat(amount),
-      submitDate: `${(i % 28) + 1}/0${(i % 12) + 1}/2024`,
-      issueDate: `${(i % 28) + 1}/0${(i % 12) + 1}/2024`,
-      extendedDO: statuses[Math.floor(Math.random() * statuses.length)],
-      proformaInvoice: statuses[Math.floor(Math.random() * statuses.length)],
-      platformFeeInvoice: statuses[Math.floor(Math.random() * statuses.length)],
-      demurrageFinalInvoice:
-        statuses[Math.floor(Math.random() * statuses.length)],
-      adminFeeFinalInvoice:
-        statuses[Math.floor(Math.random() * statuses.length)],
-    });
-  }
-
-  return extensions;
-};
+import { formatDate } from "./Utility/formatDate";
+import { formatCurrency } from "./Utility/formatCurrency";
+import { useParams } from "react-router-dom";
 
 export function ExtensionsTab() {
-  // Sample data with 50 items
-  const [extensions, setExtensions] = useState(generateExtensions(50));
+  const [extensions, setExtensions] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const token = localStorage.getItem("jwtToken");
+  const { id } = useParams();
+  const apiUrl = `https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/extension/doExt/list?sEcho=3&iDisplayStart=0&iDisplayLength=1000&iSortCol_0=0&sSortDir_0=asc&iSortingCols=1&mDataProp_0=tckJobDoExt.tckJob.tckRecordDate.rcdDtPaid&mDataProp_1=tckDo.doId&sSearch_1=${id}&mDataProp_2=history&sSearch_2=all&iColumns=3`;
+  useEffect(() => {
+    async function fetchExtensions() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const responseData = await response.json();
+        const formattedData =
+          responseData.aaData?.map((item) => ({
+            id: id,
+            validTillDate: formatDate(item.doxValidDate),
+            noContainers: item.doxNoCnt || "-",
+            currency: item.doxChargesTotal || "-",
+            amount: formatCurrency(item.doxChargesTotal),
+            submitDate: formatDate(
+              item.tckJobDoExt.tckJob.tckRecordDate.rcdDtSubmit
+            ),
+            issueDate: formatDate(
+              item.tckJobDoExt.tckJob.tckRecordDate.rcdDtPaid
+            ),
+            extendedDO: null,
+            proformaInvoice: null,
+            platformFeeInvoice: null,
+            demurrageFinalInvoice: null,
+            adminFeeFinalInvoice: null,
+          })) || [];
+
+        setExtensions(formattedData);
+        console.log("Full formattedData:", formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setExtensions([]);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    if (token) {
+      fetchExtensions();
+    }
+  }, [token]);
 
   // Sorting state
   const [sortConfig, setSortConfig] = useState({
@@ -226,7 +245,7 @@ export function ExtensionsTab() {
                 <TableCell>{extension.validTillDate}</TableCell>
                 <TableCell>{extension.noContainers}</TableCell>
                 <TableCell>{extension.currency}</TableCell>
-                <TableCell>{extension.amount.toFixed(2)}</TableCell>
+                <TableCell>{extension.amount}</TableCell>
                 <TableCell>{extension.submitDate}</TableCell>
                 <TableCell>{extension.issueDate}</TableCell>
                 <TableCell>

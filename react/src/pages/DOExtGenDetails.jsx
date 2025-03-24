@@ -39,49 +39,7 @@ const DOExtGenDetails = ({ title }) => {
     setContainerData(updatedData);
   };
 
-  // useEffect(() => {
-  //   // Simulating API fetch for container data
-  //   const fetchData = async () => {
-  //     // In a real app, this would be an API call
-  //     const data = [
-  //       {
-  //         marksAndNumber: "MSDU760099 / 45DV",
-  //         containerCat: "STANDARD",
-  //         dangerousGood: "YES",
-  //         vtd: "20/02/2025",
-  //         nextvtd: "20/03/2025",
-  //         extDays: "30",
-  //       },
-  //       {
-  //         marksAndNumber: "MSDU760100 / 45DV",
-  //         containerCat: "STANDARD",
-  //         dangerousGood: "YES",
-  //         vtd: "20/02/2025",
-  //         nextvtd: "20/03/2025",
-  //         extDays: "30",
-  //       },
-  //       {
-  //         marksAndNumber: "MSDU760101 / 45DV",
-  //         containerCat: "STANDARD",
-  //         dangerousGood: "YES",
-  //         vtd: "20/02/2025",
-  //         nextvtd: "20/03/2025",
-  //         extDays: "30",
-  //       },
-  //       {
-  //         marksAndNumber: "MSDU760101 / 45DV",
-  //         containerCat: "STANDARD",
-  //         dangerousGood: "YES",
-  //         vtd: "20/02/2025",
-  //         nextvtd: "20/03/2025",
-  //         extDays: "30",
-  //       },
-  //     ];
-  //     setContainerData(data);
-  //   };
-
-  //   fetchData();
-  // }, []);
+  
 
   const token = localStorage.getItem("jwtToken");
   const { id } = useParams();

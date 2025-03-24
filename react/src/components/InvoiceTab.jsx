@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -19,33 +19,61 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-
-// Generate a large sample dataset
-const generateInvoices = (count) => {
-  const invoices = [];
-  for (let i = 1; i <= count; i++) {
-    invoices.push({
-      id: i,
-      invoiceNumber: `PLF24${i.toString().padStart(12, "0")}`,
-      invoiceType: "INVOICE PLATFORM FEE",
-      invoiceRegion: "...",
-      invoiceCurrency: "IDR",
-      invoiceAmount: `Rp ${(Math.random() * 10000).toFixed(2)}`,
-    });
-  }
-  return invoices;
-};
-
-// Sample data with 100 items
-const initialInvoices = generateInvoices(100);
+import { formatCurrency } from "./Utility/formatCurrency";
+import { useParams } from "react-router-dom";
 
 export function InvoiceTab() {
-  const [invoices] = useState(initialInvoices);
   const [selectedInvoices, setSelectedInvoices] = useState([]);
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
   });
+
+  const [invoices, setInvoices] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const token = localStorage.getItem("jwtToken");
+  const { id } = useParams();
+  const apiUrl = `https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/doInv/${id}/list?sEcho=3&iDisplayStart=0&iDisplayLength=1000&iSortCol_0=0&sSortDir_0=desc&iSortingCols=1&mDataProp_0=tckDo.doDtCreate&mDataProp_1=tckMstInvoiceType.invtId&sSearch_1=I-IMF&iColumns=2`;
+
+  useEffect(() => {
+    async function fetchInvoices() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const responseData = await response.json();
+        const formattedData =
+          responseData.aaData?.map((item) => ({
+            id: id,
+            invoiceNumber: item.invNo || "-",
+            invoiceType: item.tckMstInvoiceType.invtName || "-",
+            invoiceRegion: item.invRegion || "-",
+            invoiceCurrency: item.tmstCurrency.ccyCode || "-",
+            invoiceAmount: formatCurrency(item.invAmount),
+          })) || [];
+
+        setInvoices(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setInvoices([]);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    if (token) {
+      fetchInvoices();
+    }
+  }, [token]);
+
+  //const displayData = tableData;
 
   const handleSelectAll = (event) => {
     if (event.target.checked) {

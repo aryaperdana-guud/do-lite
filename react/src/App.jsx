@@ -145,7 +145,7 @@ function App() {
           }
         />
         <Route
-          path="/my-do/active/details"
+          path="/my-do/active/details/:id"
           element={
             <AuthGuard>
               <MyDODetails />

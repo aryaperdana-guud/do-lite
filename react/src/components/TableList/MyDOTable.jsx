@@ -185,7 +185,7 @@ export const MyDOTable = ({ apiUrl, title }) => {
                   </TableRow>
                 ) : (
                   sortedData.map((row, index) => (
-                    <TableRow key={row.doNumber} className="table-row">
+                    <TableRow key={row.id} className="table-row">
                       <TableCell>{row.doNumber}</TableCell>
                       <TableCell>{row.consignee}</TableCell>
                       <TableCell>{row.vesselName}</TableCell>
@@ -198,7 +198,9 @@ export const MyDOTable = ({ apiUrl, title }) => {
                           <IconButton
                             size="small"
                             color="primary"
-                            onClick={() => navigate("/my-do/active/details")}
+                            onClick={() =>
+                              navigate(`/my-do/active/details/${row.id}`)
+                            }
                             sx={{ color: "#0070c0" }}
                           >
                             <Eye size={16} />

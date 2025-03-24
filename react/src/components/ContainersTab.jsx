@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -15,46 +15,61 @@ import {
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-
-// Generate a large sample dataset for containers
-const generateContainers = (count) => {
-  const containerTypes = ["20HC", "40HC", "45HC", "20FR", "40FR"];
-  const containers = [];
-
-  for (let i = 1; i <= count; i++) {
-    const containerType =
-      containerTypes[Math.floor(Math.random() * containerTypes.length)];
-    const containerNumber = `MSGU${Math.floor(1000000 + Math.random() * 9000000)}`;
-
-    containers.push({
-      id: i,
-      marksNumber: `${containerNumber} / ${containerType}`,
-      packages: Math.floor(50 + Math.random() * 100).toString(),
-      description:
-        i % 5 === 0
-          ? "Electronics"
-          : i % 4 === 0
-            ? "Textiles"
-            : i % 3 === 0
-              ? "Machinery"
-              : "-",
-      measurements: Math.floor(10000 + Math.random() * 30000).toString(),
-      validateTill: `${(i % 28) + 1}/0${(i % 12) + 1}/2024`,
-    });
-  }
-
-  return containers;
-};
+import { formatDate } from "./Utility/formatDate";
+import { useParams } from "react-router-dom";
 
 export function ContainersTab() {
-  // Sample data with 50 items
-  const [containers, setContainers] = useState(generateContainers(50));
-
   // Sorting state
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "asc",
   });
+
+  const [containers, setContainers] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const token = localStorage.getItem("jwtToken");
+  const { id } = useParams();
+  const apiUrl = `https://cdo-dev-id2.clickargo.com/be/clicdo/api/v1/clickargo/clicdo/doCnt/${id}/list?sEcho=3&iDisplayStart=0&iDisplayLength=1000&iSortCol_0=0&sSortDir_0=desc&iSortingCols=1&mDataProp_0=tckDo.doDtCreate&mDataProp_1=listOfContainerForExtension&sSearch_1=true&iColumns=2`;
+
+  useEffect(() => {
+    async function fetchContainers() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const responseData = await response.json();
+        const formattedData =
+          responseData.aaData?.map((item) => ({
+            id: item.tckCnt.cntNo || "-",
+            marksNumber: item.tckCnt.cntNo || "-",
+            packages: item.tckCnt.cntNoPackages || "-",
+            description:
+              item.tckCnt.cntDescription || "No Description Available",
+            measurements: item.tckCnt.cntWeight || "-",
+            validateTill: formatDate(item.tckCnt.cntValidDate),
+          })) || [];
+
+        setContainers(formattedData);
+        console.log("Full formattedData:", formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setContainers([]);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    if (token) {
+      fetchContainers();
+    }
+  }, [token]);
 
   // Sorting function
   const sortContainers = (key) => {
