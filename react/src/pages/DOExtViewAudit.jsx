@@ -16,45 +16,53 @@ import {
   Paper,
 } from "@mui/material";
 import { Clock, Printer, Download } from "lucide-react";
+import { formatDateTime } from "../components/Utility/formatDate";
+import { useParams } from "react-router-dom";
 
-const ViewExtAudit = ({ id }) => {
-  console.log("Current ID:", id);
-
+const ViewExtAudit = () => {
   const [auditData, setAuditData] = useState([]);
-
+  const [loadingData, setLoadingData] = useState(true);
+  const token = localStorage.getItem("jwtToken");
+  const { id } = useParams();
+  const apiUrl = `
+https://cdo-dev-id2.clickargo.com/be/clicdo/api/co/common/entity/auditLog/list?sEcho=3&iDisplayStart=0&iDisplayLength=1000&iSortCol_0=0&sSortDir_0=desc&iSortingCols=1&mDataProp_0=audtTimestamp&mDataProp_1=audtReckey&sSearch_1${id}&mDataProp_2=audtReckey&sSearch_2=${id}&iColumns=3`;
   useEffect(() => {
-    // Simulated Data Fetch
-    setAuditData([
-      {
-        event: "JOB CREATE EVENT",
-        timestamp: "17/02/2025 17:30:56",
-        remarks: "-",
-        userId: "COMLG_U002",
-        userName: "Adli Ifkar",
-      },
-      {
-        event: "CK_DO_EXT_CREATE",
-        timestamp: "17/02/2025 17:30:56",
-        remarks: "CREATE",
-        userId: "COMLG_U002",
-        userName: "Adli Ifkar",
-      },
-      {
-        event: "CK_DO_EXT_MODIFY",
-        timestamp: "17/02/2025 17:30:56",
-        remarks: "MODIFY",
-        userId: "COMLG_U001",
-        userName: "Adli Ifkar",
-      },
-      {
-        event: "CK_DO_EXT_MODIFY",
-        timestamp: "17/02/2025 17:30:56",
-        remarks: "MODIFY",
-        userId: "COMLG_U001",
-        userName: "Adli Ifkar",
-      },
-    ]);
-  }, []);
+    async function fetchAuditData() {
+      setLoadingData(true);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const responseData = await response.json();
+        const formattedData =
+          responseData.aaData?.map((item) => ({
+            event: item.audtEvent || "-",
+            timestamp: formatDateTime(item.audtTimestamp),
+            remarks: item.audtRemarks || "-",
+            userId: item.audtUid || "Unknown",
+            userName: item.audtUname || "Unknown",
+          })) || [];
+
+        setAuditData(formattedData);
+        console.log("Full formattedData:", formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setAuditData([]);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    if (token) {
+      fetchAuditData();
+    }
+  }, [token]);
 
   return (
     <Box sx={{ p: 2 }}>
