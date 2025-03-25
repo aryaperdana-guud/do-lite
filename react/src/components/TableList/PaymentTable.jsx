@@ -7,7 +7,21 @@ import {
   ArrowUpward,
   ArrowDownward,
 } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { 
+  IconButton,
+  TableRow,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Box,
+  TableContainer,
+  Table,
+  TableCell,
+  TableBody,
+  TableHead,
+  Paper,
+  Typography,
+ } from "@mui/material";
 import "./DOTable.css";
 import { useNavigate } from "react-router-dom";
 import { StatusIcon } from "../StatusRender.jsx";
@@ -26,6 +40,9 @@ export const PaymentTable = ({ apiUrl, onPaySelected }) => {
   const [tableData, setTableData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const token = localStorage.getItem("jwtToken");
+
+  const [isOpen, setIsOpen] = useState(false); //untuk open pop up do details
+  const [doDetails, setDoDetails] = useState([]); //state untuk do details
 
   useEffect(() => {
     async function fetchTableData() {
@@ -272,7 +289,23 @@ export const PaymentTable = ({ apiUrl, onPaySelected }) => {
                     <td>{row.amount}</td>
                     <td>
                       <div className="action-buttons">
-                        <button className="action-button_DO">
+                        <button className="action-button_DO"
+                        
+                          onClick={() => {
+                            const selectedDO = tableData.find(item => item.jobId === row.jobId);
+    
+                            if (selectedDO) {
+                              setDoDetails([{ 
+                                id: selectedDO.jobId, 
+                                blNo: "BL123456", //  dummy
+                                invoiceNo: "INV-7890", //dummy
+                                amount: selectedDO.amount 
+                              }]);
+                            }
+                            setIsOpen(true)
+                          }}
+                          title="View DO Details"
+                        >
                           <Search style={{ fontSize: 16 }} />
                         </button>
                       </div>
@@ -323,6 +356,46 @@ export const PaymentTable = ({ apiUrl, onPaySelected }) => {
           </button>
         </div>
       </div>
+
+      <Dialog open={isOpen} onClose={() => setIsOpen(false)} fullWidth maxWidth="md">
+        <DialogTitle sx={{ bgcolor: "#263754", color: "white", textAlign: "center" }}>
+          <Typography variant="h5" sx={{ color: "white !important" }}>
+            List of DO
+          </Typography>
+        </DialogTitle>
+        <DialogContent sx={{ margin: "20px", padding: "0"}}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ border: "1px solid #ccc", bgcolor: "#eaeaea", fontWeight: "bold" }}>DO ID</TableCell>
+                    <TableCell sx={{ border: "1px solid #ccc", bgcolor: "#eaeaea", fontWeight: "bold" }}>BL No.</TableCell>
+                    <TableCell sx={{ border: "1px solid #ccc", bgcolor: "#eaeaea", fontWeight: "bold" }}>Invoice No.</TableCell>
+                    <TableCell sx={{ border: "1px solid #ccc", bgcolor: "#eaeaea", fontWeight: "bold" }}>Amount</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {doDetails.length > 0 ? (
+                    doDetails.map((doItem, index) => (
+                      <TableRow key={index}>
+                        <TableCell sx={{ border: "1px solid #ccc", padding: "8px" }}>{doItem.id}</TableCell>
+                        <TableCell sx={{ border: "1px solid #ccc", padding: "8px" }}>{doItem.blNo}</TableCell>
+                        <TableCell sx={{ border: "1px solid #ccc", padding: "8px" }}>{doItem.invoiceNo}</TableCell>
+                        <TableCell sx={{ border: "1px solid #ccc", padding: "8px" }}>{doItem.amount}</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4} sx={{ textAlign: "center", padding: "20px", color: "#888" }}>
+                        No DO details available.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

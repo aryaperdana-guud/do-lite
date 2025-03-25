@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { formatDate } from "../Utility/formatDate.jsx";
 import TableDownloader from "../DownloadTableHandler.jsx";
 
-export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl, claimData = { selectedBOLs: [] }  }) => {
+export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl}) => {
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
@@ -32,7 +32,7 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl, claimData
   const token = localStorage.getItem("jwtToken");
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [bolDetails, setBolDetails] = useState([]); //state untuk bol details
 
   useEffect(() => {
     async function fetchTableData() {
@@ -224,12 +224,19 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl, claimData
                           className="action-button inline-button"
                           //show do details (pop-up)
                           onClick={() => {
-                            console.log("Selected Row:", row);
-                            console.log("Claim Data:", claimData);
-                            setSelectedRow(row);
+                            const selectedBOL = tableData.find(item => item.jobId === row.jobId);
+    
+                            if (selectedBOL) {
+                              setBolDetails([{ 
+                                blNo: "BL123456", //  dummy
+                                shipmentType: selectedBOL.shipmentType, 
+                                authoriser: "PT. ABC", //dummy
+                                dateSubmitted: selectedBOL.dateSubmitted,
+                              }]);
+                            }
                             setIsOpen(true)
                           }}
-                          title="View DO Details"
+                          title="View BOL Details"
                         >
                           <Search size={16} />
                         </button>
@@ -264,9 +271,10 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl, claimData
           </table>
         )} 
       </div>
+
       <Dialog open={isOpen} onClose={() => setIsOpen(false)} fullWidth maxWidth="md">
         <DialogTitle sx={{ bgcolor: "#263754", color: "white", textAlign: "center" }}>
-        <Box
+          <Box
             sx={{
               alignItems: "center",
               gap: 1.5,
@@ -283,44 +291,57 @@ export const DOTable = ({ title, data, onDownload, onViewItem, apiUrl, claimData
             </Typography>
           </Box>
         </DialogTitle>
-        <DialogContent 
+        <DialogContent
           sx={{
             padding: "0",
             margin: "15px",
           }}
         >
-        {claimData.selectedBOLs.length > 0 ?  (
           <Box>
             <TableContainer component={Paper}>
               <Table stickyHeader aria-label="selected BOL table">
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: "bold" }}>BL No</TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}>Shippment Type</TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}>Authoriser</TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}>BL Date Submitted</TableCell>
+                    <TableCell sx={{ border: "1px solid #ccc", bgcolor: "#eaeaea", fontWeight: "bold" }}>BL No</TableCell>
+                    <TableCell sx={{ border: "1px solid #ccc", bgcolor: "#eaeaea", fontWeight: "bold" }}>Shippment Type</TableCell>
+                    <TableCell sx={{ border: "1px solid #ccc", bgcolor: "#eaeaea", fontWeight: "bold" }}>Authoriser</TableCell>
+                    <TableCell sx={{ border: "1px solid #ccc", bgcolor: "#eaeaea", fontWeight: "bold" }}>BL Date Submitted</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {claimData.selectedBOLs.map((row, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{row.blNo}</TableCell>
-                      <TableCell>{row.shippingType}</TableCell>
-                      <TableCell>{row.authoriser}</TableCell>
-                      <TableCell>{row.dateSubmitted}</TableCell>
+                  {bolDetails.length > 0 ? (
+                    bolDetails.map((bolItem, index) => (
+                      <TableRow key={index}>
+                        <TableCell sx={{ border: "1px solid #ccc", padding: "8px" }}>
+                          {bolItem.blNo}
+                        </TableCell>
+                        <TableCell sx={{ border: "1px solid #ccc", padding: "8px" }}>
+                          {bolItem.shipmentType}
+                        </TableCell>
+                        <TableCell sx={{ border: "1px solid #ccc", padding: "8px" }}>
+                          {bolItem.authoriser}
+                        </TableCell>
+                        <TableCell sx={{ border: "1px solid #ccc", padding: "8px" }}>
+                          {bolItem.dateSubmitted}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={4}
+                        sx={{ textAlign: "center", padding: "20px", color: "#888" }}
+                      >
+                        No DO details available.
+                      </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
           </Box>
-
-          ) : (
-            <Typography sx={{ textAlign: "center"}}>No details available.</Typography>
-          )}
         </DialogContent>
       </Dialog>
-      
     </div>
   );
 };
