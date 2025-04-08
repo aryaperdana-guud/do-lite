@@ -309,7 +309,7 @@ export function MyDODetails() {
       <main className="main-content">
         <ProfileDropdown />
 
-        <h1 className="Title">Bill of Ladings</h1>
+        <h1 className="Title">My DO</h1>
 
         <div className="form">
           <div className="form-title">Do Details</div>

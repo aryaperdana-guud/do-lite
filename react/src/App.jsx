@@ -34,6 +34,8 @@ import { DoTransaction } from "./pages/DoPayment-transaction.jsx";
 import { DoPaymentPay } from "./pages/DOPayment-Pay.jsx";
 import SessionChecker from "./SessionControl/SessionChecker.jsx";
 import AutoLogout from "./SessionControl/AutoLogout.jsx";
+import { User } from "lucide-react";
+import { UserProfile } from "./pages/Profile.jsx";
 
 function App() {
   return (
@@ -47,6 +49,14 @@ function App() {
         {/* Other routes */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route
+          path="/user/profile"
+          element={
+            <AuthGuard>
+              <UserProfile />
+            </AuthGuard>
+          }
+        />
 
         <Route
           path="/do-claims/active"

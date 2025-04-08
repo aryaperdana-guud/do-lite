@@ -37,7 +37,7 @@ const ProfileDropdown = () => {
     router("/");
   };
 
-  const handleProfile = () => router("/profile");
+  const handleProfile = () => router("/user/profile");
 
   return (
     <div className="profile-dropdown">
