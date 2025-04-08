@@ -36,6 +36,7 @@ import SessionChecker from "./SessionControl/SessionChecker.jsx";
 import AutoLogout from "./SessionControl/AutoLogout.jsx";
 import { User } from "lucide-react";
 import { UserProfile } from "./pages/Profile.jsx";
+import { ChangePassword } from "./pages/ChangePassword.jsx";
 
 function App() {
   return (
@@ -54,6 +55,14 @@ function App() {
           element={
             <AuthGuard>
               <UserProfile />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/user/change-password"
+          element={
+            <AuthGuard>
+              <ChangePassword />
             </AuthGuard>
           }
         />
