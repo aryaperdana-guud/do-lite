@@ -76,6 +76,7 @@ const SignIn = () => {
           username: profileData.user?.name || "Unknown",
           companyName: profileData.user?.coreAccn?.accnName || "No Company",
           avatarUrl: profileData.user?.avatar || "",
+          userId: profileData.user?.username || "Unknown",
         };
 
         // console.log("Storing user in Zustand:", userData);

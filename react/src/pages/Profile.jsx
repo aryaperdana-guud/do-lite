@@ -10,6 +10,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Box, IconButton, Typography } from "@mui/material";
+import UserActivityLog from "./Profile-Audits.jsx";
 
 export function UserProfile() {
   const [activeTab, setActiveTab] = useState("user-details");
@@ -25,7 +26,7 @@ export function UserProfile() {
       case "roles":
         return <div style={{ color: "#000" }}>Tab content not available</div>;
       case "audits":
-        return <div style={{ color: "#000" }}>Tab content not available</div>; // temporary
+        return <UserActivityLog />;
       default:
         return <div style={{ color: "#000" }}>Tab content not available</div>;
     }

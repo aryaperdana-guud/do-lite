@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Box,
@@ -6,30 +6,91 @@ import {
   MenuItem,
   Grid,
   Paper,
+  CircularProgress,
 } from "@mui/material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import ContactMailOutlinedIcon from "@mui/icons-material/ContactMailOutlined";
+import axios from "axios";
 
 const UserInfoForm = () => {
-  // Default values based on the image
-  const userData = {
-    userId: "COMLG_U001",
-    accountId: "Combi Logistics",
-    documentNumber: "888888888",
-    name: "Adith Asokan",
-    designation: "Officer",
-    department: "OP",
-    officePhone: "62213805560",
-    email: "agung.dwijayanto1@guud.company",
-    addressLine1: "JL Petojo VII No. 36",
+  const [userData, setUserData] = useState({
+    userId: "",
+    accountId: "",
+    documentNumber: "",
+    name: "",
+    designation: "",
+    department: "",
+    officePhone: "",
+    email: "",
+    addressLine1: "",
     addressLine2: "",
     addressLine3: "",
-    city: "Jakarta",
-    postalCode: "10150",
+    city: "",
+    postalCode: "",
     province: "",
     country: "ID - INDONESIA",
-  };
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setLoading(true);
+
+        const API_URL =
+          "https://cdo-dev-id2.clickargo.com/be/clicdo/api/co/cac/profile/";
+
+        const AUTH_TOKEN = localStorage.getItem("jwtToken");
+
+        const response = await axios.get(API_URL, {
+          headers: {
+            Authorization: `Bearer ${AUTH_TOKEN}`,
+          },
+        });
+
+        const { user } = response.data;
+        const { coreAccn } = user;
+
+        // Get department from roles
+        const roles = user.role.split(",");
+        const department = roles.length > 0 ? roles[0] : "";
+
+        // Get document number (using company registration number)
+        const documentNumber = coreAccn.accnCoyRegn || "";
+
+        // Map API response to userData state
+        setUserData({
+          userId: user.id,
+          accountId: coreAccn.accnName,
+          documentNumber: documentNumber,
+          name: user.name,
+          designation: user.authorities[0]?.authority || "",
+          department: department,
+          officePhone: coreAccn.accnContact?.contactTel || "",
+          email: user.email,
+          addressLine1: coreAccn.accnAddr?.addrLn1 || "",
+          addressLine2: coreAccn.accnAddr?.addrLn2 || "",
+          addressLine3: coreAccn.accnAddr?.addrLn3 || "",
+          city: coreAccn.accnAddr?.addrCity || "",
+          postalCode: coreAccn.accnAddr?.addrPcode || "",
+          province: coreAccn.accnAddr?.addrProv || "",
+          country: coreAccn.accnAddr?.addrCtry
+            ? `${coreAccn.accnAddr.addrCtry} - ${coreAccn.accnNationality}`
+            : "ID - INDONESIA",
+        });
+
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        setError("Failed to load user data. Please try again later.");
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   // Country options
   const countries = [
@@ -38,6 +99,36 @@ const UserInfoForm = () => {
     { value: "MY - MALAYSIA", label: "MY - MALAYSIA" },
     { value: "TH - THAILAND", label: "TH - THAILAND" },
   ];
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Typography color="error">{error}</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box

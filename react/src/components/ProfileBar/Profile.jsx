@@ -8,6 +8,7 @@ import {
   Typography,
   IconButton,
   CircularProgress,
+  Divider,
 } from "@mui/material";
 import {
   Person as PersonIcon,
@@ -16,6 +17,8 @@ import {
 } from "@mui/icons-material";
 import { useUserStore } from "../../useUserStore.jsx"; // Import Zustand store
 import "./profile.css";
+import { Key, KeyIcon } from "lucide-react";
+import Fade from "@mui/material/Fade";
 
 const ProfileDropdown = () => {
   const router = useNavigate();
@@ -39,6 +42,8 @@ const ProfileDropdown = () => {
 
   const handleProfile = () => router("/user/profile");
 
+  const handleChangePassword = () => router("/user/change-password");
+
   return (
     <div className="profile-dropdown">
       <Box
@@ -53,15 +58,19 @@ const ProfileDropdown = () => {
         ) : (
           <>
             <Avatar
-              src={user.avatarUrl}
+              src={user.avatarUrl || undefined}
               alt={user.username}
               className="profile-avatar"
               sx={{
                 bgcolor: user.avatarUrl ? "transparent" : "#1976d2",
                 color: "#ffffff",
+                fontSize: "16px",
+                fontWeight: "bold",
               }}
             >
-              {user.username?.charAt(0) || "U"}
+              {user.avatarUrl
+                ? ""
+                : user.username?.charAt(0).toUpperCase() || "U"}
             </Avatar>
 
             <div className="profile-info">
@@ -72,7 +81,14 @@ const ProfileDropdown = () => {
                 {user.companyName}
               </Typography>
             </div>
-            <IconButton className="dropdown-arrow" size="small">
+            <IconButton
+              className="dropdown-arrow"
+              size="small"
+              sx={{
+                transition: "transform 0.3s ease-in-out",
+                transform: open ? "rotate(180deg)" : "rotate(0deg)",
+              }}
+            >
               <KeyboardArrowDownIcon />
             </IconButton>
           </>
@@ -80,18 +96,51 @@ const ProfileDropdown = () => {
       </Box>
 
       <Menu
-        id="profile-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{ "aria-labelledby": "profile-button" }}
+        TransitionComponent={Fade}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        PaperProps={{
+          sx: {
+            mt: 1.5, // Gives it a softer pop effect
+            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)", // Soft shadow for depth
+            borderRadius: "10px",
+            backgroundColor: "#263754",
+            color: "#ffffff",
+            minWidth: "180px",
+          },
+        }}
+        s
       >
-        <MenuItem onClick={handleProfile} className="dropmenu-item">
+        <MenuItem
+          onClick={() => {
+            handleProfile();
+            handleClose();
+          }}
+          className="dropmenu-item"
+        >
           <PersonIcon className="menu-icon" /> Profile
         </MenuItem>
-        <MenuItem onClick={handleLogout} className="dropmenu-item logout">
+
+        <MenuItem
+          onClick={() => {
+            handleChangePassword();
+            handleClose();
+          }}
+          className="dropmenu-item"
+        >
+          <KeyIcon className="menu-icon" /> Change Password
+        </MenuItem>
+        <Divider sx={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }} />
+        <MenuItem
+          onClick={() => {
+            handleLogout();
+            handleClose();
+          }}
+          className="dropmenu-item logout"
+        >
           <LogoutIcon className="menu-icon" /> Logout
         </MenuItem>
       </Menu>
