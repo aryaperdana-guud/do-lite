@@ -24,7 +24,16 @@ export function UserProfile() {
       case "user-details":
         return <UserInfoForm />;
       case "roles":
-        return <div style={{ color: "#000" }}>Tab content not available</div>;
+        return (
+          <div style={{ color: "red" }}>
+            Tab content currently not available
+            <div style={{ color: "#99999980", marginTop: "15px" }}>
+              To add roles, drag a role from the Available Roles to the Selected
+              Role To remove roles, drag a role from the Selected Role to the
+              Available Roles
+            </div>
+          </div>
+        );
       case "audits":
         return <UserActivityLog />;
       default:

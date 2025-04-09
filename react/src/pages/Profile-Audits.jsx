@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useUserStore } from "../useUserStore";
+import { formatDateTime } from "../components/Utility/formatDate";
 
 const UserActivityLog = () => {
   const { user } = useUserStore();
@@ -26,23 +27,7 @@ const UserActivityLog = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
   const [orderBy, setOrderBy] = useState("audtTimestamp");
-  const [order, setOrder] = useState("desc");
-
-  // Format the timestamp into a readable date string
-  const formatTimestamp = (timestamp) => {
-    const date = new Date(timestamp);
-    return date
-      .toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      })
-      .replace(",", "");
-  };
+  const [order, setOrder] = useState("desc"); // Ensuring "desc" is the default for newest to latest
 
   // Handle sort request
   const handleRequestSort = (property) => {
@@ -84,22 +69,22 @@ const UserActivityLog = () => {
         let sortColIndex = 0;
         switch (orderBy) {
           case "audtEvent":
-            sortColIndex = 1;
+            sortColIndex = 0; // Index for Event column
             break;
           case "audtTimestamp":
-            sortColIndex = 1;
+            sortColIndex = 1; // Index for Timestamp column
             break;
           case "audtRemarks":
-            sortColIndex = 2;
+            sortColIndex = 2; // Index for Remarks column
             break;
           case "audtUid":
-            sortColIndex = 3;
+            sortColIndex = 3; // Index for User ID column
             break;
           case "audtUname":
-            sortColIndex = 4;
+            sortColIndex = 4; // Index for User Name column
             break;
           default:
-            sortColIndex = 1;
+            sortColIndex = 1; // Default to timestamp column
         }
 
         // Build API URL with query parameters
@@ -112,7 +97,7 @@ const UserActivityLog = () => {
           iSortCol_0: String(sortColIndex),
           sSortDir_0: order,
           iSortingCols: "1",
-          mDataProp_0: "audtUid",
+          mDataProp_0: "audtTimestamp",
           mDataProp_1: "audtReckey",
           sSearch_1: user.userId,
           mDataProp_2: "audtReckey",
@@ -251,7 +236,7 @@ const UserActivityLog = () => {
                 {activityData.map((row) => (
                   <TableRow key={row.audtId}>
                     <TableCell>{row.audtEvent}</TableCell>
-                    <TableCell>{formatTimestamp(row.audtTimestamp)}</TableCell>
+                    <TableCell>{formatDateTime(row.audtTimestamp)}</TableCell>
                     <TableCell>{row.audtRemarks || "-"}</TableCell>
                     <TableCell>{row.audtUid}</TableCell>
                     <TableCell>{row.audtUname}</TableCell>
@@ -278,6 +263,29 @@ const UserActivityLog = () => {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            SelectProps={{
+              inputProps: { "aria-label": "rows per page" },
+              native: true,
+              sx: {
+                "& .MuiTablePagination-select": {
+                  paddingRight: "24px", // Add more space for the arrow
+                  textAlignLast: "left",
+                },
+                "& .MuiTablePagination-selectIcon": {
+                  right: 0,
+                  position: "absolute",
+                },
+              },
+            }}
+            sx={{
+              ".MuiTablePagination-selectRoot": {
+                position: "relative",
+                marginRight: 2,
+              },
+              ".MuiTablePagination-select": {
+                minWidth: "3rem", // Ensure enough width for numbers
+              },
+            }}
           />
         </Box>
       </Paper>

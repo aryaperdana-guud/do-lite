@@ -27,7 +27,6 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log("Submitting Data:", formData);
 
     try {
       const response = await fetch(
@@ -79,7 +78,6 @@ const SignIn = () => {
           userId: profileData.user?.username || "Unknown",
         };
 
-        // console.log("Storing user in Zustand:", userData);
         useUserStore.getState().setUser(userData); // Store user in Zustand
 
         setTimeout(() => navigate("/bol/active"), 100);

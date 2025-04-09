@@ -7,7 +7,7 @@ const AuthGuard = ({ children }) => {
     return <Navigate to="/" replace />; // Redirect to login if no token
   }
 
-  return children; // Show protected page if logged in
+  return children;
 };
 
 export default AuthGuard;
